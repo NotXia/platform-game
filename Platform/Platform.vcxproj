@@ -140,9 +140,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Map.cpp" />
+    <ClCompile Include="Pixel.cpp" />
     <ClCompile Include="Screen.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Map.hpp" />
+    <ClInclude Include="Pixel.hpp" />
     <ClInclude Include="Screen.hpp" />
     <ClInclude Include="settings.h" />
   </ItemGroup>

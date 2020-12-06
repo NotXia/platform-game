@@ -1,7 +1,15 @@
 ﻿#include "Screen.hpp"
 #include <iostream>
-#include "settings.h"
 using namespace std;
+
+const int GAMEBAR_OFFSET = 3;
+const int GAMEBAR_PADDING = 4;
+
+const int WEAPON_WIDTH = 15;
+const int WEAPON_HEIGHT = 1;
+
+const int TEXTBOX_HEIGHT = 5;
+const int TEXTBOX_MIN_WIDTH = 15;
 
 Screen::Screen() {
 	this->console = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -128,4 +136,15 @@ void Screen::init() {
 		cout <<char(196); // ─
 	}
 	cout <<char(217); // ┘
+}
+
+void Screen::write_game_area(Pixel terrain[][GAME_HEIGHT]) {
+	for (int i=0; i<GAME_HEIGHT; i++) {
+		moveCursor(1, 1+i);
+		for (int j=0; j<GAME_WIDTH; j++) {
+			setColor(terrain[j][i].getColor());
+			cout <<terrain[j][i].getValue();
+		}
+	}
+	resetColor();
 }

@@ -1,4 +1,7 @@
+#pragma once
 #include <windows.h>
+#include "settings.h"
+#include "Pixel.hpp"
 
 // Imposta il template del gioco
 class Screen {
@@ -29,4 +32,6 @@ class Screen {
 			Inizializza il template del gioco
 		*/
 		void init();
+
+		void write_game_area(Pixel terrain[][GAME_HEIGHT]);
 };

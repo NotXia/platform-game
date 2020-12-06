@@ -4,30 +4,39 @@
 #include <ctime>
 #include <cstdlib>
 #include "Screen.hpp"
+#include "Map.hpp"
 using namespace std;
+
 
 int main() {
     srand(time(0));
 
     Screen screen = Screen();
+    Map* map = new Map;
+    *map = Map(NULL); // TODO: Renderlo un puntatore oppure ridurre la dimensione del gioco
+    Pixel curr_terrain[GAME_WIDTH][GAME_HEIGHT];
 
     screen.init();
 
-    /*HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
-    COORD destCoord;
-
-    system("cls");
+    map->getTerrain(curr_terrain);
+    screen.write_game_area(curr_terrain);
 
     while (true) {
         if (_kbhit()) {
-            destCoord.X = 10;
-            destCoord.Y = 4;
-            SetConsoleCursorPosition(console, destCoord);
-
             char ch = _getch();
-            SetConsoleTextAttribute(console, rand()%555 | rand()%555);
-            cout <<ch <<ch <<ch <<endl;
-            SetConsoleTextAttribute(console, 7);
+            switch (ch) {
+                case 'a':
+                    if(map->getPrev() != NULL)
+                        map = map->getPrev();
+                    break;
+
+                case 'd':
+                    map = map->getNext();
+                    break;
+            }
+
+            map->getTerrain(curr_terrain);
+            screen.write_game_area(curr_terrain);
         }
-    }*/
+    }
 }
