@@ -1,5 +1,6 @@
 ﻿#include "Screen.hpp"
 #include <iostream>
+#include "colors.h"
 using namespace std;
 
 const int GAMEBAR_OFFSET = 3;
@@ -16,7 +17,7 @@ Screen::Screen() {
 }
 
 /*
-	Prende in input un intero (es. FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY | BACKGROUND_BLUE)
+	Prende in input un intero che rappresenta il colore
 	Imposta il colore dei caratteri successivi in quello indicato come parametro
 */
 void Screen::setColor(int color) {
@@ -27,7 +28,7 @@ void Screen::setColor(int color) {
 	Imposta il colore dei caratteri successivi a quello di default della console
 */
 void Screen::resetColor() {
-	SetConsoleTextAttribute(console, 7);
+	SetConsoleTextAttribute(console, LIGHTGREY_BLACK);
 }
 
 /*
@@ -70,7 +71,7 @@ void Screen::init() {
 	int hp_y = (GAME_HEIGHT + 2) + GAMEBAR_OFFSET;
 	moveCursor(hp_x, hp_y);
 	cout <<"HP ";
-	setColor(FOREGROUND_RED);
+	setColor(RED_BLACK);
 	moveCursor(7, hp_y);
 	for (int i=0; i<MAX_LIFE-1; i++) {
 		cout <<char(3) <<" "; // ♥
@@ -138,6 +139,10 @@ void Screen::init() {
 	cout <<char(217); // ┘
 }
 
+/*
+	Prende in input una matrice di Pixel
+	Stampa la matrice nell'area di gioco
+*/
 void Screen::write_game_area(Pixel terrain[][GAME_HEIGHT]) {
 	for (int i=0; i<GAME_HEIGHT; i++) {
 		moveCursor(1, 1+i);
@@ -147,4 +152,34 @@ void Screen::write_game_area(Pixel terrain[][GAME_HEIGHT]) {
 		}
 	}
 	resetColor();
+}
+
+/*
+	Prende in input un oggetto di tipo Entity
+	Inserisce l'entità nell'area di gioco rivolto verso sinistra
+*/
+void Screen::write_entity_left(Entity entity) {
+	// Corpo
+	moveCursor(entity.getPosition().getX(), entity.getPosition().getY());
+	setColor(entity.getBody().getColor());
+	cout <<entity.getBody().getValue();
+	// Testa
+	moveCursor(entity.getPosition().getX(), entity.getPosition().getY()-1);
+	setColor(entity.getHeadLeft().getColor());
+	cout <<entity.getHeadLeft().getValue();
+}
+
+/*
+	Prende in input un oggetto di tipo Entity
+	Inserisce l'entità nell'area di gioco rivolto verso destra
+*/
+void Screen::write_entity_right(Entity entity) {
+	// Corpo
+	moveCursor(entity.getPosition().getX(), entity.getPosition().getY());
+	setColor(entity.getBody().getColor());
+	cout <<entity.getBody().getValue();
+	// Testa
+	moveCursor(entity.getPosition().getX(), entity.getPosition().getY()-1);
+	setColor(entity.getHeadRight().getColor());
+	cout <<entity.getHeadRight().getValue();
 }

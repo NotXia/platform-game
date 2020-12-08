@@ -1,4 +1,5 @@
 #pragma once
+#include "colors.h"
 
 class Pixel {
 	protected:
@@ -7,7 +8,7 @@ class Pixel {
 		bool solid;
 
 	public:
-		Pixel(char value=' ', int color=7, bool solid=false); // color=7 è il default del cmd (carattere bianco su sfondo nero)
+		Pixel(char value=' ', int color=LIGHTGREY_BLACK, bool solid=false);
 
 		char getValue();
 		int getColor();

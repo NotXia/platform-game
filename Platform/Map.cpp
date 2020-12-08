@@ -14,6 +14,9 @@ const Pixel SKY_TEXTURE = Pixel(' ', 0x87, false);
 
 int platform_chance = 20;
 
+/*
+	Inizializza la matrice terrain con gli elementi della mappa
+*/
 void Map::generateTerrain() {
 	// Generazione "pavimento"
 	for (int i=0; i<TERRAIN_HEIGHT; i++) {
@@ -75,6 +78,24 @@ Map::Map(Map *prev) {
 	generateTerrain();
 	next = NULL;
 	this->prev = prev;
+
+	left_position = Position(1, GAME_HEIGHT-TERRAIN_HEIGHT);
+	right_position = Position(GAME_WIDTH, GAME_HEIGHT-TERRAIN_HEIGHT);
+}
+
+void Map::getTerrain(Pixel out[][GAME_HEIGHT]) {
+	for (int i=0; i<GAME_HEIGHT; i++) {
+		for (int j=0; j<GAME_WIDTH; j++) {
+			out[j][i] = terrain[j][i];
+		}
+	}
+}
+
+Position Map::getLeftPosition() {
+	return this->left_position;
+}
+Position Map::getRightPosition() {
+	return this->right_position;
 }
 
 Map *Map::getPrev() {
@@ -86,12 +107,4 @@ Map *Map::getNext() {
 		this->next = new Map(this);
 	}
 	return this->next;
-}
-
-void Map::getTerrain(Pixel out[][GAME_HEIGHT]) {
-	for (int i=0; i<GAME_HEIGHT; i++) {
-		for (int j=0; j<GAME_WIDTH; j++) {
-			out[j][i] = terrain[j][i];
-		}
-	}
 }

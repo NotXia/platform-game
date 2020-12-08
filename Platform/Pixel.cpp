@@ -1,6 +1,6 @@
 #include "Pixel.hpp"
 
-Pixel::Pixel(char value, int color, bool solid) { // color=7 è il default del cmd (carattere bianco su sfondo nero)
+Pixel::Pixel(char value, int color, bool solid) {
 	this->value = value;
 	this->color = color;
 	this->solid = solid;

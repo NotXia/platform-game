@@ -2,6 +2,7 @@
 #include <windows.h>
 #include "settings.h"
 #include "Pixel.hpp"
+#include "Entity.hpp"
 
 // Imposta il template del gioco
 class Screen {
@@ -9,7 +10,7 @@ class Screen {
 		HANDLE console;
 
 		/*
-			Prende in input un intero (es. FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY | BACKGROUND_BLUE)
+			Prende in input un intero che rappresenta il colore 
 			Imposta il colore dei caratteri successivi in quello indicato come parametro
 		*/
 		void setColor(int color);
@@ -33,5 +34,21 @@ class Screen {
 		*/
 		void init();
 
+		/*
+			Prende in input una matrice di Pixel
+			Stampa la matrice nell'area di gioco
+		*/
 		void write_game_area(Pixel terrain[][GAME_HEIGHT]);
+
+		/*
+			Prende in input un oggetto di tipo Entity
+			Inserisce l'entità nell'area di gioco rivolto verso sinistra
+		*/
+		void write_entity_left(Entity entity);
+
+		/*
+			Prende in input un oggetto di tipo Entity
+			Inserisce l'entità nell'area di gioco rivolto verso destra
+		*/
+		void write_entity_right(Entity entity);
 };
