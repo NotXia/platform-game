@@ -24,7 +24,16 @@ class Map {
 		Position getLeftPosition();
 		Position getRightPosition();
 		
-		Map* getPrev();
-		Map* getNext();
+		/*
+			Prende in input la posizione da cui il giocatore è uscito nel livello corrente.
+			Restituisce il puntatore al livello precedente, impostando right_position con il parametro.
+		*/
+		Map* gotoPrevious(Position exit_position);
+
+		/*
+			Prende in input la posizione da cui il giocatore è uscito nel livello corrente.
+			Restituisce il puntatore al livello successivo, impostando left_position con il parametro.
+		*/
+		Map* gotoNext(Position enter_position);
 };
 

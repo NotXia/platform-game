@@ -9,6 +9,10 @@ class Screen {
 	protected:
 		HANDLE console;
 
+		int hp_x, hp_y;
+		int weapon_x, weapon_y;
+		int textBox_x, textBox_y;
+
 		/*
 			Prende in input un intero che rappresenta il colore 
 			Imposta il colore dei caratteri successivi in quello indicato come parametro
@@ -25,6 +29,8 @@ class Screen {
 			Muove il cursore a tali coordinate
 		*/
 		void moveCursor(int x, int y);
+		void hideCursor();
+
 
 	public:
 		Screen();
@@ -51,4 +57,17 @@ class Screen {
 			Inserisce l'entità nell'area di gioco rivolto verso destra
 		*/
 		void write_entity_right(Entity entity);
+
+		/*
+			Prende in input una posizione e il terreno.
+			Imposta posizione position il valore previsto in terrain.
+		*/
+		void resetTerrain(Pixel terrain[][GAME_HEIGHT], Position position);
+
+		/*
+			Prende in input una stringa.
+			Inserisce la stringa nell'area di testo (in basso a destra).
+		*/
+		void write_textbox(const char string[]);
+
 };

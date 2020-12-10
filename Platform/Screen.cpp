@@ -14,6 +14,13 @@ const int TEXTBOX_MIN_WIDTH = 15;
 
 Screen::Screen() {
 	this->console = GetStdHandle(STD_OUTPUT_HANDLE);
+	this->hp_x = 1;
+	this->hp_y = (GAME_HEIGHT + 2) + GAMEBAR_OFFSET;
+	this->weapon_x = 7 + (MAX_LIFE * 2 - 1) + GAMEBAR_PADDING;
+	this->weapon_y = this->hp_y;
+	this->textBox_x = this->weapon_x + (WEAPON_WIDTH+2) + GAMEBAR_PADDING;
+	this->textBox_y = GAME_HEIGHT + 2;
+	hideCursor();
 }
 
 /*
@@ -42,6 +49,15 @@ void Screen::moveCursor(int x, int y) {
 	SetConsoleCursorPosition(console, coord);
 }
 
+void Screen::hideCursor() {
+	CONSOLE_CURSOR_INFO cursorInfo;
+
+	GetConsoleCursorInfo(console, &cursorInfo);
+	cursorInfo.dwSize = 1;
+	cursorInfo.bVisible = false; 
+	SetConsoleCursorInfo(console, &cursorInfo);
+}
+
 /*
 	Inizializza il template del gioco
 */
@@ -67,8 +83,6 @@ void Screen::init() {
 
 
 	// Barra della vita
-	int hp_x = 1;
-	int hp_y = (GAME_HEIGHT + 2) + GAMEBAR_OFFSET;
 	moveCursor(hp_x, hp_y);
 	cout <<"HP ";
 	setColor(RED_BLACK);
@@ -86,8 +100,6 @@ void Screen::init() {
 
 
 	// Area selettore arma
-	int weapon_x = 7 + (MAX_LIFE * 2 - 1) + GAMEBAR_PADDING;
-	int weapon_y = hp_y;
 	moveCursor(weapon_x, weapon_y);
 	cout <<char(218); // ┌
 	for (int i=0; i<WEAPON_WIDTH; i++) {
@@ -110,8 +122,6 @@ void Screen::init() {
 
 
 	// Text box
-	int textBox_x = weapon_x + (WEAPON_WIDTH+2) + GAMEBAR_PADDING;
-	int textBox_y = GAME_HEIGHT + 2;
 	int textBox_height = 2*GAMEBAR_OFFSET + 3;
 	int textBox_width = GAME_WIDTH-textBox_x;
 	if (textBox_width < TEXTBOX_MIN_WIDTH) {
@@ -137,6 +147,8 @@ void Screen::init() {
 		cout <<char(196); // ─
 	}
 	cout <<char(217); // ┘
+	
+	textBox_y = textBox_y - textBox_height + 2;
 }
 
 /*
@@ -160,11 +172,11 @@ void Screen::write_game_area(Pixel terrain[][GAME_HEIGHT]) {
 */
 void Screen::write_entity_left(Entity entity) {
 	// Corpo
-	moveCursor(entity.getPosition().getX(), entity.getPosition().getY());
+	moveCursor(entity.getBodyPosition().getX(), entity.getBodyPosition().getY());
 	setColor(entity.getBody().getColor());
 	cout <<entity.getBody().getValue();
 	// Testa
-	moveCursor(entity.getPosition().getX(), entity.getPosition().getY()-1);
+	moveCursor(entity.getHeadPosition().getX(), entity.getHeadPosition().getY());
 	setColor(entity.getHeadLeft().getColor());
 	cout <<entity.getHeadLeft().getValue();
 }
@@ -175,11 +187,26 @@ void Screen::write_entity_left(Entity entity) {
 */
 void Screen::write_entity_right(Entity entity) {
 	// Corpo
-	moveCursor(entity.getPosition().getX(), entity.getPosition().getY());
+	moveCursor(entity.getBodyPosition().getX(), entity.getBodyPosition().getY());
 	setColor(entity.getBody().getColor());
 	cout <<entity.getBody().getValue();
 	// Testa
-	moveCursor(entity.getPosition().getX(), entity.getPosition().getY()-1);
+	moveCursor(entity.getHeadPosition().getX(), entity.getHeadPosition().getY());
 	setColor(entity.getHeadRight().getColor());
 	cout <<entity.getHeadRight().getValue();
+}
+
+void Screen::resetTerrain(Pixel terrain[][GAME_HEIGHT], Position position) {
+	moveCursor(position.getX(), position.getY());
+	setColor(terrain[position.getX()-1][position.getY()-1].getColor());
+	cout <<terrain[position.getX()-1][position.getY()-1].getValue();
+}
+
+void Screen::write_textbox(const char string[]) {
+	int start_x = textBox_x+1;
+	int start_y = textBox_y+1;
+
+	moveCursor(start_x, start_y);
+	setColor(LIGHTGREY_BLACK);
+	cout <<string;
 }

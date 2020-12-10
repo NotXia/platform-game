@@ -98,13 +98,23 @@ Position Map::getRightPosition() {
 	return this->right_position;
 }
 
-Map *Map::getPrev() {
+/*
+	Prende in input la posizione da cui il giocatore è uscito nel livello corrente.
+	Restituisce il puntatore al livello precedente, impostando right_position con il parametro.
+*/
+Map* Map::gotoPrevious(Position exit_position) {
+	this->prev->right_position.setY(exit_position.getY());
 	return this->prev;
 }
 
-Map *Map::getNext() {
+/*
+	Prende in input la posizione da cui il giocatore è uscito nel livello corrente.
+	Restituisce il puntatore al livello successivo, impostando left_position con il parametro.
+*/
+Map* Map::gotoNext(Position enter_position) {
 	if (this->next == NULL) {
 		this->next = new Map(this);
 	}
+	this->next->left_position.setY(enter_position.getY());
 	return this->next;
 }
