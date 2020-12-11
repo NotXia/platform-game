@@ -5,7 +5,7 @@ class Position {
 		int y;
 
 	public:
-		Position(int x=0, int y=0);
+		Position(int x=1, int y=1);
 
 		/*
 			Imposta x (rispettando i limiti)

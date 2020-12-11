@@ -23,6 +23,11 @@ class Map {
 		void getTerrain(Pixel out[][GAME_HEIGHT]);
 		Position getLeftPosition();
 		Position getRightPosition();
+
+		/*
+			Restituisce true se *prev è NULL, false altrimenti
+		*/
+		bool prevNull();
 		
 		/*
 			Prende in input la posizione da cui il giocatore è uscito nel livello corrente.

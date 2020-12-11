@@ -100,6 +100,13 @@ Position Map::getRightPosition() {
 }
 
 /*
+	Restituisce true se *prev è NULL, false altrimenti
+*/
+bool Map::prevNull() {
+	return (prev == NULL);
+}
+
+/*
 	Prende in input la posizione da cui il giocatore è uscito nel livello corrente.
 	Restituisce il puntatore al livello precedente, impostando right_position con il parametro.
 */

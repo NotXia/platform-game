@@ -35,7 +35,7 @@ int main() {
                 screen.write_entity_left(player);
 
                 if (player.getBodyPosition().getX() <= 1) {
-                    if (map->gotoPrevious(player.getBodyPosition()) != NULL) {
+                    if (!map->prevNull()) {
                         map = map->gotoPrevious(player.getBodyPosition());
                         map->getTerrain(curr_terrain);
                         screen.write_game_area(curr_terrain);
