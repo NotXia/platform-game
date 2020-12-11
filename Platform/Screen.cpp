@@ -35,7 +35,7 @@ void Screen::setColor(int color) {
 	Imposta il colore dei caratteri successivi a quello di default della console
 */
 void Screen::resetColor() {
-	SetConsoleTextAttribute(console, LIGHTGREY_BLACK);
+	SetConsoleTextAttribute(console, CONSOLE_DEFAULT);
 }
 
 /*
@@ -149,6 +149,7 @@ void Screen::init() {
 	cout <<char(217); // ┘
 	
 	textBox_y = textBox_y - textBox_height + 2;
+	resetColor();
 }
 
 /*
@@ -179,6 +180,7 @@ void Screen::write_entity_left(Entity entity) {
 	moveCursor(entity.getHeadPosition().getX(), entity.getHeadPosition().getY());
 	setColor(entity.getHeadLeft().getColor());
 	cout <<entity.getHeadLeft().getValue();
+	resetColor();
 }
 
 /*
@@ -194,12 +196,14 @@ void Screen::write_entity_right(Entity entity) {
 	moveCursor(entity.getHeadPosition().getX(), entity.getHeadPosition().getY());
 	setColor(entity.getHeadRight().getColor());
 	cout <<entity.getHeadRight().getValue();
+	resetColor();
 }
 
 void Screen::resetTerrain(Pixel terrain[][GAME_HEIGHT], Position position) {
 	moveCursor(position.getX(), position.getY());
 	setColor(terrain[position.getX()-1][position.getY()-1].getColor());
 	cout <<terrain[position.getX()-1][position.getY()-1].getValue();
+	resetColor();
 }
 
 void Screen::write_textbox(const char string[]) {
@@ -209,4 +213,5 @@ void Screen::write_textbox(const char string[]) {
 	moveCursor(start_x, start_y);
 	setColor(LIGHTGREY_BLACK);
 	cout <<string;
+	resetColor();
 }

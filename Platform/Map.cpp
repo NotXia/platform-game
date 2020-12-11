@@ -2,15 +2,16 @@
 #include <windows.h>
 #include <cstdlib>
 #include <iostream>
+#include "colors.h"
 
 const int TERRAIN_HEIGHT = 3;
 const int PLATFORM_MAX_LENGTH = 25;
 const int PLATFORM_MIN_LENGTH = 5;
 const int EMPTYZONE_LENGTH = 5;
 
-const Pixel PLATFORM_TEXTURE = Pixel(char(219), 0x84, true);
-const Pixel TERRAIN_TEXTURE = Pixel(' ', 0x66, true);
-const Pixel SKY_TEXTURE = Pixel(' ', 0x87, false);
+const Pixel PLATFORM_TEXTURE = Pixel(char(219), PLATFORM_COLOR, true);
+const Pixel TERRAIN_TEXTURE = Pixel(' ', TERRAIN_COLOR, true);
+const Pixel SKY_TEXTURE = Pixel(' ', BACKGROUND_DEFAULT, false);
 
 int platform_chance = 20;
 

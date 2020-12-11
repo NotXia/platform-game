@@ -5,6 +5,7 @@
 #include "Screen.hpp"
 #include "Map.hpp"
 #include "Player.hpp"
+#include "colors.h"
 using namespace std;
 
 int main() {
@@ -14,7 +15,7 @@ int main() {
     Map *map = new Map;
     *map = Map(NULL); 
     Pixel curr_terrain[GAME_WIDTH][GAME_HEIGHT]; // TODO: Renderlo un puntatore oppure ridurre la dimensione del gioco
-    Player player = Player(MAX_LIFE, Pixel('<', 0x8F, true), Pixel('>', 0x8F, true), Pixel(char(219), 0x8F, true), NULL, map->getLeftPosition());
+    Player player = Player(MAX_LIFE, Pixel('<', PLAYER_HEAD_COLOR, true), Pixel('>', PLAYER_HEAD_COLOR, true), Pixel(char(219), PLAYER_BODY_COLOR, true), NULL, map->getLeftPosition());
     Position head_position;
     int loop = 0;
 
