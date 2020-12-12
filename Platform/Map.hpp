@@ -3,6 +3,12 @@
 #include "settings.h"
 #include "Position.hpp"
 #include <iostream>
+#include "Enemy.hpp"
+
+struct EnemyList {
+	Enemy enemy;
+	EnemyList *next;
+};
 
 class Map {
 	protected:
@@ -11,16 +17,20 @@ class Map {
 		Map *prev;
 		Position left_position;
 		Position right_position;
+		EnemyList *enemyList;
 
 		/*
-			Inizializza la matrice terrain con gli elementi della mappa
+			Inizializza la matrice terrain con gli elementi base della mappa
 		*/
 		void generateTerrain();
+
+		/*
+		*/
+		EnemyList* generateEnemy(int max);
 
 	public:
 		Map(Map *prev=NULL);
 
-		void getTerrain(Pixel out[][GAME_HEIGHT]);
 		Position getLeftPosition();
 		Position getRightPosition();
 
@@ -31,14 +41,20 @@ class Map {
 		
 		/*
 			Prende in input la posizione da cui il giocatore è uscito nel livello corrente.
-			Restituisce il puntatore al livello precedente, impostando right_position con il parametro.
+			Restituisce il puntatore al livello precedente, impostando right_position con il parametro in input.
 		*/
 		Map* gotoPrevious(Position exit_position);
 
 		/*
 			Prende in input la posizione da cui il giocatore è uscito nel livello corrente.
-			Restituisce il puntatore al livello successivo, impostando left_position con il parametro.
+			Restituisce il puntatore al livello successivo, impostando left_position con il parametro in input.
 		*/
-		Map* gotoNext(Position enter_position);
+		Map* gotoNext(Position enter_position, int max_enemy);
+
+		/*
+			Prende in input una posizione.
+			Restituisce quella posizione della mappa.
+		*/
+		Pixel getMapAt(Position position);
 };
 

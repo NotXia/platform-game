@@ -139,18 +139,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="BulletList.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Pixel.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Position.cpp" />
     <ClCompile Include="Screen.cpp" />
+    <ClCompile Include="TODO.cpp" />
     <ClCompile Include="Weapon.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bullet.hpp" />
     <ClInclude Include="colors.h" />
+    <ClInclude Include="Enemy.hpp" />
     <ClInclude Include="Entity.hpp" />
+    <ClInclude Include="BulletList.hpp" />
     <ClInclude Include="Map.hpp" />
     <ClInclude Include="Pixel.hpp" />
     <ClInclude Include="Player.hpp" />

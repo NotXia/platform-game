@@ -40,10 +40,12 @@ const int BG_PINK = 0xD0;
 const int BG_YELLOW = 0xE0;
 const int BG_WHITE = 0xF0;
 
-const int LIGHTGREY_BLACK = 0x07;
-const int RED_BLACK = 0x0C;
+//const int LIGHTGREY_BLACK = 0x07;
+//const int RED_BLACK = 0x0C;
 
 const int CONSOLE_DEFAULT = FG_LIGHTGREY | BG_BLACK;
+
+const int HP_COLOR = FG_DARKRED | BG_BLACK;
 
 const int BACKGROUND_DEFAULT = BG_GREY;
 

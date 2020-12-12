@@ -3,6 +3,7 @@
 #include "settings.h"
 #include "Pixel.hpp"
 #include "Entity.hpp"
+#include "Map.hpp"
 
 // Imposta il template del gioco
 class Screen {
@@ -41,10 +42,10 @@ class Screen {
 		void init();
 
 		/*
-			Prende in input una matrice di Pixel
-			Stampa la matrice nell'area di gioco
+			Prende in input una mappa
+			Stampa l'area di gioco
 		*/
-		void write_game_area(Pixel terrain[][GAME_HEIGHT]);
+		void write_game_area(Map *map);
 
 		/*
 			Prende in input un oggetto di tipo Entity
@@ -59,15 +60,21 @@ class Screen {
 		void write_entity_right(Entity entity);
 
 		/*
-			Prende in input una posizione e il terreno.
-			Imposta posizione position il valore previsto in terrain.
+			Prende in input una posizione e la mappa.
+			Imposta in posizione position il valore previsto dalla mappa.
 		*/
-		void resetTerrain(Pixel terrain[][GAME_HEIGHT], Position position);
+		void resetTerrain(Map *map, Position position);
 
 		/*
 			Prende in input una stringa.
 			Inserisce la stringa nell'area di testo (in basso a destra).
 		*/
 		void write_textbox(const char string[]);
+
+		/*
+			Prende in input un Pixel e una Position.
+			Imposta il pixel nella posizione indicata.
+		*/
+		void write_at(Pixel pixel, Position position);
 
 };

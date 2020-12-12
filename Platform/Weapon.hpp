@@ -1,13 +1,16 @@
+#pragma once
 #include "Pixel.hpp"
+#include "Bullet.hpp"
 
 class Weapon {
 	protected:
-		int range;
-		int damage;
 		Pixel textureLeft;
 		Pixel textureRight;
+		Bullet bullet;
 
 	public:
-		Weapon(int range, int damage, Pixel left, Pixel right);
+		Weapon(Pixel left, Pixel right, Bullet bullet);
+
+		Pixel getTexture(bool direction);
 };
 

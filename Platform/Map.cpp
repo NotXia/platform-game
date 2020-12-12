@@ -15,8 +15,19 @@ const Pixel SKY_TEXTURE = Pixel(' ', BACKGROUND_DEFAULT, false);
 
 int platform_chance = 20;
 
+Map::Map(Map *prev) {
+	generateTerrain();
+	next = NULL;
+	this->prev = prev;
+
+	left_position = Position(1, GAME_HEIGHT-TERRAIN_HEIGHT);
+	right_position = Position(GAME_WIDTH, GAME_HEIGHT-TERRAIN_HEIGHT);
+
+	enemyList = NULL;
+}
+
 /*
-	Inizializza la matrice terrain con gli elementi della mappa
+	Inizializza la matrice terrain con gli elementi base della mappa
 */
 void Map::generateTerrain() {
 	// Generazione "pavimento"
@@ -75,21 +86,21 @@ void Map::generateTerrain() {
 	}
 }
 
-Map::Map(Map *prev) {
-	generateTerrain();
-	next = NULL;
-	this->prev = prev;
+EnemyList* Map::generateEnemy(int max) {
+	EnemyList *out = NULL;
 
-	left_position = Position(1, GAME_HEIGHT-TERRAIN_HEIGHT);
-	right_position = Position(GAME_WIDTH, GAME_HEIGHT-TERRAIN_HEIGHT);
-}
-
-void Map::getTerrain(Pixel out[][GAME_HEIGHT]) {
-	for (int i=0; i<GAME_HEIGHT; i++) {
-		for (int j=0; j<GAME_WIDTH; j++) {
-			out[j][i] = terrain[j][i];
+	for (int i=GAME_HEIGHT-1; i>=0; i--) {
+		for (int j=GAME_WIDTH-1; j>=0; j--) {
+			if (terrain[j][i].isSolid()) {
+				if (out == NULL) {
+					/*out = new EnemyList;
+					out->enemy = new Enemy()*/
+				}
+			}
 		}
 	}
+
+	return out;
 }
 
 Position Map::getLeftPosition() {
@@ -108,7 +119,7 @@ bool Map::prevNull() {
 
 /*
 	Prende in input la posizione da cui il giocatore è uscito nel livello corrente.
-	Restituisce il puntatore al livello precedente, impostando right_position con il parametro.
+	Restituisce il puntatore al livello precedente, impostando right_position con il parametro in input.
 */
 Map* Map::gotoPrevious(Position exit_position) {
 	this->prev->right_position.setY(exit_position.getY());
@@ -117,12 +128,21 @@ Map* Map::gotoPrevious(Position exit_position) {
 
 /*
 	Prende in input la posizione da cui il giocatore è uscito nel livello corrente.
-	Restituisce il puntatore al livello successivo, impostando left_position con il parametro.
+	Restituisce il puntatore al livello successivo, impostando left_position con il parametro in input.
 */
-Map* Map::gotoNext(Position enter_position) {
+Map* Map::gotoNext(Position enter_position, int max_enemy) {
 	if (this->next == NULL) {
 		this->next = new Map(this);
+		this->next->enemyList = generateEnemy(max_enemy);
 	}
 	this->next->left_position.setY(enter_position.getY());
 	return this->next;
+}
+
+/*
+	Prende in input una posizione.
+	Restituisce quella posizione della mappa.
+*/
+Pixel Map::getMapAt(Position position) {
+	return terrain[position.getX()-1][position.getY()-1];
 }

@@ -8,7 +8,7 @@ class Pixel {
 		bool solid;
 
 	public:
-		Pixel(char value=' ', int color=LIGHTGREY_BLACK, bool solid=false);
+		Pixel(char value=' ', int color=CONSOLE_DEFAULT, bool solid=false);
 
 		char getValue();
 		int getColor();

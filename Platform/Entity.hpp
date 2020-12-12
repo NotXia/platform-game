@@ -14,10 +14,14 @@ class Entity {
 		Pixel body;
 		Position position;
 		bool direction; // false = left | true = right
+		bool can_move;
 
 		int jump_status; 
 		bool is_jumping;
-		bool can_jump;
+		bool on_terrain;
+		int jump_loop_counter;
+		int fall_loop_counter;
+
 
 	public:
 		Entity(int health=0, Pixel head_left=Pixel(' ', 0, false), Pixel head_right=Pixel(' ', 0, false), Pixel body=Pixel(' ', 0, false), Position position=Position(0, 0));
@@ -29,7 +33,13 @@ class Entity {
 		bool getDirection();
 		Position getBodyPosition();
 		Position getHeadPosition();
+		Position getFrontPosition(); // Restituisce le coordinate davanti al corpo (stabilito in base alla direzione)
 		void setPosition(Position position);
+		void setCanMove(bool can_move);
+		bool getCanMove();
+		bool isOnTerrain();
+		void setOnTerrain(bool on_terrain);
+		bool isJumping();
 
 
 		/*
@@ -58,10 +68,6 @@ class Entity {
 		*/
 		void initJump();
 
-		bool getCanJump();
-		void setCanJump(bool can_jump);
-		bool isJumping();
-
 		/*
 			Se jump_status è inferiore all'altezza massima di salto, aggiorna position decrementando di 1 la posizione sull'asse Y.
 			Altrimenti interrompe il salto.
@@ -77,6 +83,38 @@ class Entity {
 			Aggiorna position incrementando di 1 la posizione sull'asse Y.
 		*/
 		void fall();
+
+		/*
+			Incrementa jump_loop_counter di 1.
+			Se supera il limite impostato, viene resettato.
+		*/
+		void incJumpLoopCounter();
+
+		/*
+			Resetta jump_loop_counter
+		*/
+		void resetJumpLoopCounter();
+
+		/*
+			Incrementa fall_loop_counter di 1.
+			Se supera il limite impostato, viene resettato.
+		*/
+		void incFallLoopCounter();
+
+		/*
+			Resetta fall_loop_counter
+		*/
+		void resetFallLoopCounter();
+
+		/*
+			Restituisce true quando è possibile avanzare nell'animazione del salto
+		*/
+		bool canJump();
+
+		/*
+			Restituisce true quando è possibile avanzare nell'animazione della caduta
+		*/
+		bool canFall();
 };
 
 

@@ -85,7 +85,7 @@ void Screen::init() {
 	// Barra della vita
 	moveCursor(hp_x, hp_y);
 	cout <<"HP ";
-	setColor(RED_BLACK);
+	setColor(HP_COLOR);
 	moveCursor(7, hp_y);
 	for (int i=0; i<MAX_LIFE-1; i++) {
 		cout <<char(3) <<" "; // ♥
@@ -153,15 +153,15 @@ void Screen::init() {
 }
 
 /*
-	Prende in input una matrice di Pixel
-	Stampa la matrice nell'area di gioco
+	Prende in input una mappa
+	Stampa l'area di gioco
 */
-void Screen::write_game_area(Pixel terrain[][GAME_HEIGHT]) {
-	for (int i=0; i<GAME_HEIGHT; i++) {
-		moveCursor(1, 1+i);
-		for (int j=0; j<GAME_WIDTH; j++) {
-			setColor(terrain[j][i].getColor());
-			cout <<terrain[j][i].getValue();
+void Screen::write_game_area(Map *map) {
+	for (int i=1; i<=GAME_HEIGHT; i++) {
+		moveCursor(1, i);
+		for (int j=1; j<=GAME_WIDTH; j++) {
+			setColor(map->getMapAt(Position(j, i)).getColor());
+			cout <<map->getMapAt(Position(j, i)).getValue();
 		}
 	}
 	resetColor();
@@ -199,10 +199,14 @@ void Screen::write_entity_right(Entity entity) {
 	resetColor();
 }
 
-void Screen::resetTerrain(Pixel terrain[][GAME_HEIGHT], Position position) {
+/*
+	Prende in input una posizione e la mappa.
+	Imposta in posizione position il valore previsto dalla mappa.
+*/
+void Screen::resetTerrain(Map *map, Position position) {
 	moveCursor(position.getX(), position.getY());
-	setColor(terrain[position.getX()-1][position.getY()-1].getColor());
-	cout <<terrain[position.getX()-1][position.getY()-1].getValue();
+	setColor(map->getMapAt(position).getColor());
+	cout <<map->getMapAt(position).getValue();
 	resetColor();
 }
 
@@ -211,7 +215,13 @@ void Screen::write_textbox(const char string[]) {
 	int start_y = textBox_y+1;
 
 	moveCursor(start_x, start_y);
-	setColor(LIGHTGREY_BLACK);
+	resetColor();
 	cout <<string;
+}
+
+void Screen::write_at(Pixel pixel, Position position) {
+	moveCursor(position.getX(), position.getY());
+	setColor(pixel.getColor());
+	cout <<pixel.getValue();
 	resetColor();
 }
