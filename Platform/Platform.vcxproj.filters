@@ -8,95 +8,93 @@
     <Filter Include="Utilities">
       <UniqueIdentifier>{bce6d954-18ed-4168-9788-403d115d5466}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Classes">
-      <UniqueIdentifier>{9d6173e2-2687-494f-90a5-f019c9f49a5d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Classes\Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="Classes\Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
     <Filter Include="Main">
       <UniqueIdentifier>{28e172ce-0d97-4dc5-b44f-539f9c259348}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Entity">
+      <UniqueIdentifier>{52042e8c-9280-4395-92d3-6d8e3419fab7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Weapon">
+      <UniqueIdentifier>{bae3aaf3-59d0-4610-bd1c-4096a0eb5b1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Screen">
+      <UniqueIdentifier>{24e628bb-45a9-465d-8964-a0d1565413f7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Screen.cpp">
-      <Filter>Classes\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Pixel.cpp">
-      <Filter>Classes\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Map.cpp">
-      <Filter>Classes\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Entity.cpp">
-      <Filter>Classes\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Classes\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Weapon.cpp">
-      <Filter>Classes\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Position.cpp">
-      <Filter>Classes\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="TODO.cpp">
       <Filter>Resource Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Bullet.cpp">
-      <Filter>Classes\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BulletList.cpp">
-      <Filter>Classes\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>Classes\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Main</Filter>
     </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity.cpp">
+      <Filter>Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapon.cpp">
+      <Filter>Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="BulletList.cpp">
+      <Filter>Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="Screen.cpp">
+      <Filter>Screen</Filter>
+    </ClCompile>
+    <ClCompile Include="Position.cpp">
+      <Filter>Screen</Filter>
+    </ClCompile>
+    <ClCompile Include="Pixel.cpp">
+      <Filter>Screen</Filter>
+    </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>Screen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Screen.hpp">
-      <Filter>Classes\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Pixel.hpp">
-      <Filter>Classes\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Map.hpp">
-      <Filter>Classes\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Entity.hpp">
-      <Filter>Classes\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.hpp">
-      <Filter>Classes\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Weapon.hpp">
-      <Filter>Classes\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Position.hpp">
-      <Filter>Classes\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Bullet.hpp">
-      <Filter>Classes\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BulletList.hpp">
-      <Filter>Classes\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemy.hpp">
-      <Filter>Classes\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="colors.h">
       <Filter>Utilities</Filter>
     </ClInclude>
     <ClInclude Include="settings.h">
       <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.hpp">
+      <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.hpp">
+      <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.hpp">
+      <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapon.hpp">
+      <Filter>Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="BulletList.hpp">
+      <Filter>Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.hpp">
+      <Filter>Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="Screen.hpp">
+      <Filter>Screen</Filter>
+    </ClInclude>
+    <ClInclude Include="Position.hpp">
+      <Filter>Screen</Filter>
+    </ClInclude>
+    <ClInclude Include="Pixel.hpp">
+      <Filter>Screen</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.hpp">
+      <Filter>Screen</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
