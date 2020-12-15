@@ -55,9 +55,6 @@
     <ClCompile Include="Map.cpp">
       <Filter>Screen</Filter>
     </ClCompile>
-    <ClCompile Include="TODO.txt">
-      <Filter>Resource Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="colors.h">
@@ -96,5 +93,10 @@
     <ClInclude Include="Map.hpp">
       <Filter>Screen</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="TODO.cpp">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>
