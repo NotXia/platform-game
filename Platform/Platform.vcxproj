@@ -149,7 +149,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Position.cpp" />
     <ClCompile Include="Screen.cpp" />
-    <ClCompile Include="TODO.cpp" />
+    <ClCompile Include="TODO.txt" />
     <ClCompile Include="Weapon.cpp" />
   </ItemGroup>
   <ItemGroup>

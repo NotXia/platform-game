@@ -22,9 +22,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="TODO.cpp">
-      <Filter>Resource Files</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Main</Filter>
     </ClCompile>
@@ -57,6 +54,9 @@
     </ClCompile>
     <ClCompile Include="Map.cpp">
       <Filter>Screen</Filter>
+    </ClCompile>
+    <ClCompile Include="TODO.txt">
+      <Filter>Resource Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
