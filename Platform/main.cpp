@@ -103,8 +103,7 @@ int main() {
 
                 player.jump();
 
-                if (player.getDirection() == DIRECTION_LEFT) { screen.write_entity(player); }
-                else { screen.write_entity(player); }
+                screen.write_entity(player);
             }
         }
         /*** Gestione caduta ***/
@@ -116,8 +115,7 @@ int main() {
 
             player.fall();
 
-            if (player.getDirection() == DIRECTION_LEFT) { screen.write_entity(player); }
-            else { screen.write_entity(player); }
+            screen.write_entity(player);
         }
         /*** Gestione arrivo a terra ***/
         else if (!player.isJumping() && map->getMapAt(Position(player.getBodyPosition().getX(), player.getBodyPosition().getY()+1)).isSolid()) {
