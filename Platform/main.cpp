@@ -8,6 +8,7 @@
 #include "colors.h"
 #include "Weapon.hpp"
 #include "Bullet.hpp"
+#include "EnemyList.hpp"
 using namespace std;
 
 int main() {
@@ -20,16 +21,15 @@ int main() {
 
     Screen screen = Screen();
     Map *map = new Map(NULL);
-    //*map = Map(NULL); 
-    Player player = Player(MAX_LIFE, Pixel('<', PLAYER_HEAD_COLOR, true), Pixel('>', PLAYER_HEAD_COLOR, true), Pixel(char(219), PLAYER_BODY_COLOR, true), &test, map->getLeftPosition());
+    Player player = Player(MAX_LIFE, Pixel('<', PLAYER_HEAD_COLOR, true), Pixel('>', PLAYER_HEAD_COLOR, true), Pixel(char(219), PLAYER_BODY_COLOR, true), map->getLeftPosition(), &test);
     Position head_position;
 
     
-
     screen.init();
 
     screen.write_game_area(map);
-    screen.write_entity_right(player);
+    screen.write_enemies(map->getEnemyList());
+    screen.write_entity(player);
 
     while (true) {
         if (_kbhit()) {
@@ -38,14 +38,15 @@ int main() {
                 screen.resetTerrain(map, player.getBodyPosition());
                 screen.resetTerrain(map, player.getHeadPosition());
                 player.goLeft();
-                screen.write_entity_left(player);
+                screen.write_entity(player);
 
                 if (player.getBodyPosition().getX() <= 1) {
                     if (!map->prevNull()) {
                         map = map->gotoPrevious(player.getBodyPosition());
                         screen.write_game_area(map);
+                        screen.write_enemies(map->getEnemyList());
                         player.setPosition(map->getRightPosition());
-                        screen.write_entity_left(player);
+                        screen.write_entity(player);
                     }
                 }
             }
@@ -53,13 +54,14 @@ int main() {
                 screen.resetTerrain(map, player.getBodyPosition());
                 screen.resetTerrain(map, player.getHeadPosition());
                 player.goRight();
-                screen.write_entity_right(player);
+                screen.write_entity(player);
 
                 if (player.getBodyPosition().getX() >= GAME_WIDTH) {
                     map = map->gotoNext(player.getBodyPosition(), 0);
                     screen.write_game_area(map);
+                    screen.write_enemies(map->getEnemyList());
                     player.setPosition(map->getLeftPosition());
-                    screen.write_entity_right(player);
+                    screen.write_entity(player);
                 }
             }
             else if (ch == 'w' && player.getCanMove()) {
@@ -101,8 +103,8 @@ int main() {
 
                 player.jump();
 
-                if (player.getDirection() == DIRECTION_LEFT) { screen.write_entity_left(player); }
-                else { screen.write_entity_right(player); }
+                if (player.getDirection() == DIRECTION_LEFT) { screen.write_entity(player); }
+                else { screen.write_entity(player); }
             }
         }
         /*** Gestione caduta ***/
@@ -114,8 +116,8 @@ int main() {
 
             player.fall();
 
-            if (player.getDirection() == DIRECTION_LEFT) { screen.write_entity_left(player); }
-            else { screen.write_entity_right(player); }
+            if (player.getDirection() == DIRECTION_LEFT) { screen.write_entity(player); }
+            else { screen.write_entity(player); }
         }
         /*** Gestione arrivo a terra ***/
         else if (!player.isJumping() && map->getMapAt(Position(player.getBodyPosition().getX(), player.getBodyPosition().getY()+1)).isSolid()) {

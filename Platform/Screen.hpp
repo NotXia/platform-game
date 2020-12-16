@@ -4,6 +4,7 @@
 #include "Pixel.hpp"
 #include "Entity.hpp"
 #include "Map.hpp"
+#include "EnemyList.hpp"
 
 // Imposta il template del gioco
 class Screen {
@@ -48,16 +49,16 @@ class Screen {
 		void write_game_area(Map *map);
 
 		/*
-			Prende in input un oggetto di tipo Entity
-			Inserisce l'entità nell'area di gioco rivolto verso sinistra
+			Prende in input un Pixel e una Position.
+			Imposta il pixel nella posizione indicata.
 		*/
-		void write_entity_left(Entity entity);
+		void write_at(Pixel pixel, Position position);
 
 		/*
 			Prende in input un oggetto di tipo Entity
-			Inserisce l'entità nell'area di gioco rivolto verso destra
+			Inserisce l'entità nell'area di gioco
 		*/
-		void write_entity_right(Entity entity);
+		void write_entity(Entity entity);
 
 		/*
 			Prende in input una posizione e la mappa.
@@ -72,9 +73,9 @@ class Screen {
 		void write_textbox(const char string[]);
 
 		/*
-			Prende in input un Pixel e una Position.
-			Imposta il pixel nella posizione indicata.
+			Prende in input un oggetto EnemyList.
+			Stampa sullo schermo tutti i nemici
 		*/
-		void write_at(Pixel pixel, Position position);
+		void write_enemies(EnemyList list);
 
 };

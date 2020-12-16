@@ -167,36 +167,28 @@ void Screen::write_game_area(Map *map) {
 	resetColor();
 }
 
+
 /*
-	Prende in input un oggetto di tipo Entity
-	Inserisce l'entità nell'area di gioco rivolto verso sinistra
+	Prende in input un Pixel e una Position.
+	Imposta il pixel nella posizione indicata.
 */
-void Screen::write_entity_left(Entity entity) {
-	// Corpo
-	moveCursor(entity.getBodyPosition().getX(), entity.getBodyPosition().getY());
-	setColor(entity.getBody().getColor());
-	cout <<entity.getBody().getValue();
-	// Testa
-	moveCursor(entity.getHeadPosition().getX(), entity.getHeadPosition().getY());
-	setColor(entity.getHeadLeft().getColor());
-	cout <<entity.getHeadLeft().getValue();
+void Screen::write_at(Pixel pixel, Position position) {
+	moveCursor(position.getX(), position.getY());
+	setColor(pixel.getColor());
+	cout <<pixel.getValue();
 	resetColor();
 }
 
 /*
 	Prende in input un oggetto di tipo Entity
-	Inserisce l'entità nell'area di gioco rivolto verso destra
+	Inserisce l'entità nell'area di gioco
 */
-void Screen::write_entity_right(Entity entity) {
+void Screen::write_entity(Entity entity) {
 	// Corpo
-	moveCursor(entity.getBodyPosition().getX(), entity.getBodyPosition().getY());
-	setColor(entity.getBody().getColor());
-	cout <<entity.getBody().getValue();
+	write_at(entity.getBody(), entity.getBodyPosition());
+	
 	// Testa
-	moveCursor(entity.getHeadPosition().getX(), entity.getHeadPosition().getY());
-	setColor(entity.getHeadRight().getColor());
-	cout <<entity.getHeadRight().getValue();
-	resetColor();
+	write_at(entity.getHead(), entity.getHeadPosition());
 }
 
 /*
@@ -204,12 +196,13 @@ void Screen::write_entity_right(Entity entity) {
 	Imposta in posizione position il valore previsto dalla mappa.
 */
 void Screen::resetTerrain(Map *map, Position position) {
-	moveCursor(position.getX(), position.getY());
-	setColor(map->getMapAt(position).getColor());
-	cout <<map->getMapAt(position).getValue();
-	resetColor();
+	write_at(map->getMapAt(position), position);
 }
 
+/*
+	Prende in input una stringa.
+	Inserisce la stringa nell'area di testo (in basso a destra).
+*/
 void Screen::write_textbox(const char string[]) {
 	int start_x = textBox_x+1;
 	int start_y = textBox_y+1;
@@ -219,9 +212,17 @@ void Screen::write_textbox(const char string[]) {
 	cout <<string;
 }
 
-void Screen::write_at(Pixel pixel, Position position) {
-	moveCursor(position.getX(), position.getY());
-	setColor(pixel.getColor());
-	cout <<pixel.getValue();
-	resetColor();
+
+/*
+	Prende in input un oggetto EnemyList.
+	Stampa sullo schermo tutti i nemici
+*/
+void Screen::write_enemies(EnemyList list) {
+	list.initIter();
+
+	while (!list.isNull()) {
+		write_entity(list.getCurrent());
+
+		list.goNext();
+	}
 }

@@ -27,8 +27,7 @@ class Entity {
 		Entity(int health=0, Pixel head_left=Pixel(' ', 0, false), Pixel head_right=Pixel(' ', 0, false), Pixel body=Pixel(' ', 0, false), Position position=Position(0, 0));
 
 		int getHealth();
-		Pixel getHeadLeft();
-		Pixel getHeadRight();
+		Pixel getHead();
 		Pixel getBody(); 
 		bool getDirection();
 		Position getBodyPosition();

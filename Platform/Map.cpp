@@ -23,7 +23,8 @@ Map::Map(Map *prev) {
 	left_position = Position(1, GAME_HEIGHT-TERRAIN_HEIGHT);
 	right_position = Position(GAME_WIDTH, GAME_HEIGHT-TERRAIN_HEIGHT);
 
-	enemyList = NULL;
+	enemyList = EnemyList();
+	generateEnemy(2);
 }
 
 /*
@@ -86,21 +87,29 @@ void Map::generateTerrain() {
 	}
 }
 
-EnemyList* Map::generateEnemy(int max) {
-	EnemyList *out = NULL;
-
-	for (int i=GAME_HEIGHT-1; i>=0; i--) {
-		for (int j=GAME_WIDTH-1; j>=0; j--) {
-			if (terrain[j][i].isSolid()) {
-				if (out == NULL) {
-					/*out = new EnemyList;
-					out->enemy = new Enemy()*/
+void Map::generateEnemy(int max) {
+	int chance = 1000;
+	int generate;
+	for (int i=GAME_HEIGHT-3; i>=0; i--) {
+		for (int j=GAME_WIDTH-EMPTYZONE_LENGTH; j>EMPTYZONE_LENGTH; j--) {
+			if (terrain[j][i].isSolid() && !terrain[j][i-1].isSolid() && !terrain[j][i-2].isSolid()) {
+				generate = rand() % chance;
+				if (generate == 0 && max > 0) {
+					Enemy new_enemy = Enemy(1, 10, 0, 10, Pixel('<', ENEMY_HEAD_COLOR, true), Pixel('>', ENEMY_HEAD_COLOR, true), Pixel(char(219), ENEMY_BODY_COLOR, true), Position(j+1, i), NULL, 3);
+					enemyList.add(new_enemy);
+					max--;
+					chance = 1000;
+				}
+				else {
+					chance -= 10;
+					if (chance <= 0) {
+						chance = 1;
+					}
 				}
 			}
 		}
 	}
-
-	return out;
+	//enemyList.print();
 }
 
 Position Map::getLeftPosition() {
@@ -109,6 +118,11 @@ Position Map::getLeftPosition() {
 Position Map::getRightPosition() {
 	return this->right_position;
 }
+
+EnemyList Map::getEnemyList() {
+	return enemyList;
+}
+
 
 /*
 	Restituisce true se *prev è NULL, false altrimenti
@@ -133,7 +147,7 @@ Map* Map::gotoPrevious(Position exit_position) {
 Map* Map::gotoNext(Position enter_position, int max_enemy) {
 	if (this->next == NULL) {
 		this->next = new Map(this);
-		this->next->enemyList = generateEnemy(max_enemy);
+		generateEnemy(max_enemy);
 	}
 	this->next->left_position.setY(enter_position.getY());
 	return this->next;

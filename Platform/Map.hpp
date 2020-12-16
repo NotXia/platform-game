@@ -4,11 +4,8 @@
 #include "Position.hpp"
 #include <iostream>
 #include "Enemy.hpp"
+#include "EnemyList.hpp"
 
-struct EnemyList {
-	Enemy enemy;
-	EnemyList *next;
-};
 
 class Map {
 	protected:
@@ -17,7 +14,8 @@ class Map {
 		Map *prev;
 		Position left_position;
 		Position right_position;
-		EnemyList *enemyList;
+
+		EnemyList enemyList;
 
 		/*
 			Inizializza la matrice terrain con gli elementi base della mappa
@@ -26,13 +24,14 @@ class Map {
 
 		/*
 		*/
-		EnemyList* generateEnemy(int max);
+		void generateEnemy(int max);
 
 	public:
 		Map(Map *prev=NULL);
 
 		Position getLeftPosition();
 		Position getRightPosition();
+		EnemyList getEnemyList();
 
 		/*
 			Restituisce true se *prev è NULL, false altrimenti

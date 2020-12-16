@@ -20,6 +20,9 @@
     <Filter Include="Screen">
       <UniqueIdentifier>{24e628bb-45a9-465d-8964-a0d1565413f7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="List">
+      <UniqueIdentifier>{e89c0539-3611-464b-93ac-7ac494ea1ca4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -54,6 +57,12 @@
     </ClCompile>
     <ClCompile Include="Map.cpp">
       <Filter>Screen</Filter>
+    </ClCompile>
+    <ClCompile Include="ArmedEntity.cpp">
+      <Filter>Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyList.cpp">
+      <Filter>List</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -92,6 +101,12 @@
     </ClInclude>
     <ClInclude Include="Map.hpp">
       <Filter>Screen</Filter>
+    </ClInclude>
+    <ClInclude Include="ArmedEntity.hpp">
+      <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyList.hpp">
+      <Filter>List</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

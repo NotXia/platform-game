@@ -21,12 +21,14 @@ int Entity::getHealth() {
 	return health;
 }
 
-Pixel Entity::getHeadLeft() {
-	return head_left;
-}
 
-Pixel Entity::getHeadRight() {
-	return head_right;
+Pixel Entity::getHead() {
+	if (direction == DIRECTION_LEFT) {
+		return head_left;
+	}
+	else {
+		return head_right;
+	}
 }
 
 Pixel Entity::getBody() {

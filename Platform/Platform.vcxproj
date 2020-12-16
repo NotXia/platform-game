@@ -139,8 +139,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ArmedEntity.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemyList.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="BulletList.cpp" />
     <ClCompile Include="main.cpp" />
@@ -152,9 +154,11 @@
     <ClCompile Include="Weapon.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ArmedEntity.hpp" />
     <ClInclude Include="Bullet.hpp" />
     <ClInclude Include="colors.h" />
     <ClInclude Include="Enemy.hpp" />
+    <ClInclude Include="EnemyList.hpp" />
     <ClInclude Include="Entity.hpp" />
     <ClInclude Include="BulletList.hpp" />
     <ClInclude Include="Map.hpp" />

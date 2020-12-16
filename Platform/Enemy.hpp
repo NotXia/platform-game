@@ -1,17 +1,15 @@
-#include "Entity.hpp"
+#pragma once
+#include "ArmedEntity.hpp"
 #include "Weapon.hpp"
 
-class Enemy : public Entity {
+class Enemy : public ArmedEntity {
 	protected:
-		Weapon *weapon;
 		int points;
 		int money;
 		Position *lastPlayerPosition;
 		int visualRange;
 
-		int weapon_loop_counter;
-
 	public:
-		Enemy(int health, int points, int min_money, int max_money, Pixel head_left, Pixel head_right, Pixel body, Weapon *weapon, Position position, int visualRange);
+		Enemy(int health=0, int points=0, int min_money=0, int max_money=0, Pixel head_left=Pixel(), Pixel head_right=Pixel(), Pixel body=Pixel(), Position position=Position(), Weapon *weapon=NULL, int visualRange=0);
 };
 

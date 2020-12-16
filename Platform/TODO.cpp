@@ -1,7 +1,7 @@
 /*
 	TODO:
 	X S per scendere - DONE
-	- Classe entità armata
+	X Classe entità armata
 	- Umarells
 	- La funzione attack di player restituisce un proiettile
 	- Weapons
@@ -14,3 +14,5 @@
 	- Ogni livello ha un nome generato casualmente
 	- Easter eggs
 */
+
+
