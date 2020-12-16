@@ -67,6 +67,20 @@ Position Entity::getFrontPosition() {
 	return front;
 }
 
+// Restituisce le coordinate dietro al corpo (stabilito in base alla direzione)
+Position Entity::getBackPosition() {
+	Position back = position;
+
+	if (direction == DIRECTION_LEFT) {
+		back.setX(back.getX()+1);
+	}
+	else {
+		back.setX(back.getX()-1);
+	}
+
+	return back;
+}
+
 void Entity::setCanMove(bool can_move) {
 	this->can_move = can_move;
 }
@@ -94,7 +108,9 @@ bool Entity::isDead() {
 	Aggiorna position, decrementando di 1 la posizione sull'asse X
 */
 void Entity::goLeft() {
-	position.setX(position.getX()-1);
+	if (direction != DIRECTION_RIGHT) {
+		position.setX(position.getX()-1);
+	}
 	direction = DIRECTION_LEFT;
 }
 
@@ -102,7 +118,9 @@ void Entity::goLeft() {
 	Aggiorna position, incrementando di 1 la posizione sull'asse X
 */
 void Entity::goRight() {
-	position.setX(position.getX()+1);
+	if (direction != DIRECTION_LEFT) {
+		position.setX(position.getX()+1);
+	}
 	direction = DIRECTION_RIGHT;
 }
 

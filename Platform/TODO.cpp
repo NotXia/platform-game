@@ -13,6 +13,7 @@
 	- Boss
 	- Ogni livello ha un nome generato casualmente
 	- Easter eggs
+	- Rework range visione nemici
 */
 
 

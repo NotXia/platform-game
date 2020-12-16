@@ -15,7 +15,7 @@ const Pixel SKY_TEXTURE = Pixel(' ', BACKGROUND_DEFAULT, false);
 
 int platform_chance = 20;
 
-Map::Map(Map *prev) {
+Map::Map(Map *prev, int max_enemies, int difficulty) {
 	generateTerrain();
 	next = NULL;
 	this->prev = prev;
@@ -24,7 +24,7 @@ Map::Map(Map *prev) {
 	right_position = Position(GAME_WIDTH, GAME_HEIGHT-TERRAIN_HEIGHT);
 
 	enemyList = EnemyList();
-	generateEnemy(2);
+	generateEnemy(max_enemies, difficulty);
 }
 
 /*
@@ -87,29 +87,39 @@ void Map::generateTerrain() {
 	}
 }
 
-void Map::generateEnemy(int max) {
-	int chance = 1000;
-	int generate;
-	for (int i=GAME_HEIGHT-3; i>=0; i--) {
-		for (int j=GAME_WIDTH-EMPTYZONE_LENGTH; j>EMPTYZONE_LENGTH; j--) {
-			if (terrain[j][i].isSolid() && !terrain[j][i-1].isSolid() && !terrain[j][i-2].isSolid()) {
-				generate = rand() % chance;
-				if (generate == 0 && max > 0) {
-					Enemy new_enemy = Enemy(1, 10, 0, 10, Pixel('<', ENEMY_HEAD_COLOR, true), Pixel('>', ENEMY_HEAD_COLOR, true), Pixel(char(219), ENEMY_BODY_COLOR, true), Position(j+1, i), NULL, 3);
-					enemyList.add(new_enemy);
-					max--;
-					chance = 1000;
-				}
-				else {
-					chance -= 10;
-					if (chance <= 0) {
-						chance = 1;
+/*
+	Prende in input due interi, rispettivamente il numero massimo di nemici generabili e la difficoltà.
+	Genera e inizializza i nemici e li inserisce in enemyList
+*/
+void Map::generateEnemy(int max_enemies, int difficulty) {
+	if (max_enemies != 0) {
+		int base_chance = 2000 + 500*max_enemies;
+		int chance = base_chance;
+		int generate;
+		for (int i=GAME_HEIGHT-TERRAIN_HEIGHT; i>0; i--) {
+			base_chance -= 200 * max_enemies;
+			for (int j=GAME_WIDTH-(EMPTYZONE_LENGTH*2); j>(EMPTYZONE_LENGTH*2); j--) {
+				if (terrain[j][i].isSolid() && !terrain[j][i-1].isSolid() && !terrain[j][i-2].isSolid()) {
+					generate = rand() % chance;
+					if (generate == 0 && max_enemies > 0) {
+						int hp = rand() % (difficulty*2 - difficulty + 1) + difficulty;
+						int points = 10 * difficulty;
+						int money = rand() % difficulty + 1;
+						Enemy new_enemy = Enemy(hp, points, money, Pixel('<', ENEMY_HEAD_COLOR, true), Pixel('>', ENEMY_HEAD_COLOR, true), Pixel(char(219), ENEMY_BODY_COLOR, true), Position(j+1, i), NULL, 8);
+						enemyList.add(new_enemy);
+						max_enemies--;
+						chance = base_chance;
+					}
+					else {
+						chance -= rand() % (1-100*max_enemies) + 1;
+						if (chance <= 0) {
+							chance = 1;
+						}
 					}
 				}
 			}
 		}
 	}
-	//enemyList.print();
 }
 
 Position Map::getLeftPosition() {
@@ -122,7 +132,6 @@ Position Map::getRightPosition() {
 EnemyList Map::getEnemyList() {
 	return enemyList;
 }
-
 
 /*
 	Restituisce true se *prev è NULL, false altrimenti
@@ -144,10 +153,9 @@ Map* Map::gotoPrevious(Position exit_position) {
 	Prende in input la posizione da cui il giocatore è uscito nel livello corrente.
 	Restituisce il puntatore al livello successivo, impostando left_position con il parametro in input.
 */
-Map* Map::gotoNext(Position enter_position, int max_enemy) {
+Map* Map::gotoNext(Position enter_position, int max_enemy, int difficulty) {
 	if (this->next == NULL) {
-		this->next = new Map(this);
-		generateEnemy(max_enemy);
+		this->next = new Map(this, max_enemy, difficulty);
 	}
 	this->next->left_position.setY(enter_position.getY());
 	return this->next;
@@ -155,8 +163,46 @@ Map* Map::gotoNext(Position enter_position, int max_enemy) {
 
 /*
 	Prende in input una posizione.
+	Restituisce true se quella posizione è solida, false altrimenti
+*/
+bool Map::isSolidAt(Position position) {
+	bool out = false;
+
+	if (enemyList.existsAt(position)) {
+		out = true;
+	}
+	else if(terrain[position.getX()-1][position.getY()-1].isSolid()) {
+		out = true;
+	}
+	return out;
+}
+
+/*
+	Prende in input una posizione.
 	Restituisce quella posizione della mappa.
 */
-Pixel Map::getMapAt(Position position) {
-	return terrain[position.getX()-1][position.getY()-1];
+//Pixel Map::getMapAt(Position position) {
+//	Pixel out;
+//
+//	int enemy_flag = enemyList.existsAt(position);
+//	if (enemy_flag == BODY_FOUND) {
+//		out = enemyList.getCurrent().getBody();
+//	}
+//	else if (enemy_flag == HEAD_FOUND) {
+//		out = enemyList.getCurrent().getHead();
+//	}
+//	else {
+//		out = terrain[position.getX()-1][position.getY()-1];
+//	}
+//	return out;
+//}
+
+/*
+	Prende in input una posizione.
+	Restituisce quella posizione della mappa, ignorando la lista di nemici
+*/
+Pixel Map::getTerrainAt(Position position) {
+	Pixel out;
+	out = terrain[position.getX()-1][position.getY()-1];
+	return out;
 }

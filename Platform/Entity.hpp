@@ -33,6 +33,7 @@ class Entity {
 		Position getBodyPosition();
 		Position getHeadPosition();
 		Position getFrontPosition(); // Restituisce le coordinate davanti al corpo (stabilito in base alla direzione)
+		Position getBackPosition(); // Restituisce le coordinate dietro al corpo (stabilito in base alla direzione)
 		void setPosition(Position position);
 		void setCanMove(bool can_move);
 		bool getCanMove();

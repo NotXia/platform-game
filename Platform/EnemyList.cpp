@@ -70,3 +70,29 @@ void EnemyList::add(Enemy enemy) {
 bool EnemyList::isNull() {
 	return iter == NULL;
 }
+
+bool EnemyList::existsAt(Position position) {
+	iter = list;
+	bool found = false;
+
+	while (iter != NULL && found == NOT_FOUND) {
+		if (iter->enemy.getBodyPosition().getX() == position.getX() && iter->enemy.getBodyPosition().getY() == position.getY() ||
+			iter->enemy.getHeadPosition().getX() == position.getX() && iter->enemy.getHeadPosition().getY() == position.getY()) {
+			found = true;
+		}
+		else {
+			iter = iter->next;
+		}
+	}
+
+	return found;
+}
+
+/*
+	Aggiorna l'oggetto Enemy del nodo attualmente puntato da iter
+*/
+void EnemyList::updateCurrent(Enemy enemy) {
+	if (iter != NULL) {
+		iter->enemy = enemy;
+	}
+}

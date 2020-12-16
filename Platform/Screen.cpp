@@ -160,8 +160,8 @@ void Screen::write_game_area(Map *map) {
 	for (int i=1; i<=GAME_HEIGHT; i++) {
 		moveCursor(1, i);
 		for (int j=1; j<=GAME_WIDTH; j++) {
-			setColor(map->getMapAt(Position(j, i)).getColor());
-			cout <<map->getMapAt(Position(j, i)).getValue();
+			setColor(map->getTerrainAt(Position(j, i)).getColor());
+			cout <<map->getTerrainAt(Position(j, i)).getValue();
 		}
 	}
 	resetColor();
@@ -196,7 +196,7 @@ void Screen::write_entity(Entity entity) {
 	Imposta in posizione position il valore previsto dalla mappa.
 */
 void Screen::resetTerrain(Map *map, Position position) {
-	write_at(map->getMapAt(position), position);
+	write_at(map->getTerrainAt(position), position);
 }
 
 /*

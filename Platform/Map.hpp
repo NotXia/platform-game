@@ -24,10 +24,10 @@ class Map {
 
 		/*
 		*/
-		void generateEnemy(int max);
+		void generateEnemy(int max_enemies, int difficulty);
 
 	public:
-		Map(Map *prev=NULL);
+		Map(Map *prev=NULL, int max_enemies=0, int difficulty=1);
 
 		Position getLeftPosition();
 		Position getRightPosition();
@@ -48,12 +48,24 @@ class Map {
 			Prende in input la posizione da cui il giocatore è uscito nel livello corrente.
 			Restituisce il puntatore al livello successivo, impostando left_position con il parametro in input.
 		*/
-		Map* gotoNext(Position enter_position, int max_enemy);
+		Map* gotoNext(Position enter_position, int max_enemy, int difficulty);
+
+		/*
+			Prende in input una posizione.
+			Restituisce true se quella posizione è solida, false altrimenti
+		*/
+		bool isSolidAt(Position position);
 
 		/*
 			Prende in input una posizione.
 			Restituisce quella posizione della mappa.
 		*/
-		Pixel getMapAt(Position position);
+		//Pixel getMapAt(Position position);
+
+		/*
+			Prende in input una posizione.
+			Restituisce quella posizione della mappa, ignorando la lista di nemici
+		*/
+		Pixel getTerrainAt(Position position);
 };
 
