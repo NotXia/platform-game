@@ -105,7 +105,7 @@ void Map::generateEnemy(int max_enemies, int difficulty) {
 						int hp = rand() % (difficulty*2 - difficulty + 1) + difficulty;
 						int points = 10 * difficulty;
 						int money = rand() % difficulty + 1;
-						Enemy new_enemy = Enemy(hp, points, money, Pixel('<', ENEMY_HEAD_COLOR, true), Pixel('>', ENEMY_HEAD_COLOR, true), Pixel(char(219), ENEMY_BODY_COLOR, true), Position(j+1, i), NULL, 8);
+						Enemy new_enemy = Enemy(hp, points, money, Pixel('<', ENEMY_HEAD_COLOR, true), Pixel('>', ENEMY_HEAD_COLOR, true), Pixel(char(219), ENEMY_BODY_COLOR, true), Position(j+1, i), new Weapon(Pixel(), Pixel(), Bullet(), 3));
 						enemyList.add(new_enemy);
 						max_enemies--;
 						chance = base_chance;

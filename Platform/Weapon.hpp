@@ -7,10 +7,13 @@ class Weapon {
 		Pixel textureLeft;
 		Pixel textureRight;
 		Bullet bullet;
+		int range;
 
 	public:
-		Weapon(Pixel left, Pixel right, Bullet bullet);
+		Weapon(Pixel left, Pixel right, Bullet bullet, int range);
 
 		Pixel getTexture(bool direction);
+
+		int getRange();
 };
 

@@ -11,3 +11,5 @@ const int JUMP_SPEED = 2500;
 const int FALL_SPEED = 1800;
 
 const int WEAPON_DISPLAY_TIME = 4000;
+
+const int ENEMY_RANGE = 8;

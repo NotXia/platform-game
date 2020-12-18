@@ -39,3 +39,11 @@ int Position::getX() {
 int Position::getY() {
 	return this->y;
 }
+
+/*
+	Prende in input un oggetto Position
+	Restituisce true se il parametro è uguale all'oggetto su cui è chiamato
+*/
+bool Position::equals(Position p) {
+	return this->x == p.x && this->y == p.y;
+}

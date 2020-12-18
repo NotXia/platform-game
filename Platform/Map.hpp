@@ -3,9 +3,10 @@
 #include "settings.h"
 #include "Position.hpp"
 #include <iostream>
-#include "Enemy.hpp"
+//#include "Enemy.hpp"
 #include "EnemyList.hpp"
 
+class Enemy;
 
 class Map {
 	protected:

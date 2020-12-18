@@ -19,4 +19,10 @@ class Position {
 
 		int getX();
 		int getY();
+
+		/*
+			Prende in input un oggetto Position
+			Restituisce true se il parametro è uguale all'oggetto su cui è chiamato
+		*/
+		bool equals(Position p);
 };
