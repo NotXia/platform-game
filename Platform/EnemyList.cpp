@@ -11,6 +11,7 @@ EnemyList::EnemyList() {
 */
 void EnemyList::initIter() {
 	iter = list;
+	prev = NULL;
 }
 
 /*
@@ -23,34 +24,6 @@ Enemy EnemyList::getCurrent() {
 	}
 	else {
 		return Enemy();
-	}
-}
-
-/*
-	Muove l'iteratore al nodo successivo
-*/
-void EnemyList::goNext() {
-	if (iter != NULL) {
-		prev = iter;
-		iter = iter->next;
-	}
-}
-
-/*
-	Elimina il nodo attualmente puntato da iter
-*/
-void EnemyList::deleteCurrent() {
-	if (iter != NULL) {
-		if (prev == NULL) {
-			EnemyNode *to_del = list;
-			list = list->next;
-			delete to_del;
-		}
-		else {
-			EnemyNode *to_del = iter;
-			prev->next = iter->next;
-			delete to_del;
-		}
 	}
 }
 
@@ -68,20 +41,56 @@ void EnemyList::add(Enemy enemy) {
 	Restituisce true se iter è NULL, false altrimenti
 */
 bool EnemyList::isNull() {
-	return iter == NULL;
+	return (iter == NULL);
 }
 
-bool EnemyList::existsAt(Position position) {
-	iter = list;
+/*
+	Sposta prev al nodo attualmente puntato da iter
+	Sposta iter al nodo successivo.
+*/
+void EnemyList::goNext() {
+	prev = iter;
+	iter = iter->next;
+}
+
+/*
+	Prende in input una posizione.
+	Indica se in quella posizione c'è un nemico.
+	Iter punterà a quel nodo, se esiste.
+	Previ punterà al nodo precedente, se esiste.
+*/
+bool EnemyList::pointAt(Position position) {
+	initIter();
 	bool found = false;
 
-	while (iter != NULL && found == NOT_FOUND) {
-		if (iter->enemy.getBodyPosition().getX() == position.getX() && iter->enemy.getBodyPosition().getY() == position.getY() ||
-			iter->enemy.getHeadPosition().getX() == position.getX() && iter->enemy.getHeadPosition().getY() == position.getY()) {
+	while (iter != NULL && !found) {
+		if (iter->enemy.getBodyPosition().equals(position) || iter->enemy.getHeadPosition().equals(position)) {
 			found = true;
 		}
 		else {
+			prev = iter;
 			iter = iter->next;
+		}
+	}
+
+	return found;
+}
+
+/*
+	Prende in input una posizione.
+	Indica se in quella posizione c'è un nemico.
+	Non modifica iter e prev
+*/
+bool EnemyList::existsAt(Position position) {
+	EnemyNode *iterator = list;
+	bool found = false;
+
+	while (iterator != NULL && !found) {
+		if (iterator->enemy.getBodyPosition().equals(position) || iterator->enemy.getHeadPosition().equals(position)) {
+			found = true;
+		}
+		else {
+			iterator = iterator->next;
 		}
 	}
 
@@ -93,6 +102,24 @@ bool EnemyList::existsAt(Position position) {
 */
 void EnemyList::updateCurrent(Enemy enemy) {
 	if (iter != NULL) {
-		iter->enemy = enemy;
+		if (!enemy.isDead()) {
+			iter->enemy = enemy;
+			prev = iter;
+			iter = iter->next;
+		}
+		else {
+			if (prev == NULL) {
+				EnemyNode *to_del = iter;
+				list = list->next;
+				iter = list;
+				delete to_del;
+			}
+			else {
+				EnemyNode *to_del = iter;
+				prev->next = iter->next;
+				iter = iter->next;
+				delete to_del;
+			}
+		}
 	}
 }

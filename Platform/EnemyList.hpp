@@ -2,9 +2,6 @@
 #include "Enemy.hpp"
 #include <iostream>
 
-const int NOT_FOUND = 0;
-const int BODY_FOUND = 1;
-const int HEAD_FOUND = 2;
 
 class EnemyList {
 	protected:
@@ -19,7 +16,7 @@ class EnemyList {
 		EnemyList();
 
 		/*
-			Inizializza iter alla testa della lista
+			Inizializza iter alla testa della lista e prev a NULL
 		*/
 		void initIter();
 
@@ -30,16 +27,12 @@ class EnemyList {
 		Enemy getCurrent();
 
 		/*
-			Muove l'iteratore al nodo successivo
-		*/
-		void goNext();
-
-		/*
 			Elimina il nodo attualmente puntato da iter
 		*/
-		void deleteCurrent();
+		//void deleteCurrent();
 
 		/*
+			Prende in input un oggetto Enemy
 			Aggiunge un nuovo nodo in testa a list
 		*/
 		void add(Enemy enemy);
@@ -50,8 +43,23 @@ class EnemyList {
 		bool isNull();
 
 		/*
+			Sposta prev al nodo attualmente puntato da iter
+			Sposta iter al nodo successivo.
+		*/
+		void goNext();
+
+		/*
 			Prende in input una posizione.
 			Indica se in quella posizione c'è un nemico.
+			Iter punterà a quel nodo, se esiste.
+			Previ punterà al nodo precedente, se esiste.
+		*/
+		bool pointAt(Position position);
+
+		/*
+			Prende in input una posizione.
+			Indica se in quella posizione c'è un nemico.
+			Non modifica iter e prev
 		*/
 		bool existsAt(Position position);
 

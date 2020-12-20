@@ -21,7 +21,7 @@ class Enemy : public ArmedEntity {
 		int refreshTime, currRefresh;
 
 	public:
-		Enemy(int health=0, int points=0, int money=0, Pixel head_left=Pixel(), Pixel head_right=Pixel(), Pixel body=Pixel(), Position position=Position(), Weapon *weapon=NULL);
+		Enemy(int health=0, int points=0, int money=0, Pixel head_left=Pixel(), Pixel head_right=Pixel(), Pixel body=Pixel(), Position position=Position(), Weapon weapon=Weapon());
 
 		/*
 			Indica se è possibile eseguire la prossima azione (currRefresh ha raggiunto refreshTime)
@@ -44,5 +44,11 @@ class Enemy : public ArmedEntity {
 			Restituisce l'azione da eseguire
 		*/
 		int getAction(Map *map, Player player);
+
+		/*
+			Richiama la funzione attack() della superclasse e imposta il campo hostile dell'oggetto Bullet restituito a true.
+			Restituisce tale oggetto.
+		*/
+		Bullet attack();
 };
 

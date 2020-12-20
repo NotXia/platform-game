@@ -15,17 +15,19 @@ int main() {
     srand(time(0));
 
     Weapon test = Weapon(
-        Pixel(char(196), FG_GREEN | BG_CYAN, false), Pixel(char(196), FG_GREEN | BG_CYAN, false),
-        Bullet(Pixel(char(153), FG_WHITE | BACKGROUND_DEFAULT, false), 10, 10, 10),
-        1
+        Pixel(char(196), FG_GREEN | BG_CYAN, false), 
+        Pixel(char(196), FG_GREEN | BG_CYAN, false),
+        Bullet(Pixel('-', FG_BLACK | BACKGROUND_DEFAULT, false), 100, 10)
     );
 
     int difficulty = 1;
     int max_enemies = 2;
     Screen screen = Screen();
-    Map *map = new Map(NULL, 2, difficulty);
-    Player player = Player(MAX_LIFE, Pixel('<', PLAYER_HEAD_COLOR, true), Pixel('>', PLAYER_HEAD_COLOR, true), Pixel(char(219), PLAYER_BODY_COLOR, true), map->getLeftPosition(), &test);
-    Position head_position;
+    Map *map = new Map(NULL, 3, difficulty);
+    Player player = Player(MAX_LIFE, Pixel('<', PLAYER_HEAD_COLOR, true), Pixel('>', PLAYER_HEAD_COLOR, true), Pixel(char(219), PLAYER_BODY_COLOR, true), map->getLeftPosition(), test);
+    //Position head_position;
+    EnemyList enemylist;
+    BulletList bulletlist;
 
     
     screen.init();
@@ -35,6 +37,10 @@ int main() {
     screen.write_entity(player);
 
     while (true) {
+
+        /* ----------------------------
+           INIZIO GESTIONE GIOCATORE   
+        ---------------------------- */
         if (_kbhit()) {
             char ch = _getch();
             if (ch == 'a' && player.getCanMove() && (!map->isSolidAt(player.getFrontPosition()) || (player.getDirection() == DIRECTION_RIGHT))) {
@@ -85,10 +91,10 @@ int main() {
             }
             else if (ch == 32) {
                 if (player.isOnTerrain()) {
-                    player.attack();
+                    map->addBullet(player.attack());
 
                     player.resetWeaponLoop();
-                    screen.write_at(player.getWeapon()->getTexture(player.getDirection()), player.getFrontPosition());
+                    screen.write_at(player.getWeapon().getTexture(player.getDirection()), player.getFrontPosition());
                 }
             }
         } // if (_kbhit())
@@ -133,15 +139,66 @@ int main() {
         player.incJumpLoopCounter();
         player.incFallLoopCounter();
         player.incWeaponLoop();
+        /* FINE GESTIONE GIOCATORE   
+        -------------------------- */
 
 
-        EnemyList enemylist = map->getEnemyList();
+
+        /* -----------------------------
+           INIZIO GESTIONE PROIETTILI   
+        ----------------------------- */
+        bulletlist = map->getBulletList();
+        bulletlist.initIter();
+
+        while (!bulletlist.isNull()) {
+            enemylist = map->getEnemyList();
+            Bullet bullet = bulletlist.getCurrent();
+
+            if (bullet.canRefresh()) {
+                screen.resetTerrain(map, bullet.getPosition());
+
+                if (bullet.isHostile()) {
+
+                }
+                else {
+                    if (enemylist.pointAt(bullet.getPosition())) {
+                        Enemy hit_enemy = enemylist.getCurrent();
+                        hit_enemy.take_damage(bullet.hit());
+
+                        if (hit_enemy.isDead()) {
+                            screen.resetTerrain(map, hit_enemy.getHeadPosition());
+                            screen.resetTerrain(map, hit_enemy.getBodyPosition());
+                        }
+                        enemylist.updateCurrent(hit_enemy);
+                        map->setEnemyList(enemylist);
+                    }
+                }
+                
+                if (bullet.travel()) {
+                    screen.write_at(bullet.getTexture(), bullet.getPosition());
+                }
+            }
+
+            bullet.incRefresh();
+
+            bulletlist.updateCurrent(bullet);
+            map->setBulletList(bulletlist);
+        }
+        /*  FINE GESTIONE PROIETTILI   
+        --------------------------- */
+
+
+
+        /* --------------------------
+           INIZIO GESTIONE UMARELL   
+        -------------------------- */
+        enemylist = map->getEnemyList();
         enemylist.initIter();
 
         while (!enemylist.isNull()) {
             Enemy enemy = enemylist.getCurrent();
-            if (enemy.canRefresh()) {
 
+            if (enemy.canRefresh()) {
                 enemy.search4Player(player);
 
                 int action = enemy.getAction(map, player);
@@ -176,6 +233,9 @@ int main() {
                         screen.resetTerrain(map, enemy.getHeadPosition());
                         enemy.fall();
                     }
+                }
+                else if (action == ACTION_ATTACK) {
+
                 }
             }
 
@@ -221,13 +281,31 @@ int main() {
                 ) {
                 enemy.setOnTerrain(true);
             }
+            
+            /*** Gestione collisione con proiettili ***/
+            bulletlist = map->getBulletList();
+            if (bulletlist.pointAt(enemy.getHeadPosition(), enemy.getBodyPosition())) {
+                Bullet hit_bullet = bulletlist.getCurrent();
+
+                enemy.take_damage(hit_bullet.hit());
+                if (enemy.isDead()) {
+                    screen.resetTerrain(map, enemy.getHeadPosition());
+                    screen.resetTerrain(map, enemy.getBodyPosition());
+                }
+
+                bulletlist.updateCurrent(hit_bullet);
+                map->setBulletList(bulletlist);
+            }
 
             enemy.incJumpLoopCounter();
             enemy.incFallLoopCounter();
             enemy.incRefresh();
-            enemylist.updateCurrent(enemy);
-            enemylist.goNext();
-        }
 
+            enemylist.updateCurrent(enemy);
+            map->setEnemyList(enemylist);
+        }
+        /* FINE GESTIONE UMARELL   
+        ------------------------ */
+        
     } // while (true)
 }

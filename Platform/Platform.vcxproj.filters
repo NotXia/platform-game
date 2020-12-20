@@ -43,9 +43,6 @@
     <ClCompile Include="Bullet.cpp">
       <Filter>Weapon</Filter>
     </ClCompile>
-    <ClCompile Include="BulletList.cpp">
-      <Filter>Weapon</Filter>
-    </ClCompile>
     <ClCompile Include="Screen.cpp">
       <Filter>Screen</Filter>
     </ClCompile>
@@ -62,6 +59,9 @@
       <Filter>Entity</Filter>
     </ClCompile>
     <ClCompile Include="EnemyList.cpp">
+      <Filter>List</Filter>
+    </ClCompile>
+    <ClCompile Include="BulletList.cpp">
       <Filter>List</Filter>
     </ClCompile>
   </ItemGroup>
@@ -84,9 +84,6 @@
     <ClInclude Include="Weapon.hpp">
       <Filter>Weapon</Filter>
     </ClInclude>
-    <ClInclude Include="BulletList.hpp">
-      <Filter>Weapon</Filter>
-    </ClInclude>
     <ClInclude Include="Bullet.hpp">
       <Filter>Weapon</Filter>
     </ClInclude>
@@ -106,6 +103,9 @@
       <Filter>Entity</Filter>
     </ClInclude>
     <ClInclude Include="EnemyList.hpp">
+      <Filter>List</Filter>
+    </ClInclude>
+    <ClInclude Include="BulletList.hpp">
       <Filter>List</Filter>
     </ClInclude>
   </ItemGroup>

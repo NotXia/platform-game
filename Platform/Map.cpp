@@ -25,6 +25,8 @@ Map::Map(Map *prev, int max_enemies, int difficulty) {
 
 	enemyList = EnemyList();
 	generateEnemy(max_enemies, difficulty);
+
+	bulletList = BulletList();
 }
 
 /*
@@ -105,7 +107,7 @@ void Map::generateEnemy(int max_enemies, int difficulty) {
 						int hp = rand() % (difficulty*2 - difficulty + 1) + difficulty;
 						int points = 10 * difficulty;
 						int money = rand() % difficulty + 1;
-						Enemy new_enemy = Enemy(hp, points, money, Pixel('<', ENEMY_HEAD_COLOR, true), Pixel('>', ENEMY_HEAD_COLOR, true), Pixel(char(219), ENEMY_BODY_COLOR, true), Position(j+1, i), new Weapon(Pixel(), Pixel(), Bullet(), 3));
+						Enemy new_enemy = Enemy(hp, points, money, Pixel('<', ENEMY_HEAD_COLOR, true), Pixel('>', ENEMY_HEAD_COLOR, true), Pixel(char(219), ENEMY_BODY_COLOR, true), Position(j+1, i), Weapon());
 						enemyList.add(new_enemy);
 						max_enemies--;
 						chance = base_chance;
@@ -131,6 +133,10 @@ Position Map::getRightPosition() {
 
 EnemyList Map::getEnemyList() {
 	return enemyList;
+}
+
+BulletList Map::getBulletList() {
+	return bulletList;
 }
 
 /*
@@ -205,4 +211,22 @@ Pixel Map::getTerrainAt(Position position) {
 	Pixel out;
 	out = terrain[position.getX()-1][position.getY()-1];
 	return out;
+}
+
+/*
+	Prende in input un oggetto Bullet.
+	Inserisce il parametro nella lista BulletList
+*/
+void Map::addBullet(Bullet bullet) {
+	bulletList.insert(bullet);
+}
+
+void Map::setEnemyList(EnemyList enemylist) {
+	enemylist.initIter();
+	this->enemyList = enemylist;
+}
+
+void Map::setBulletList(BulletList bulletlist) {
+	bulletlist.initIter();
+	this->bulletList = bulletlist;
 }

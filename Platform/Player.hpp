@@ -9,7 +9,7 @@ class Player : public ArmedEntity {
 		int money;
 
 	public:
-		Player(int health, Pixel head_left, Pixel head_right, Pixel body, Position position, Weapon *weapon);
+		Player(int health, Pixel head_left, Pixel head_right, Pixel body, Position position, Weapon weapon);
 
 		/*
 			Prende un input un intero
@@ -34,5 +34,11 @@ class Player : public ArmedEntity {
 			Decrementa money di quel valore
 		*/
 		void decMoney(int money);
+
+		/*
+			Richiama la funzione attack() della superclasse e imposta il campo hostile dell'oggetto Bullet restituito a false.
+			Restituisce tale oggetto.
+		*/
+		Bullet attack();
 };
 

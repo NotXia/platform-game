@@ -1,20 +1,29 @@
 #include "ArmedEntity.hpp"
 #include "settings.h"
 
-ArmedEntity::ArmedEntity(int health, Pixel head_left, Pixel head_right, Pixel body, Position position, Weapon *weapon) : Entity(health, head_left, head_right, body, position) {
+ArmedEntity::ArmedEntity(int health, Pixel head_left, Pixel head_right, Pixel body, Position position, Weapon weapon) : Entity(health, head_left, head_right, body, position) {
 	this->weapon = weapon;
 	is_attacking = false;
 	weapon_loop_counter = 0;
 }
 
-Weapon *ArmedEntity::getWeapon() {
+Weapon ArmedEntity::getWeapon() {
 	return this->weapon;
 }
 
-void ArmedEntity::attack() {
+/*
+	Restituisce un oggetto Bullet identico al Bullet associato all'oggetto weapon
+*/
+Bullet ArmedEntity::attack() {
 	setCanMove(false);
 	resetWeaponLoop();
 	is_attacking = true;
+
+	Bullet out_bullet = weapon.getBullet();
+	out_bullet.setPosition(getFrontPosition());
+	out_bullet.setDirection(this->direction);
+
+	return out_bullet;
 }
 
 /*

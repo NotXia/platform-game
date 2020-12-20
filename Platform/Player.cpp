@@ -1,7 +1,7 @@
 #include "Player.hpp"
 #include "settings.h"
 
-Player::Player(int health, Pixel head_left, Pixel head_right, Pixel body, Position position, Weapon *weapon) : ArmedEntity(health, head_left, head_right, body, position, weapon) {
+Player::Player(int health, Pixel head_left, Pixel head_right, Pixel body, Position position, Weapon weapon) : ArmedEntity(health, head_left, head_right, body, position, weapon) {
 	this->points = 0;
 	this->money = 0;
 }
@@ -41,4 +41,14 @@ void Player::incMoney(int money) {
 void Player::decMoney(int money) {
 	this->money -= money;
 
+}
+
+/*
+	Richiama la funzione attack() della superclasse e imposta il campo hostile dell'oggetto Bullet restituito a false.
+	Restituisce tale oggetto.
+*/
+Bullet Player::attack() {
+	Bullet bullet = ArmedEntity::attack();
+	bullet.setHostile(false);
+	return bullet;
 }

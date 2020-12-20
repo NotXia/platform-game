@@ -3,7 +3,7 @@
 #include "Map.hpp"
 #include "colors.h"
 
-Enemy::Enemy(int health, int points, int money, Pixel head_left, Pixel head_right, Pixel body, Position position, Weapon *weapon) : ArmedEntity(health, head_left, head_right, body, position, weapon) {
+Enemy::Enemy(int health, int points, int money, Pixel head_left, Pixel head_right, Pixel body, Position position, Weapon weapon) : ArmedEntity(health, head_left, head_right, body, position, weapon) {
 	this->points = points;
 	this->money = money;
 	lastPlayerPosition = NULL;
@@ -70,12 +70,8 @@ void Enemy::search4Player(Player player) {
 int Enemy::getAction(Map *map, Player player) {
 	int action_code = ACTION_DO_NOTHING;
 	int weapon_range;
-	if (weapon == NULL) {
-		weapon_range = 0;
-	}
-	else {
-		weapon_range = weapon->getRange();
-	}
+	weapon_range = weapon.getBullet().getRange();
+	
 
 	if (lastPlayerPosition != NULL) {
 		if (player.getBodyPosition().equals(*lastPlayerPosition)) {
@@ -144,4 +140,14 @@ int Enemy::getAction(Map *map, Player player) {
 		}
 	}
 	return action_code;
+}
+
+/*
+	Richiama la funzione attack() della superclasse e imposta il campo hostile dell'oggetto Bullet restituito a true.
+	Restituisce tale oggetto.
+*/
+Bullet Enemy::attack() {
+	Bullet bullet = ArmedEntity::attack();
+	bullet.setHostile(true);
+	return bullet;
 }

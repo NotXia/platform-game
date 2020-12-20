@@ -5,19 +5,51 @@ class BulletList {
 	protected:
 		struct FlyingBullet {
 			Bullet bullet;
-			Position position;
-			bool hostile;
-			int distance;
 			FlyingBullet *next;
 		};
 
 		FlyingBullet *list;
+		FlyingBullet *prev, *iter;
 
 	public:
 		BulletList();
 
-		void insert(Bullet bullet, Position position, bool hostile);
+		/*
+			Prende in input un oggetto di tipo Bullet.
+			Inserisce l'input in testa alla lista list
+		*/
+		void insert(Bullet bullet);
 
-		
+		/*
+			Inizializza iter alla testa della lista e prev a NULL
+		*/
+		void initIter();
+
+		/*
+			Restituisce true se iter è NULL, false altrimenti
+		*/
+		bool isNull();
+
+		/*
+			Restituisce l'oggetto Bullet del nodo attualmente puntato da iter. Se è NULL, restituisce l'oggetto di default
+		*/
+		Bullet getCurrent();
+
+		//void deleteCurrent();
+
+		/*
+			Aggiorna l'oggetto Bullet del nodo attualmente puntato da iter
+		*/
+		void updateCurrent(Bullet bullet);
+
+		/*
+			Prende in input due oggetti Position.
+			Restituisce true se è presente un Bullet in una delle due posizioni. False altrimenti.
+			Iter punterà a quel nodo, se esiste.
+			Prev punterà al nodo precedente, se esiste.
+		*/
+		bool pointAt(Position position1, Position position2);
+
 };
+
 
