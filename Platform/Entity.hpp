@@ -23,6 +23,18 @@ class Entity {
 		int fall_loop_counter;
 
 
+		/*
+			Incrementa jump_loop_counter di 1.
+			Se supera il limite impostato, viene resettato.
+		*/
+		void incJumpLoopCounter();
+
+		/*
+			Incrementa fall_loop_counter di 1.
+			Se supera il limite impostato, viene resettato.
+		*/
+		void incFallLoopCounter();
+
 	public:
 		Entity(int health=0, Pixel head_left=Pixel(' ', 0, false), Pixel head_right=Pixel(' ', 0, false), Pixel body=Pixel(' ', 0, false), Position position=Position(0, 0));
 
@@ -85,21 +97,9 @@ class Entity {
 		void fall();
 
 		/*
-			Incrementa jump_loop_counter di 1.
-			Se supera il limite impostato, viene resettato.
-		*/
-		void incJumpLoopCounter();
-
-		/*
 			Resetta jump_loop_counter
 		*/
 		void resetJumpLoopCounter();
-
-		/*
-			Incrementa fall_loop_counter di 1.
-			Se supera il limite impostato, viene resettato.
-		*/
-		void incFallLoopCounter();
 
 		/*
 			Resetta fall_loop_counter
@@ -115,6 +115,11 @@ class Entity {
 			Restituisce true quando è possibile avanzare nell'animazione della caduta
 		*/
 		bool canFall();
+
+		/*
+			Incrementa i vari contatori
+		*/
+		void incCounters();
 };
 
 

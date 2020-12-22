@@ -226,3 +226,8 @@ bool Entity::canJump() {
 bool Entity::canFall() {
 	return (fall_loop_counter >= FALL_SPEED);
 }
+
+void Entity::incCounters() {
+	incFallLoopCounter();
+	incJumpLoopCounter();
+}

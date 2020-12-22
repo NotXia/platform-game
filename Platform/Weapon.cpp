@@ -1,10 +1,24 @@
 #include "Weapon.hpp"
 #include "Entity.hpp"
+#include <cstring>
 
-Weapon::Weapon(Pixel left, Pixel right, Bullet bullet) {
+Weapon::Weapon(const char name[], Pixel left, Pixel right, Bullet bullet, int ammo, int reloadDelay, int shootDelay) {
+	strncpy(this->name, name, STRING_LEN);
 	this->textureLeft = left;
 	this->textureRight = right;
 	this->bullet = bullet;
+	
+	this->ammo = ammo;
+	this->curr_ammo = ammo;
+
+	this->reloading = false;
+	this->curr_reloadDelay = 0;
+	this->reloadDelay = reloadDelay;
+
+
+	this->shooting = false;
+	this->curr_shootDelay = 0;
+	this->shootDelay = shootDelay;
 }
 
 Pixel Weapon::getTexture(bool direction) {
@@ -17,4 +31,95 @@ Pixel Weapon::getTexture(bool direction) {
 
 Bullet Weapon::getBullet() {
 	return bullet;
+}
+
+char* Weapon::getName() {
+	return name;
+}
+
+int Weapon::getCurrAmmo() {
+	return curr_ammo;
+}
+
+
+bool Weapon::isShooting() {
+	return shooting;
+}
+
+bool Weapon::isReloading() {
+	return reloading;
+}
+
+/*
+	Restituisce true se curr_ammo è maggiore di 0, false altrimenti
+*/
+bool Weapon::hasAmmo() {
+	return curr_ammo > 0;
+}
+
+/*
+	Inizializza i parametri per visualizzare il tempo di ricarica
+*/
+void Weapon::startReloadDelay() {
+	if (!reloading) {
+		reloading = true;
+		curr_reloadDelay = 0;
+		curr_ammo = -1;
+	}
+}
+
+/*
+	Incrementa di 1 curr_reloadDelay
+*/
+void Weapon::incReloadDelay() {
+	if (reloading) {
+		curr_reloadDelay++;
+	}
+}
+
+/*
+	Restituisce true se curr_reloadDelay ha raggiunto reloadDelay
+*/
+bool Weapon::canEndReloadDelay() {
+	return (curr_reloadDelay >= reloadDelay) && reloading;
+}
+
+/*
+	Imposta curr_ammo ad ammo e reloading a false
+*/
+void Weapon::endReload() {
+	reloading = false;
+	curr_ammo = ammo;
+}
+
+/*
+	Inizializza i parametri per visualizzare l'attesa tra un colpo e l'altro
+*/
+void Weapon::startShootDelay() {
+	curr_ammo--;
+	shooting = true;
+	curr_shootDelay = 0;
+}
+
+/*
+	Incrementa di 1 curr_shootDelay
+*/
+void Weapon::incShootDelay() {
+	if (shooting) {
+		curr_shootDelay++;
+	}
+}
+
+/*
+	Restituisce true se curr_shootDelay ha raggiunto shootDelay
+*/
+bool Weapon::canEndShootDelay() {
+	return curr_shootDelay >= shootDelay;
+}
+
+/*
+	Imposta shooting a false
+*/
+void Weapon::endShoot() {
+	shooting = false;
 }

@@ -1,5 +1,7 @@
 #pragma once
 
+const int STRING_LEN = 1000;
+
 const int GAME_WIDTH = 100;
 const int GAME_HEIGHT = 15;
 

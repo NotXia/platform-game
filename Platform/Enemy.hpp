@@ -50,5 +50,11 @@ class Enemy : public ArmedEntity {
 			Restituisce tale oggetto.
 		*/
 		Bullet attack();
+
+		/*
+			Incrementa i vari contatori
+		*/
+		void incCounters();
+
 };
 

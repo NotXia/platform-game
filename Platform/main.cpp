@@ -15,12 +15,16 @@ int main() {
     srand(time(0));
 
     Weapon test = Weapon(
-        Pixel(char(196), FG_GREEN | BG_CYAN, false), 
+        "Test",
         Pixel(char(196), FG_GREEN | BG_CYAN, false),
-        Bullet(Pixel('-', FG_BLACK | BACKGROUND_DEFAULT, false), 100, 10)
+        Pixel(char(196), FG_GREEN | BG_CYAN, false),
+        Bullet(Pixel(char(254), FG_DARKRED | BACKGROUND_DEFAULT, false), 100, 20),
+        5,
+        40000,
+        8000
     );
 
-    int difficulty = 1;
+    int difficulty = 5;
     int max_enemies = 2;
     Screen screen = Screen();
     Map *map = new Map(NULL, 3, difficulty);
@@ -28,16 +32,16 @@ int main() {
     //Position head_position;
     EnemyList enemylist;
     BulletList bulletlist;
-
     
     screen.init();
 
     screen.write_game_area(map);
     screen.write_enemies(map->getEnemyList());
     screen.write_entity(player);
+    screen.write_weaponbox(player.getWeapon().getName(), player.getWeapon().getCurrAmmo());
+
 
     while (true) {
-
         /* ----------------------------
            INIZIO GESTIONE GIOCATORE   
         ---------------------------- */
@@ -89,13 +93,25 @@ int main() {
                     player.fall();
                 }
             }
-            else if (ch == 32) {
+            else if (ch == 32) { // Spacebar
                 if (player.isOnTerrain()) {
-                    map->addBullet(player.attack());
+                    if (player.canAttack()) {
+                        map->addBullet(player.attack());
 
-                    player.resetWeaponLoop();
-                    screen.write_at(player.getWeapon().getTexture(player.getDirection()), player.getFrontPosition());
+                        player.resetWeaponDisplay();
+                        screen.write_at(player.getWeapon().getTexture(player.getDirection()), player.getFrontPosition());
+                    }
+                    else {
+                        if (player.canReload() && !player.getWeapon().hasAmmo()) {
+                            player.reload();
+                        }
+                    }
                 }
+                screen.write_weaponbox(player.getWeapon().getName(), player.getWeapon().getCurrAmmo());
+            }
+            else if (ch == 'r') {
+                player.reload();
+                screen.write_weaponbox(player.getWeapon().getName(), player.getWeapon().getCurrAmmo());
             }
         } // if (_kbhit())
 
@@ -136,9 +152,12 @@ int main() {
             player.setCanMove(true);
         }
 
-        player.incJumpLoopCounter();
-        player.incFallLoopCounter();
-        player.incWeaponLoop();
+        if (player.hasReloadFinished()) {
+            screen.write_weaponbox(player.getWeapon().getName(), player.getWeapon().getCurrAmmo());
+        }
+        player.hasShootDelayFinished();
+
+        player.incCounters();
         /* FINE GESTIONE GIOCATORE   
         -------------------------- */
 
@@ -189,9 +208,9 @@ int main() {
 
 
 
-        /* --------------------------
-           INIZIO GESTIONE UMARELL   
-        -------------------------- */
+        /* -------------------------
+           INIZIO GESTIONE NEMICI   
+        ------------------------- */
         enemylist = map->getEnemyList();
         enemylist.initIter();
 
@@ -297,15 +316,13 @@ int main() {
                 map->setBulletList(bulletlist);
             }
 
-            enemy.incJumpLoopCounter();
-            enemy.incFallLoopCounter();
-            enemy.incRefresh();
+            enemy.incCounters();
 
             enemylist.updateCurrent(enemy);
             map->setEnemyList(enemylist);
         }
-        /* FINE GESTIONE UMARELL   
-        ------------------------ */
+        /* FINE GESTIONE NEMICI     
+        ----------------------- */
         
     } // while (true)
 }

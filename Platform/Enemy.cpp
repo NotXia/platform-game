@@ -8,7 +8,7 @@ Enemy::Enemy(int health, int points, int money, Pixel head_left, Pixel head_righ
 	this->money = money;
 	lastPlayerPosition = NULL;
 	this->visualRange = ENEMY_RANGE;
-	this->refreshTime = 7000;
+	this->refreshTime = 5000;
 	this->currRefresh = 0;
 }
 
@@ -150,4 +150,9 @@ Bullet Enemy::attack() {
 	Bullet bullet = ArmedEntity::attack();
 	bullet.setHostile(true);
 	return bullet;
+}
+
+void Enemy::incCounters() {
+	ArmedEntity::incCounters();
+	incRefresh();
 }

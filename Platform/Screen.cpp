@@ -226,3 +226,19 @@ void Screen::write_enemies(EnemyList list) {
 		list.goNext();
 	}
 }
+
+void Screen::write_weaponbox(char name[], int ammo) {
+	moveCursor(weapon_x+1, weapon_y);
+	resetColor();
+	for (int i=0; i<WEAPON_WIDTH; i++) {
+		cout <<" ";
+	}
+	moveCursor(weapon_x+1, weapon_y);
+
+	if (ammo >= 0) {
+		cout <<name <<" | " <<ammo;
+	}
+	else {
+		cout <<name <<" | R";
+	}
+}

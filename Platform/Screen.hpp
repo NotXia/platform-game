@@ -78,4 +78,7 @@ class Screen {
 		*/
 		void write_enemies(EnemyList list);
 
+		void write_weaponbox(char name[], int ammo);
+
+
 };

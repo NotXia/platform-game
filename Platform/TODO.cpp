@@ -5,6 +5,7 @@
 	- Umarells
 	- La funzione attack di player restituisce un proiettile
 	- Weapons
+	- Gestire proiettili al limite della mappa
 	- Arma attaccata al player
 	- Lava
 	- Villaggi NPC
