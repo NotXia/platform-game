@@ -61,7 +61,7 @@ class ArmedEntity : public Entity {
 		/*
 			Se il delay per lo sparo è terminato, permette di sparare nuovamente
 		*/
-		void hasShootDelayFinished();
+		bool hasShootDelayFinished();
 
 };
 

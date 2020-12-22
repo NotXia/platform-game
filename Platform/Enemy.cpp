@@ -12,6 +12,14 @@ Enemy::Enemy(int health, int points, int money, Pixel head_left, Pixel head_righ
 	this->currRefresh = 0;
 }
 
+int Enemy::getPoints() {
+	return points;
+}
+
+int Enemy::getMoney() {
+	return money;
+}
+
 /*
 	Indica se è possibile eseguire la prossima azione (currRefresh ha raggiunto refreshTime)
 */

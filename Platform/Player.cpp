@@ -6,6 +6,14 @@ Player::Player(int health, Pixel head_left, Pixel head_right, Pixel body, Positi
 	this->money = 0;
 }
 
+int Player::getPoints() {
+	return points;
+}
+
+int Player::getMoney() {
+	return money;
+}
+
 /*
 	Prende un input un intero
 	Incrementa health di quel valore (non può superare il limite)

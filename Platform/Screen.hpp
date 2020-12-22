@@ -9,11 +9,31 @@
 // Imposta il template del gioco
 class Screen {
 	protected:
+		const int GAMEBAR_OFFSET = 3;
+		const int GAMEBAR_PADDING = 4;
+
+		const int WEAPON_WIDTH = 20;
+		const int WEAPON_HEIGHT = 1;
+
+		const int TEXTBOX_HEIGHT = 5;
+		const int TEXTBOX_MIN_WIDTH = 15;
+
+		const char MONEY_SYMBOL = char(207);
+
+		const int WEAPONBOX_ROTATION_SPEED = 10000;
+
+
 		HANDLE console;
 
 		int hp_x, hp_y;
 		int weapon_x, weapon_y;
 		int textBox_x, textBox_y;
+		int weaponbox_width, ammobox_width;
+
+		int start_index;
+		char weaponbox_text[STRING_LEN];
+		bool need_rotate;
+		int rotation_counter;
 
 		/*
 			Prende in input un intero che rappresenta il colore 
@@ -78,7 +98,45 @@ class Screen {
 		*/
 		void write_enemies(EnemyList list);
 
-		void write_weaponbox(char name[], int ammo);
+		/*
+			Prende in input un intero
+			Aggiorna la quantità di soldi visualizzata
+		*/
+		void write_money(int money);
+
+		/*
+			Prende in input un intero
+			Aggiorna la quantità di punti visualizzata
+		*/
+		void write_points(int points);
+
+		/*
+			Prende in input una stringa
+			Scrive il parametro nell'area del nome dell'arma. Se la stringa è troppo lunga, vengono inizializzati i parametri per la rotazione
+		*/
+		void write_weaponbox(char name[]);
+
+		/*
+			Incrementa di 1 rotation_counter
+		*/
+		void incWeaponboxRotateCounter();
+
+		/*
+			Restituisce true se rotation_counter ha raggiunto WEAPONBOX_ROTATION_SPEED e need_rotate è true
+		*/
+		bool canRotateWeaponbox();
+
+		/*
+			Incrementa start_index e stampa nell'area dell'arma la stringa weaponbox_text a partire da quell'indice.
+			Se start_index supera la dimensione della stringa, ricomincia da capo.
+		*/
+		void rotate_weaponbox();
+
+		/*
+			Prende in input un intero.
+			Aggiorna la quantità di munizioni visualizzata
+		*/
+		void write_ammobox(int ammo);
 
 
 };

@@ -168,6 +168,7 @@
     <ClInclude Include="Screen.hpp" />
     <ClInclude Include="settings.h" />
     <ClInclude Include="Weapon.hpp" />
+    <ClInclude Include="weapons.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="TODO.cpp" />

@@ -3,24 +3,21 @@
 #include "colors.h"
 using namespace std;
 
-const int GAMEBAR_OFFSET = 3;
-const int GAMEBAR_PADDING = 4;
-
-const int WEAPON_WIDTH = 15;
-const int WEAPON_HEIGHT = 1;
-
-const int TEXTBOX_HEIGHT = 5;
-const int TEXTBOX_MIN_WIDTH = 15;
-
 Screen::Screen() {
 	this->console = GetStdHandle(STD_OUTPUT_HANDLE);
+	hideCursor();
 	this->hp_x = 1;
 	this->hp_y = (GAME_HEIGHT + 2) + GAMEBAR_OFFSET;
 	this->weapon_x = 7 + (MAX_LIFE * 2 - 1) + GAMEBAR_PADDING;
 	this->weapon_y = this->hp_y;
 	this->textBox_x = this->weapon_x + (WEAPON_WIDTH+2) + GAMEBAR_PADDING;
 	this->textBox_y = GAME_HEIGHT + 2;
-	hideCursor();
+	this->ammobox_width = 2;
+	this->weaponbox_width = WEAPON_WIDTH - ammobox_width - 1;
+
+	this->rotation_counter = 0;
+	this->need_rotate = false;
+	this->start_index = 0;
 }
 
 /*
@@ -94,6 +91,13 @@ void Screen::init() {
 	resetColor();
 
 
+	// Soldi
+	moveCursor(1, hp_y + 1);
+	cout <<"Soldi 0 ";
+	setColor(FG_DARKYELLOW | BG_BLACK);
+	cout <<char(207);
+	resetColor();
+
 	// Punteggio
 	moveCursor(1, hp_y + 2);
 	cout <<"Punti 0";
@@ -106,14 +110,13 @@ void Screen::init() {
 		cout <<char(196); // ─
 	}
 	cout <<char(191); // ┐
-	for (int i=0; i<WEAPON_HEIGHT; i++) {
-		weapon_y++;
-		moveCursor(weapon_x, weapon_y);
+	for (int i=1; i<=WEAPON_HEIGHT+1; i++) {
+		moveCursor(weapon_x, weapon_y+i);
 		cout <<char(179); // │
-		moveCursor(weapon_x+WEAPON_WIDTH+1, weapon_y);
+		moveCursor(weapon_x+WEAPON_WIDTH+1, weapon_y+i);
 		cout <<char(179); // │
 	}
-	moveCursor(weapon_x, weapon_y+1);
+	moveCursor(weapon_x, weapon_y+WEAPON_HEIGHT+1);
 	cout <<char(192); // ┌
 	for (int i=0; i<WEAPON_WIDTH; i++) {
 		cout <<char(196); // ─
@@ -212,7 +215,6 @@ void Screen::write_textbox(const char string[]) {
 	cout <<string;
 }
 
-
 /*
 	Prende in input un oggetto EnemyList.
 	Stampa sullo schermo tutti i nemici
@@ -227,18 +229,112 @@ void Screen::write_enemies(EnemyList list) {
 	}
 }
 
-void Screen::write_weaponbox(char name[], int ammo) {
-	moveCursor(weapon_x+1, weapon_y);
+/*
+	Prende in input un intero
+	Aggiorna la quantità di soldi visualizzata
+*/
+void Screen::write_money(int money) {
+	moveCursor(hp_x, hp_y + 1);
+	cout <<"Soldi " <<money <<" ";
+	setColor(FG_DARKYELLOW | BG_BLACK);
+	cout <<char(207);
+	resetColor();
+}
+
+/*
+	Prende in input un intero
+	Aggiorna la quantità di punti visualizzata
+*/
+void Screen::write_points(int points) {
+	moveCursor(hp_x, hp_y+2);
+	resetColor();
+	cout <<"Punti " <<points;
+}
+
+/*
+	Prende in input una stringa
+	Scrive il parametro nell'area del nome dell'arma. Se la stringa è troppo lunga, vengono inizializzati i parametri per la rotazione
+*/
+void Screen::write_weaponbox(char name[]) {
+	moveCursor(weapon_x+1, weapon_y+1);
 	resetColor();
 	for (int i=0; i<WEAPON_WIDTH; i++) {
 		cout <<" ";
 	}
-	moveCursor(weapon_x+1, weapon_y);
+	moveCursor(weapon_x+1, weapon_y+1);
 
-	if (ammo >= 0) {
-		cout <<name <<" | " <<ammo;
+	strncpy(weaponbox_text, name, STRING_LEN);
+	start_index = 0;
+	if (strlen(name) > weaponbox_width) {
+		need_rotate = true;
+		strcat(weaponbox_text, "   ");
+		for (int i=0; i<weaponbox_width; i++) {
+			cout <<name[i];
+		}
 	}
 	else {
-		cout <<name <<" | R";
+		cout <<name;
+	}
+}
+
+/*
+	Incrementa di 1 rotation_counter
+*/
+void Screen::incWeaponboxRotateCounter() {
+	if (need_rotate) {
+		rotation_counter++;
+		if (rotation_counter > WEAPONBOX_ROTATION_SPEED) {
+			rotation_counter = 0;
+		}
+	}
+}
+
+/*
+	Restituisce true se rotation_counter ha raggiunto WEAPONBOX_ROTATION_SPEED e need_rotate è true
+*/
+bool Screen::canRotateWeaponbox() {
+	return rotation_counter >= WEAPONBOX_ROTATION_SPEED && need_rotate;
+}
+
+/*
+	Incrementa start_index e stampa nell'area dell'arma la stringa weaponbox_text a partire da quell'indice.
+	Se start_index supera la dimensione della stringa, ricomincia da capo.
+*/
+void Screen::rotate_weaponbox() {
+	start_index++;
+	if (start_index > strlen(weaponbox_text)) {
+		start_index = 0;
+	}
+
+	moveCursor(weapon_x+1, weapon_y+1);
+	for (int i=start_index; i<start_index+weaponbox_width; i++) {
+		if (i < strlen(weaponbox_text)) {
+			cout <<weaponbox_text[i];
+		}
+		else {
+			cout <<weaponbox_text[i-strlen(weaponbox_text)];
+		}
+	}
+}
+
+/*
+	Prende in input un intero.
+	Aggiorna la quantità di munizioni visualizzata
+*/
+void Screen::write_ammobox(int ammo) {
+	moveCursor(weapon_x+WEAPON_WIDTH-ammobox_width, weapon_y+1);
+	cout <<"|  ";
+	moveCursor(weapon_x+WEAPON_WIDTH-ammobox_width, weapon_y+1);
+
+	if (ammo < 0) {
+		cout <<"| R";
+	}
+	else {
+		if (ammo > 9) {
+			cout <<"|" <<ammo;
+		}
+		else {
+			cout <<"| " <<ammo;
+		}
 	}
 }

@@ -23,6 +23,9 @@ class Enemy : public ArmedEntity {
 	public:
 		Enemy(int health=0, int points=0, int money=0, Pixel head_left=Pixel(), Pixel head_right=Pixel(), Pixel body=Pixel(), Position position=Position(), Weapon weapon=Weapon());
 
+		int getPoints();
+		int getMoney();
+
 		/*
 			Indica se è possibile eseguire la prossima azione (currRefresh ha raggiunto refreshTime)
 		*/

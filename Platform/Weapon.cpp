@@ -96,9 +96,9 @@ void Weapon::endReload() {
 	Inizializza i parametri per visualizzare l'attesa tra un colpo e l'altro
 */
 void Weapon::startShootDelay() {
-	curr_ammo--;
 	shooting = true;
 	curr_shootDelay = 0;
+	curr_ammo--;
 }
 
 /*
@@ -114,7 +114,7 @@ void Weapon::incShootDelay() {
 	Restituisce true se curr_shootDelay ha raggiunto shootDelay
 */
 bool Weapon::canEndShootDelay() {
-	return curr_shootDelay >= shootDelay;
+	return curr_shootDelay >= shootDelay && shooting;
 }
 
 /*

@@ -1,7 +1,21 @@
 #include "Bullet.hpp"
+#include "settings.h"
 
 Bullet::Bullet(Pixel texture, int damage, int range, Position position, bool direction) {
-	this->texture = texture;
+	this->textureLeft = texture;
+	this->textureRight = texture;
+	this->damage = damage;
+	this->range = range;
+	this->position = position;
+	this->direction = direction;
+	this->refreshTime = 1500;
+	this->currRefresh = 0;
+	this->hostile = false;
+}
+
+Bullet::Bullet(Pixel textureLeft, Pixel textureRight, int damage, int range, Position position, bool direction) {
+	this->textureLeft = textureLeft;
+	this->textureRight = textureRight;
 	this->damage = damage;
 	this->range = range;
 	this->position = position;
@@ -12,7 +26,12 @@ Bullet::Bullet(Pixel texture, int damage, int range, Position position, bool dir
 }
 
 Pixel Bullet::getTexture() {
-	return texture;
+	if (direction == BULLET_LEFT) {
+		return textureLeft;
+	}
+	else {
+		return textureRight;
+	}
 }
 int Bullet::getDamage() {
 	return damage;
@@ -40,21 +59,32 @@ void Bullet::setDirection(bool direction) {
 	Restituisce true se il range è maggiore di 0, false altrimenti
 */
 bool Bullet::canTravel() {
-	return (range > 0);
+	return range > 0;
 }
 
 /*
 	Se range è maggiore di 0: decrementa range e muove la posizione di 1 (in base all direzione).
+	In caso la posizione dovesse superare i limiti, range viene impostato ad un valore nullo.
 	Restituisce true se il range è maggiore di 0, false altrimenti.
 */
 bool Bullet::travel() {
 	if (canTravel()) {
 		range--;
 		if (direction == BULLET_LEFT) {
-			position.setX(position.getX()-1);
+			if (position.getX() == 1) {
+				range = -1;
+			}
+			else {
+				position.setX(position.getX()-1);
+			}
 		}
 		else {
-			position.setX(position.getX()+1);
+			if (position.getX() == GAME_WIDTH) {
+				range = -1;
+			}
+			else {
+				position.setX(position.getX()+1);
+			}
 		}
 	}
 

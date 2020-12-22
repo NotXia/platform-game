@@ -9,27 +9,17 @@
 #include "Weapon.hpp"
 #include "Bullet.hpp"
 #include "EnemyList.hpp"
+#include "weapons.h"
 using namespace std;
 
 int main() {
     srand(time(0));
 
-    Weapon test = Weapon(
-        "Test",
-        Pixel(char(196), FG_GREEN | BG_CYAN, false),
-        Pixel(char(196), FG_GREEN | BG_CYAN, false),
-        Bullet(Pixel(char(254), FG_DARKRED | BACKGROUND_DEFAULT, false), 100, 20),
-        5,
-        40000,
-        8000
-    );
-
     int difficulty = 5;
     int max_enemies = 2;
     Screen screen = Screen();
     Map *map = new Map(NULL, 3, difficulty);
-    Player player = Player(MAX_LIFE, Pixel('<', PLAYER_HEAD_COLOR, true), Pixel('>', PLAYER_HEAD_COLOR, true), Pixel(char(219), PLAYER_BODY_COLOR, true), map->getLeftPosition(), test);
-    //Position head_position;
+    Player player = Player(MAX_LIFE, Pixel('<', PLAYER_HEAD_COLOR, true), Pixel('>', PLAYER_HEAD_COLOR, true), Pixel(char(219), PLAYER_BODY_COLOR, true), map->getLeftPosition(), assault_rifle);
     EnemyList enemylist;
     BulletList bulletlist;
     
@@ -38,10 +28,16 @@ int main() {
     screen.write_game_area(map);
     screen.write_enemies(map->getEnemyList());
     screen.write_entity(player);
-    screen.write_weaponbox(player.getWeapon().getName(), player.getWeapon().getCurrAmmo());
+
+    screen.write_weaponbox(player.getWeapon().getName());
+    screen.write_ammobox(player.getWeapon().getCurrAmmo());
 
 
     while (true) {
+        if (screen.canRotateWeaponbox()) {
+            screen.rotate_weaponbox();
+        }
+
         /* ----------------------------
            INIZIO GESTIONE GIOCATORE   
         ---------------------------- */
@@ -98,7 +94,6 @@ int main() {
                     if (player.canAttack()) {
                         map->addBullet(player.attack());
 
-                        player.resetWeaponDisplay();
                         screen.write_at(player.getWeapon().getTexture(player.getDirection()), player.getFrontPosition());
                     }
                     else {
@@ -107,11 +102,11 @@ int main() {
                         }
                     }
                 }
-                screen.write_weaponbox(player.getWeapon().getName(), player.getWeapon().getCurrAmmo());
+                screen.write_ammobox(player.getWeapon().getCurrAmmo());
             }
             else if (ch == 'r') {
                 player.reload();
-                screen.write_weaponbox(player.getWeapon().getName(), player.getWeapon().getCurrAmmo());
+                screen.write_ammobox(player.getWeapon().getCurrAmmo());
             }
         } // if (_kbhit())
 
@@ -153,9 +148,11 @@ int main() {
         }
 
         if (player.hasReloadFinished()) {
-            screen.write_weaponbox(player.getWeapon().getName(), player.getWeapon().getCurrAmmo());
+            screen.write_ammobox(player.getWeapon().getCurrAmmo());
         }
-        player.hasShootDelayFinished();
+        if (player.hasShootDelayFinished()) {
+            screen.write_ammobox(player.getWeapon().getCurrAmmo());
+        }
 
         player.incCounters();
         /* FINE GESTIONE GIOCATORE   
@@ -187,6 +184,10 @@ int main() {
                         if (hit_enemy.isDead()) {
                             screen.resetTerrain(map, hit_enemy.getHeadPosition());
                             screen.resetTerrain(map, hit_enemy.getBodyPosition());
+                            player.incPoints(hit_enemy.getPoints());
+                            screen.write_points(player.getPoints());
+                            player.incMoney(hit_enemy.getMoney());
+                            screen.write_money(player.getMoney());
                         }
                         enemylist.updateCurrent(hit_enemy);
                         map->setEnemyList(enemylist);
@@ -310,6 +311,10 @@ int main() {
                 if (enemy.isDead()) {
                     screen.resetTerrain(map, enemy.getHeadPosition());
                     screen.resetTerrain(map, enemy.getBodyPosition());
+                    player.incPoints(enemy.getPoints());
+                    screen.write_points(player.getPoints());
+                    player.incMoney(enemy.getMoney());
+                    screen.write_money(player.getMoney());
                 }
 
                 bulletlist.updateCurrent(hit_bullet);
@@ -324,5 +329,6 @@ int main() {
         /* FINE GESTIONE NEMICI     
         ----------------------- */
         
+        screen.incWeaponboxRotateCounter();
     } // while (true)
 }

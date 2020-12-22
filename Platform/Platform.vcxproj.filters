@@ -108,6 +108,9 @@
     <ClInclude Include="BulletList.hpp">
       <Filter>List</Filter>
     </ClInclude>
+    <ClInclude Include="weapons.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="TODO.cpp">

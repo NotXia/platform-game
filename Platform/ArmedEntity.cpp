@@ -45,7 +45,7 @@ void ArmedEntity::reload() {
 void ArmedEntity::incWeaponDisplay() {
 	weapon_display_counter++;
 	if (weapon_display_counter > WEAPON_DISPLAY_TIME) {
-		resetWeaponDisplay();
+		weapon_display_counter = 0;
 	}
 }
 
@@ -54,6 +54,7 @@ void ArmedEntity::incWeaponDisplay() {
 */
 void ArmedEntity::resetWeaponDisplay() {
 	weapon_display_counter = 0;
+	is_attacking = false;
 }
 
 /*
@@ -101,15 +102,16 @@ bool ArmedEntity::hasReloadFinished() {
 		weapon.endReload();
 		return true;
 	}
-	
 	return false;
 }
 
 /*
 	Se il delay per lo sparo è terminato, permette di sparare nuovamente
 */
-void ArmedEntity::hasShootDelayFinished() {
+bool ArmedEntity::hasShootDelayFinished() {
 	if (weapon.canEndShootDelay()) {
 		weapon.endShoot();
+		return true;
 	}
+	return false;
 }

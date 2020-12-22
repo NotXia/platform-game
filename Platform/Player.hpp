@@ -11,6 +11,9 @@ class Player : public ArmedEntity {
 	public:
 		Player(int health, Pixel head_left, Pixel head_right, Pixel body, Position position, Weapon weapon);
 
+		int getPoints();
+		int getMoney();
+
 		/*
 			Prende un input un intero
 			Incrementa health di quel valore (non può superare il limite)

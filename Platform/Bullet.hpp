@@ -7,7 +7,8 @@ const bool BULLET_RIGHT = true;
 
 class Bullet {
 	protected:
-		Pixel texture;
+		Pixel textureLeft;
+		Pixel textureRight;
 		int damage;
 		int range;
 		Position position;
@@ -18,6 +19,7 @@ class Bullet {
 
 	public:
 		Bullet(Pixel texture=Pixel(), int damage=1, int range=1, Position position=Position(), bool direction=BULLET_LEFT);
+		Bullet(Pixel textureLeft, Pixel textureRight, int damage, int range, Position position, bool direction);
 
 		Pixel getTexture();
 		int getDamage();
@@ -35,6 +37,7 @@ class Bullet {
 
 		/*
 			Se range è maggiore di 0: decrementa range e muove la posizione di 1 (in base all direzione).
+			In caso la posizione dovesse superare i limiti, range viene impostato ad un valore nullo.
 			Restituisce true se il range è maggiore di 0, false altrimenti.
 		*/
 		bool travel();
