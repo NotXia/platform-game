@@ -11,50 +11,22 @@ Weapon ArmedEntity::getWeapon() {
 	return this->weapon;
 }
 
-/*
-	Restituisce un oggetto Bullet identico al Bullet associato all'oggetto weapon
-*/
-Bullet ArmedEntity::attack() {
-	if (weapon.hasAmmo()) {
-		weapon.startShootDelay();
-		setCanMove(false);
-		resetWeaponDisplay();
-		is_attacking = true;
 
-		Bullet out_bullet = weapon.getBullet();
-		out_bullet.setPosition(getFrontPosition());
-		out_bullet.setDirection(this->direction);
-
-		return out_bullet;
-	}
-	else {
-		return Bullet(Pixel(), 0, 0, direction);
-	}
-
-}
-
-void ArmedEntity::reload() {
-	weapon.startReloadDelay();
-}
-
+/****************************
+   INIZIO GESTIONE ATTACCO
+****************************/
 
 /*
-	Incrementa weapon_loop_counter di 1.
-	Se supera il limite, viene resettato.
+	Se is_attacking è true: incrementa weapon_loop_counter di 1.
+	Se supera il limite, viene azzerato.
 */
 void ArmedEntity::incWeaponDisplay() {
-	weapon_display_counter++;
-	if (weapon_display_counter > WEAPON_DISPLAY_TIME) {
-		weapon_display_counter = 0;
+	if (is_attacking) {
+		weapon_display_counter++;
+		if (weapon_display_counter > WEAPON_DISPLAY_TIME) {
+			weapon_display_counter = 0;
+		}
 	}
-}
-
-/*
-	Azzera weapon_loop_counter
-*/
-void ArmedEntity::resetWeaponDisplay() {
-	weapon_display_counter = 0;
-	is_attacking = false;
 }
 
 /*
@@ -71,13 +43,25 @@ bool ArmedEntity::endWeaponDisplay() {
 }
 
 /*
-	Incrementa i vari contatori
+	Imposta i vari parametri per l'attacco e restituisce un oggetto Bullet identico al Bullet associato all'oggetto weapon
 */
-void ArmedEntity::incCounters() {
-	Entity::incCounters();
-	weapon.incReloadDelay();
-	weapon.incShootDelay();
-	incWeaponDisplay();
+Bullet ArmedEntity::attack() {
+	if (weapon.hasAmmo()) {
+		weapon.startShootDelay();
+		setCanMove(false);
+		weapon_display_counter = 0;
+		is_attacking = true;
+
+		Bullet out_bullet = weapon.getBullet();
+		out_bullet.setPosition(getFrontPosition());
+		out_bullet.setDirection(this->direction);
+
+		return out_bullet;
+	}
+	else {
+		return Bullet(Pixel(), 0, 0, direction);
+	}
+
 }
 
 /*
@@ -85,6 +69,33 @@ void ArmedEntity::incCounters() {
 */
 bool ArmedEntity::canAttack() {
 	return weapon.hasAmmo() && !weapon.isReloading() && !weapon.isShooting() && !is_attacking;
+}
+
+/*
+	Se il delay per lo sparo è terminato, permette di sparare nuovamente
+*/
+bool ArmedEntity::hasShootDelayFinished() {
+	if (weapon.canEndShootDelay()) {
+		weapon.endShoot();
+		return true;
+	}
+	return false;
+}
+
+/* FINE GESTIONE ATTACCO
+*************************/
+
+
+
+/*****************************
+   INIZIO GESTIONE RICARICA
+*****************************/
+
+/*
+	Avvia la ricarica dell'arma
+*/
+void ArmedEntity::reload() {
+	weapon.startReloadDelay();
 }
 
 /*
@@ -105,13 +116,16 @@ bool ArmedEntity::hasReloadFinished() {
 	return false;
 }
 
+/* FINE GESTIONE RICARICA
+**************************/
+
+
 /*
-	Se il delay per lo sparo è terminato, permette di sparare nuovamente
+	Incrementa i vari contatori
 */
-bool ArmedEntity::hasShootDelayFinished() {
-	if (weapon.canEndShootDelay()) {
-		weapon.endShoot();
-		return true;
-	}
-	return false;
+void ArmedEntity::incCounters() {
+	Entity::incCounters();
+	weapon.incReloadDelay();
+	weapon.incShootDelay();
+	incWeaponDisplay();
 }

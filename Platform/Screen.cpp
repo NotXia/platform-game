@@ -46,6 +46,9 @@ void Screen::moveCursor(int x, int y) {
 	SetConsoleCursorPosition(console, coord);
 }
 
+/*
+	Modifica le variabili di sistema per nascondere il cursore
+*/
 void Screen::hideCursor() {
 	CONSOLE_CURSOR_INFO cursorInfo;
 
@@ -81,7 +84,6 @@ void Screen::init() {
 
 	// Barra della vita
 	write_hp(MAX_LIFE);
-
 
 	// Soldi
 	write_money(0);
@@ -142,8 +144,13 @@ void Screen::init() {
 	resetColor();
 }
 
+
+/**********************************
+   INIZIO GESTIONE AREA DI GIOCO
+**********************************/
+
 /*
-	Prende in input una mappa
+	Prende in input un oggetto Map
 	Stampa l'area di gioco
 */
 void Screen::write_game_area(Map *map) {
@@ -190,19 +197,6 @@ void Screen::resetTerrain(Map *map, Position position) {
 }
 
 /*
-	Prende in input una stringa.
-	Inserisce la stringa nell'area di testo (in basso a destra).
-*/
-void Screen::write_textbox(const char string[]) {
-	int start_x = textBox_x+1;
-	int start_y = textBox_y+1;
-
-	moveCursor(start_x, start_y);
-	resetColor();
-	cout <<string;
-}
-
-/*
 	Prende in input un oggetto EnemyList.
 	Stampa sullo schermo tutti i nemici
 */
@@ -215,6 +209,35 @@ void Screen::write_enemies(EnemyList list) {
 		list.goNext();
 	}
 }
+
+/* FINE GESTIONE AREA DI GIOCO
+*******************************/
+
+
+/*****************************
+   INIZIO GESTIONE TEXT BOX
+*****************************/
+
+/*
+	Prende in input una stringa.
+	Inserisce la stringa nell'area di testo (in basso a destra).
+*/
+void Screen::write_textbox(const char string[]) {
+	int start_x = textBox_x+1;
+	int start_y = textBox_y+1;
+
+	moveCursor(start_x, start_y);
+	resetColor();
+	cout <<string;
+}
+
+/* FINE GESTIONE TEXT BOX
+**************************/
+
+
+/********************************
+   INIZIO GESTIONE DATI PLAYER
+********************************/
 
 /*
 	Prende in input un intero
@@ -238,6 +261,37 @@ void Screen::write_points(int points) {
 	cout <<"Punti " <<points;
 }
 
+
+/*
+	Prende in input un intero.
+	Aggiorna il numero di cuori visualizzato
+*/
+void Screen::write_hp(int hp) {
+	if (hp >= 0) {
+		resetColor();
+		moveCursor(1, hp_y);
+		cout <<"HP";
+		moveCursor(7, hp_y);
+		for (int i=0; i<MAX_LIFE; i++) {
+			cout <<"  ";
+		}
+
+		moveCursor(7, hp_y);
+		setColor(HP_COLOR);
+		for (int i=0; i<hp; i++) {
+			cout <<char(3) <<" "; // ♥
+		}
+		resetColor();
+	}
+}
+
+/* FINE GESTIONE DATI PLAYER
+*****************************/
+
+
+/******************************
+   INIZIO GESTIONE DATI ARMA
+******************************/
 /*
 	Prende in input una stringa
 	Scrive il parametro nell'area del nome dell'arma. Se la stringa è troppo lunga, vengono inizializzati i parametri per la rotazione
@@ -326,25 +380,5 @@ void Screen::write_ammobox(int ammo) {
 	}
 }
 
-/*
-	Prende in input un intero.
-	Aggiorna il numero di cuori visualizzato
-*/
-void Screen::write_hp(int hp) {
-	if (hp >= 0) {
-		resetColor();
-		moveCursor(1, hp_y);
-		cout <<"HP";
-		moveCursor(7, hp_y);
-		for (int i=0; i<MAX_LIFE; i++) {
-			cout <<"  ";
-		}
-	
-		moveCursor(7, hp_y);
-		setColor(HP_COLOR);
-		for (int i=0; i<hp; i++) {
-			cout <<char(3) <<" "; // ♥
-		}
-		resetColor();
-	}
-}
+/* FINE GESTIONE DATI ARMA
+***************************/

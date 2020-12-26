@@ -6,7 +6,6 @@
 #include "Map.hpp"
 #include "EnemyList.hpp"
 
-// Imposta il template del gioco
 class Screen {
 	protected:
 		const int GAMEBAR_OFFSET = 3;
@@ -51,6 +50,10 @@ class Screen {
 			Muove il cursore a tali coordinate
 		*/
 		void moveCursor(int x, int y);
+
+		/*
+			Modifica le variabili di sistema per nascondere il cursore
+		*/
 		void hideCursor();
 
 
@@ -62,8 +65,13 @@ class Screen {
 		*/
 		void init();
 
+
+		/**********************************
+		   INIZIO GESTIONE AREA DI GIOCO
+		**********************************/
+
 		/*
-			Prende in input una mappa
+			Prende in input un oggetto Map
 			Stampa l'area di gioco
 		*/
 		void write_game_area(Map *map);
@@ -87,16 +95,32 @@ class Screen {
 		void resetTerrain(Map *map, Position position);
 
 		/*
+			Prende in input un oggetto EnemyList.
+			Stampa sullo schermo tutti i nemici
+		*/
+		void write_enemies(EnemyList list);
+
+		/* FINE GESTIONE AREA DI GIOCO  
+		*******************************/
+
+
+		/*****************************
+		   INIZIO GESTIONE TEXT BOX   
+		*****************************/
+
+		/*
 			Prende in input una stringa.
 			Inserisce la stringa nell'area di testo (in basso a destra).
 		*/
 		void write_textbox(const char string[]);
 
-		/*
-			Prende in input un oggetto EnemyList.
-			Stampa sullo schermo tutti i nemici
-		*/
-		void write_enemies(EnemyList list);
+		/* FINE GESTIONE TEXT BOX  
+		**************************/
+
+
+		/********************************
+		   INIZIO GESTIONE DATI PLAYER
+		********************************/
 
 		/*
 			Prende in input un intero
@@ -109,6 +133,26 @@ class Screen {
 			Aggiorna la quantità di punti visualizzata
 		*/
 		void write_points(int points);
+
+		/*
+			Prende in input un intero.
+			Aggiorna il numero di cuori visualizzato
+		*/
+		void write_hp(int hp);
+
+		/* FINE GESTIONE DATI PLAYER  
+		*****************************/
+
+
+		/******************************
+		   INIZIO GESTIONE DATI ARMA   
+		******************************/
+
+		/*
+			Prende in input un intero.
+			Aggiorna la quantità di munizioni visualizzata
+		*/
+		void write_ammobox(int ammo);
 
 		/*
 			Prende in input una stringa
@@ -132,16 +176,6 @@ class Screen {
 		*/
 		void rotate_weaponbox();
 
-		/*
-			Prende in input un intero.
-			Aggiorna la quantità di munizioni visualizzata
-		*/
-		void write_ammobox(int ammo);
-
-		/*
-			Prende in input un intero.
-			Aggiorna il numero di cuori visualizzato
-		*/
-		void write_hp(int hp);
-
+		/* FINE GESTIONE DATI ARMA  
+		***************************/
 };

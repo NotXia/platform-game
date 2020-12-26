@@ -15,21 +15,22 @@ class Entity : public Block {
 		bool direction; // false = left | true = right
 		bool can_move;
 
-		int jump_status; 
 		bool is_jumping;
-		bool on_terrain;
+		int jump_status; 
 		int jump_loop_counter;
+
+		bool on_terrain;
 		int fall_loop_counter;
 
 
 		/*
-			Incrementa jump_loop_counter di 1.
+			Se is_jumping è true: incrementa jump_loop_counter di 1.
 			Se supera il limite impostato, viene resettato.
 		*/
 		void incJumpLoopCounter();
 
 		/*
-			Incrementa fall_loop_counter di 1.
+			Se on_terrain è false: incrementa fall_loop_counter di 1.
 			Se supera il limite impostato, viene resettato.
 		*/
 		void incFallLoopCounter();
@@ -48,7 +49,6 @@ class Entity : public Block {
 		bool getCanMove();
 		bool isOnTerrain();
 		void setOnTerrain(bool on_terrain);
-		bool isJumping();
 
 
 		/*
@@ -63,14 +63,23 @@ class Entity : public Block {
 		bool isDead();
 
 		/*
-			Aggiorna position, decrementando di 1 la posizione sull'asse X
+			Se il valore di attuale direction è DIRECTION_LEFT, aggiorna position decrementando di 1 la posizione sull'asse X
+			Aggiorna direction a DIRECTION_LEFT.
 		*/
 		void goLeft();
 
 		/*
-			Aggiorna position, incrementando di 1 la posizione sull'asse X
+			Se il valore di attuale direction è DIRECTION_RIGHT, aggiorna position incrementando di 1 la posizione sull'asse X
+			Aggiorna direction a DIRECTION_RIGHT.
 		*/
 		void goRight();
+
+
+		/**************************
+		   INIZIO GESTIONE SALTO   
+		**************************/
+
+		bool isJumping();
 
 		/*
 			Inizializza i parametri per il salto dell'entità
@@ -81,7 +90,7 @@ class Entity : public Block {
 			Se jump_status è inferiore all'altezza massima di salto, aggiorna position decrementando di 1 la posizione sull'asse Y.
 			Altrimenti interrompe il salto.
 		*/
-		bool jump();
+		void jump();
 
 		/*
 			Imposta i parametri di salto dell'entità in modo da interromperlo
@@ -89,29 +98,31 @@ class Entity : public Block {
 		void stopJump();
 
 		/*
+			Restituisce true quando è possibile avanzare nell'animazione del salto
+		*/
+		bool canJump();
+
+		/* FINE GESTIONE SALTO
+		************************/
+
+
+		/***************************
+		   INIZIO GESTIONE CADUTA   
+		***************************/
+
+		/*
 			Aggiorna position incrementando di 1 la posizione sull'asse Y.
 		*/
 		void fall();
 
 		/*
-			Resetta jump_loop_counter
-		*/
-		void resetJumpLoopCounter();
-
-		/*
-			Resetta fall_loop_counter
-		*/
-		void resetFallLoopCounter();
-
-		/*
-			Restituisce true quando è possibile avanzare nell'animazione del salto
-		*/
-		bool canJump();
-
-		/*
 			Restituisce true quando è possibile avanzare nell'animazione della caduta
 		*/
 		bool canFall();
+
+		/* FINE GESTIONE CADUTA
+		************************/
+
 
 		/*
 			Incrementa i vari contatori

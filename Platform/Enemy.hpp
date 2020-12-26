@@ -20,6 +20,11 @@ class Enemy : public ArmedEntity {
 
 		int refreshTime, currRefresh;
 
+		/*
+			Incrementa currRefresh di 1. Se supera refreshTime, viene azzerato
+		*/
+		void incRefresh();
+
 	public:
 		Enemy(int health=0, int points=0, int money=0, Pixel head_left=Pixel(), Pixel head_right=Pixel(), Pixel body=Pixel(), Position position=Position(), Weapon weapon=Weapon());
 
@@ -30,11 +35,6 @@ class Enemy : public ArmedEntity {
 			Indica se è possibile eseguire la prossima azione (currRefresh ha raggiunto refreshTime)
 		*/
 		bool canRefresh();
-
-		/*
-			Incrementa currRefresh di 1. Se supera refreshTime, viene azzerato
-		*/
-		void incRefresh();
 
 		/*
 			Prende in input un oggetto Player

@@ -11,8 +11,8 @@ class ArmedEntity : public Entity {
 		int weapon_display_counter;
 
 		/*
-			Incrementa weapon_loop_counter di 1.
-			Se supera il limite, viene resettato.
+			Se is_attacking è true: incrementa weapon_loop_counter di 1.
+			Se supera il limite, viene azzerato.
 		*/
 		void incWeaponDisplay();
 
@@ -21,17 +21,20 @@ class ArmedEntity : public Entity {
 
 		Weapon getWeapon();
 
+
+		/****************************
+		   INIZIO GESTIONE ATTACCO   
+		****************************/
+
 		/*
-			Restituisce un oggetto Bullet identico al Bullet associato all'oggetto weapon
+			Imposta i vari parametri per l'attacco e restituisce un oggetto Bullet identico al Bullet associato all'oggetto weapon
 		*/
 		Bullet attack();
 
-		void reload();
-		
 		/*
-			Azzera weapon_loop_counter
+			Restituisce true se ci sono le condizioni per attaccare
 		*/
-		void resetWeaponDisplay();
+		bool canAttack();
 
 		/*
 			Indica se terminare la visualizzazione dell'arma quando il giocatore attacca
@@ -39,15 +42,23 @@ class ArmedEntity : public Entity {
 		bool endWeaponDisplay();
 
 		/*
-			Incrementa i vari contatori
+			Se il delay per lo sparo è terminato, permette di sparare nuovamente
 		*/
-		void incCounters();
+		bool hasShootDelayFinished();
+
+		/* FINE GESTIONE ATTACCO  
+		*************************/
+
+
+		/*****************************
+		   INIZIO GESTIONE RICARICA   
+		*****************************/
 
 		/*
-			Restituisce true se ci sono le condizioni per attaccare
+			Avvia la ricarica dell'arma
 		*/
-		bool canAttack();
-
+		void reload();
+		
 		/*
 			Restituisce true se ci sono le condizioni per ricaricare
 		*/
@@ -58,10 +69,13 @@ class ArmedEntity : public Entity {
 		*/
 		bool hasReloadFinished();
 
-		/*
-			Se il delay per lo sparo è terminato, permette di sparare nuovamente
-		*/
-		bool hasShootDelayFinished();
+		/* FINE GESTIONE RICARICA  
+		**************************/
 
+
+		/*
+			Incrementa i vari contatori
+		*/
+		void incCounters();
 };
 

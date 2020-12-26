@@ -98,8 +98,11 @@ void Map::generateEnemy(int max_enemies, int difficulty) {
 		int base_chance = 2000 + 500*max_enemies;
 		int chance = base_chance;
 		int generate;
+
+		// La generazione inizia dall'angolo in basso a destra, scorrendo orizzontalmente l'area di gioco fino a raggiungere l'angolo in alto a sinistra
 		for (int i=GAME_HEIGHT-TERRAIN_HEIGHT; i>0; i--) {
 			base_chance -= 200 * max_enemies;
+
 			for (int j=GAME_WIDTH-(EMPTYZONE_LENGTH*2); j>(EMPTYZONE_LENGTH*2); j--) {
 				if (terrain[j][i].isSolid() && !terrain[j][i-1].isSolid() && !terrain[j][i-2].isSolid()) {
 					generate = rand() % chance;
@@ -107,7 +110,7 @@ void Map::generateEnemy(int max_enemies, int difficulty) {
 						int hp = rand() % (difficulty*2 - difficulty + 1) + difficulty;
 						int points = 10 * difficulty;
 						int money = rand() % difficulty + 1;
-						Enemy new_enemy = Enemy(hp, points, money, Pixel('<', ENEMY_HEAD_COLOR, true), Pixel('>', ENEMY_HEAD_COLOR, true), Pixel(char(219), ENEMY_BODY_COLOR, true), Position(j+1, i), 
+						Enemy new_enemy = Enemy(hp, points, money, Pixel('<', ENEMY_HEAD_COLOR, true), Pixel('>', ENEMY_HEAD_COLOR, true), Pixel(char(219), ENEMY_BODY_COLOR, true), Position(j+1, i),
 							Weapon(
 							"Fucile d'assalto",
 							Pixel(char(191), FG_DARKBLUE | BACKGROUND_DEFAULT, false),
@@ -146,6 +149,16 @@ EnemyList Map::getEnemyList() {
 
 BulletList Map::getBulletList() {
 	return bulletList;
+}
+
+void Map::setEnemyList(EnemyList enemylist) {
+	enemylist.initIter();
+	this->enemyList = enemylist;
+}
+
+void Map::setBulletList(BulletList bulletlist) {
+	bulletlist.initIter();
+	this->bulletList = bulletlist;
 }
 
 /*
@@ -194,26 +207,6 @@ bool Map::isSolidAt(Position position) {
 
 /*
 	Prende in input una posizione.
-	Restituisce quella posizione della mappa.
-*/
-//Pixel Map::getMapAt(Position position) {
-//	Pixel out;
-//
-//	int enemy_flag = enemyList.existsAt(position);
-//	if (enemy_flag == BODY_FOUND) {
-//		out = enemyList.getCurrent().getBody();
-//	}
-//	else if (enemy_flag == HEAD_FOUND) {
-//		out = enemyList.getCurrent().getHead();
-//	}
-//	else {
-//		out = terrain[position.getX()-1][position.getY()-1];
-//	}
-//	return out;
-//}
-
-/*
-	Prende in input una posizione.
 	Restituisce quella posizione della mappa, ignorando la lista di nemici
 */
 Pixel Map::getTerrainAt(Position position) {
@@ -228,14 +221,4 @@ Pixel Map::getTerrainAt(Position position) {
 */
 void Map::addBullet(Bullet bullet) {
 	bulletList.insert(bullet);
-}
-
-void Map::setEnemyList(EnemyList enemylist) {
-	enemylist.initIter();
-	this->enemyList = enemylist;
-}
-
-void Map::setBulletList(BulletList bulletlist) {
-	bulletlist.initIter();
-	this->bulletList = bulletlist;
 }

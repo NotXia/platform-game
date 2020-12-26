@@ -30,6 +30,11 @@ class Weapon {
 		*/
 		bool hasAmmo();
 
+
+		/*****************************
+		   INIZIO GESTIONE RICARICA   
+		*****************************/
+
 		/*
 			Inizializza i parametri per visualizzare il tempo di ricarica
 		*/
@@ -49,6 +54,14 @@ class Weapon {
 			Imposta curr_ammo ad ammo e reloading a false
 		*/
 		void endReload();
+
+		/* FINE GESTIONE RICARICA
+		**************************/
+
+
+		/**************************
+		   INIZIO GESTIONE SPARO   
+		**************************/
 
 		/*
 			Inizializza i parametri per visualizzare l'attesa tra un colpo e l'altro
@@ -70,7 +83,8 @@ class Weapon {
 		*/
 		void endShoot();
 
-
+		/* FINE GESTIONE SPARO
+		***********************/
 
 
 };

@@ -23,6 +23,8 @@ class Map {
 		void generateTerrain();
 
 		/*
+			Prende in input due interi, rispettivamente il numero massimo di nemici generabili e la difficoltà.
+			Genera e inizializza i nemici e li inserisce in enemyList
 		*/
 		void generateEnemy(int max_enemies, int difficulty);
 
@@ -58,12 +60,6 @@ class Map {
 			Restituisce true se quella posizione è solida, false altrimenti
 		*/
 		bool isSolidAt(Position position);
-
-		/*
-			Prende in input una posizione.
-			Restituisce quella posizione della mappa.
-		*/
-		//Pixel getMapAt(Position position);
 
 		/*
 			Prende in input una posizione.

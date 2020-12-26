@@ -27,11 +27,6 @@ class EnemyList {
 		Enemy getCurrent();
 
 		/*
-			Elimina il nodo attualmente puntato da iter
-		*/
-		//void deleteCurrent();
-
-		/*
 			Prende in input un oggetto Enemy
 			Aggiunge un nuovo nodo in testa a list
 		*/

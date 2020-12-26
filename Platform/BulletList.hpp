@@ -35,8 +35,6 @@ class BulletList {
 		*/
 		Bullet getCurrent();
 
-		//void deleteCurrent();
-
 		/*
 			Aggiorna l'oggetto Bullet del nodo attualmente puntato da iter
 		*/

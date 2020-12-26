@@ -81,8 +81,13 @@ int Enemy::getAction(Map *map, Player player) {
 	weapon_range = weapon.getBullet().getRange();
 	
 
-	if (lastPlayerPosition != NULL) {
+	if (lastPlayerPosition != NULL) { // Il nemico ha visto il giocatore almeno una volta
 		if (player.getBodyPosition().equals(*lastPlayerPosition)) {
+			/*
+				Se l'ultima posizione nota è effettivamente il giocatore:
+				- Si avvicina entro il raggio d'azione dell'arma
+				- Attacca
+			*/
 			if (lastPlayerPosition->getX() > this->position.getX()+weapon_range) {
 				action_code = ACTION_GO_RIGHT;
 			}
@@ -100,6 +105,10 @@ int Enemy::getAction(Map *map, Player player) {
 			}
 		}
 		else {
+			/*
+				Se l'ultima posizione nota non è quella attuale del giocatore:
+				- Si avvicina
+			*/
 			if (lastPlayerPosition->getX() > this->position.getX()) {
 				action_code = ACTION_GO_RIGHT;
 			}
@@ -109,6 +118,12 @@ int Enemy::getAction(Map *map, Player player) {
 		}
 
 		if (lastPlayerPosition->getY() < this->position.getY()) {
+			/*
+				Se il giocatore si trova più in alto del nemico:
+				- Annulla l'azione precedentemente calcolata
+				- Salta se sopra c'è una piattaforma
+				- Si avvicina al nemico rispetto all'asse X se non può saltare
+			*/
 			if (map->isSolidAt(Position(this->position.getX(), this->position.getY()-2))) {
 				action_code = ACTION_JUMP;
 			}
@@ -120,10 +135,18 @@ int Enemy::getAction(Map *map, Player player) {
 			}
 		}
 		else if (lastPlayerPosition->getY() > this->position.getY()) {
+			/*
+				Se il giocatore si trova più in basso del nemico:
+				- Annulla l'azione precedentemente calcolata
+				- Scende dalla piattaforma su cui è attualmente
+			*/
 			action_code = ACTION_FALL;
 		}
 	}
-	else {
+	else { // Il nemico non ha mai visto il giocatore
+		/*
+			Esegue un'azione casuale, rispettando i limiti della mappa
+		*/
 		if (!map->isSolidAt(Position(position.getX()+1, position.getY()+1))) {
 			if (rand() % 2 == 0) {
 				action_code = ACTION_GO_LEFT;
@@ -166,6 +189,9 @@ Bullet Enemy::attack() {
 	return bullet;
 }
 
+/*
+	Incrementa i vari contatori
+*/
 void Enemy::incCounters() {
 	ArmedEntity::incCounters();
 	incRefresh();

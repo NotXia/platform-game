@@ -57,6 +57,12 @@ bool Weapon::hasAmmo() {
 	return curr_ammo > 0;
 }
 
+
+
+/*****************************
+   INIZIO GESTIONE RICARICA
+*****************************/
+
 /*
 	Inizializza i parametri per visualizzare il tempo di ricarica
 */
@@ -91,6 +97,14 @@ void Weapon::endReload() {
 	reloading = false;
 	curr_ammo = ammo;
 }
+/* FINE GESTIONE RICARICA
+**************************/
+
+
+
+/**************************
+   INIZIO GESTIONE SPARO
+**************************/
 
 /*
 	Inizializza i parametri per visualizzare l'attesa tra un colpo e l'altro
@@ -123,3 +137,6 @@ bool Weapon::canEndShootDelay() {
 void Weapon::endShoot() {
 	shooting = false;
 }
+
+/* FINE GESTIONE SPARO
+***********************/

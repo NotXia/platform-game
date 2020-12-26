@@ -8,10 +8,10 @@ Entity::Entity(int health, Pixel head_left, Pixel head_right, Pixel body, Positi
 	this->direction = DIRECTION_RIGHT;
 	this->can_move = true;
 
-	this->jump_status = 0;
 	this->is_jumping = false;
-	this->on_terrain = true;
+	this->jump_status = 0;
 	this->jump_loop_counter = 0;
+	this->on_terrain = true;
 	this->fall_loop_counter = 0;
 }
 
@@ -80,6 +80,14 @@ bool Entity::getCanMove() {
 	return can_move;
 }
 
+bool Entity::isOnTerrain() {
+	return on_terrain;
+}
+
+void Entity::setOnTerrain(bool on_terrain) {
+	this->on_terrain = on_terrain;
+}
+
 /*
 	Prende in input un intero
 	Decrementa health di quel valore
@@ -96,23 +104,34 @@ bool Entity::isDead() {
 }
 
 /*
-	Aggiorna position, decrementando di 1 la posizione sull'asse X
+	Se il valore di attuale direction è DIRECTION_LEFT, aggiorna position decrementando di 1 la posizione sull'asse X
+	Aggiorna direction a DIRECTION_LEFT.
 */
 void Entity::goLeft() {
-	if (direction != DIRECTION_RIGHT) {
+	if (direction == DIRECTION_LEFT) {
 		position.setX(position.getX()-1);
 	}
 	direction = DIRECTION_LEFT;
 }
 
 /*
-	Aggiorna position, incrementando di 1 la posizione sull'asse X
+	Se il valore di attuale direction è DIRECTION_RIGHT, aggiorna position incrementando di 1 la posizione sull'asse X
+	Aggiorna direction a DIRECTION_RIGHT.
 */
 void Entity::goRight() {
-	if (direction != DIRECTION_LEFT) {
+	if (direction == DIRECTION_RIGHT) {
 		position.setX(position.getX()+1);
 	}
 	direction = DIRECTION_RIGHT;
+}
+
+
+/**************************
+   INIZIO GESTIONE SALTO
+**************************/
+
+bool Entity::isJumping() {
+	return is_jumping;
 }
 
 /*
@@ -124,32 +143,18 @@ void Entity::initJump() {
 	jump_status = 0;
 }
 
-bool Entity::isOnTerrain() {
-	return on_terrain;
-}
-
-void Entity::setOnTerrain(bool on_terrain) {
-	this->on_terrain = on_terrain;
-}
-
-bool Entity::isJumping() {
-	return is_jumping;
-}
-
 /*
 	Se jump_status è inferiore all'altezza massima di salto, aggiorna position decrementando di 1 la posizione sull'asse Y.
 	Altrimenti interrompe il salto.
 */
-bool Entity::jump() {
+void Entity::jump() {
 	jump_status++;
 	if (jump_status < JUMP_HEIGHT) {
 		is_jumping = true;
 		position.setY(position.getY()-1);
-		return true;
 	}
 	else {
 		stopJump();
-		return false;
 	}
 }
 
@@ -162,6 +167,47 @@ void Entity::stopJump() {
 }
 
 /*
+	Se is_jumping è true: incrementa jump_loop_counter di 1.
+	Se supera il limite impostato, viene resettato.
+*/
+void Entity::incJumpLoopCounter() {
+	if (is_jumping) {
+		jump_loop_counter++;
+		if (jump_loop_counter > JUMP_SPEED) {
+			jump_loop_counter = 0;
+		}
+	}
+}
+
+/*
+	Restituisce true quando è possibile avanzare nell'animazione del salto
+*/
+bool Entity::canJump() {
+	return (jump_loop_counter >= JUMP_SPEED && is_jumping);
+}
+
+/* FINE GESTIONE SALTO
+************************/
+
+
+/***************************
+   INIZIO GESTIONE CADUTA
+***************************/
+
+/*
+	Se on_terrain è false: incrementa fall_loop_counter di 1.
+	Se supera il limite impostato, viene resettato.
+*/
+void Entity::incFallLoopCounter() {
+	if (!on_terrain) {
+		fall_loop_counter++;
+		if (fall_loop_counter > FALL_SPEED) {
+			fall_loop_counter = 0;
+		}
+	}
+}
+
+/*
 	Aggiorna position incrementando di 1 la posizione sull'asse Y.
 */
 void Entity::fall() {
@@ -169,55 +215,19 @@ void Entity::fall() {
 }
 
 /*
-	Incrementa jump_loop_counter di 1.
-	Se supera il limite impostato, viene resettato.
-*/
-void Entity::incJumpLoopCounter() {
-	jump_loop_counter++;
-	if (fall_loop_counter > FALL_SPEED) {
-		resetJumpLoopCounter();
-	}
-}
-
-/*
-	Resetta jump_loop_counter
-*/
-void Entity::resetJumpLoopCounter() {
-	jump_loop_counter = 0;
-}
-
-/*
-	Incrementa fall_loop_counter di 1.
-	Se supera il limite impostato, viene resettato.
-*/
-void Entity::incFallLoopCounter() {
-	fall_loop_counter++;
-	if (fall_loop_counter > FALL_SPEED) {
-		resetFallLoopCounter();
-	}
-}
-
-/*
-	Resetta fall_loop_counter
-*/
-void Entity::resetFallLoopCounter() {
-	fall_loop_counter = 0;
-}
-
-/*
-	Restituisce true quando è possibile avanzare nell'animazione del salto
-*/
-bool Entity::canJump() {
-	return (jump_loop_counter >= JUMP_SPEED);
-}
-
-/*
 	Restituisce true quando è possibile avanzare nell'animazione della caduta
 */
 bool Entity::canFall() {
-	return (fall_loop_counter >= FALL_SPEED);
+	return (fall_loop_counter >= FALL_SPEED && !on_terrain && !is_jumping);
 }
 
+/* FINE GESTIONE CADUTA
+************************/
+
+
+/*
+	Incrementa i vari contatori
+*/
 void Entity::incCounters() {
 	incFallLoopCounter();
 	incJumpLoopCounter();
