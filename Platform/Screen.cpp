@@ -80,27 +80,14 @@ void Screen::init() {
 
 
 	// Barra della vita
-	moveCursor(hp_x, hp_y);
-	cout <<"HP ";
-	setColor(HP_COLOR);
-	moveCursor(7, hp_y);
-	for (int i=0; i<MAX_LIFE-1; i++) {
-		cout <<char(3) <<" "; // ♥
-	}
-	cout <<char(3); // ♥
-	resetColor();
+	write_hp(MAX_LIFE);
 
 
 	// Soldi
-	moveCursor(1, hp_y + 1);
-	cout <<"Soldi 0 ";
-	setColor(FG_DARKYELLOW | BG_BLACK);
-	cout <<char(207);
-	resetColor();
+	write_money(0);
 
 	// Punteggio
-	moveCursor(1, hp_y + 2);
-	cout <<"Punti 0";
+	write_points(0);
 
 
 	// Area selettore arma
@@ -336,5 +323,28 @@ void Screen::write_ammobox(int ammo) {
 		else {
 			cout <<"| " <<ammo;
 		}
+	}
+}
+
+/*
+	Prende in input un intero.
+	Aggiorna il numero di cuori visualizzato
+*/
+void Screen::write_hp(int hp) {
+	if (hp >= 0) {
+		resetColor();
+		moveCursor(1, hp_y);
+		cout <<"HP";
+		moveCursor(7, hp_y);
+		for (int i=0; i<MAX_LIFE; i++) {
+			cout <<"  ";
+		}
+	
+		moveCursor(7, hp_y);
+		setColor(HP_COLOR);
+		for (int i=0; i<hp; i++) {
+			cout <<char(3) <<" "; // ♥
+		}
+		resetColor();
 	}
 }

@@ -1,12 +1,10 @@
 #include "Entity.hpp"
 #include "settings.h"
 
-Entity::Entity(int health, Pixel head_left, Pixel head_right, Pixel body, Position position) {
+Entity::Entity(int health, Pixel head_left, Pixel head_right, Pixel body, Position position) : Block(body, position) {
 	this->health = health;
 	this->head_left = head_left;
 	this->head_right = head_right;
-	this->body = body;
-	this->position = position;
 	this->direction = DIRECTION_RIGHT;
 	this->can_move = true;
 
@@ -31,16 +29,9 @@ Pixel Entity::getHead() {
 	}
 }
 
-Pixel Entity::getBody() {
-	return body;
-}
 
 bool Entity::getDirection() {
 	return direction;
-}
-
-Position Entity::getBodyPosition() {
-	return position;
 }
 
 Position Entity::getHeadPosition() {

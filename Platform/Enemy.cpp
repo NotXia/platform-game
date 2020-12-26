@@ -8,7 +8,7 @@ Enemy::Enemy(int health, int points, int money, Pixel head_left, Pixel head_righ
 	this->money = money;
 	lastPlayerPosition = NULL;
 	this->visualRange = ENEMY_RANGE;
-	this->refreshTime = 5000;
+	this->refreshTime = 8000;
 	this->currRefresh = 0;
 }
 
@@ -87,6 +87,12 @@ int Enemy::getAction(Map *map, Player player) {
 				action_code = ACTION_GO_RIGHT;
 			}
 			else if (lastPlayerPosition->getX() < this->position.getX()-weapon_range) {
+				action_code = ACTION_GO_LEFT;
+			}
+			else if (lastPlayerPosition->getX() > this->position.getX() && direction == DIRECTION_LEFT) {
+				action_code = ACTION_GO_RIGHT;
+			}
+			else  if (lastPlayerPosition->getX() < this->position.getX() && direction == DIRECTION_RIGHT) {
 				action_code = ACTION_GO_LEFT;
 			}
 			else {

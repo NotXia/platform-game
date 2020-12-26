@@ -2,17 +2,16 @@
 
 #include "Pixel.hpp"
 #include "Position.hpp"
+#include "Block.hpp"
 
 const bool DIRECTION_LEFT = false;
 const bool DIRECTION_RIGHT = true;
 
-class Entity {
+class Entity : public Block {
 	protected:
 		int health;
 		Pixel head_left;
 		Pixel head_right;
-		Pixel body;
-		Position position;
 		bool direction; // false = left | true = right
 		bool can_move;
 
@@ -40,9 +39,7 @@ class Entity {
 
 		int getHealth();
 		Pixel getHead();
-		Pixel getBody(); 
 		bool getDirection();
-		Position getBodyPosition();
 		Position getHeadPosition();
 		Position getFrontPosition(); // Restituisce le coordinate davanti al corpo (stabilito in base alla direzione)
 		Position getBackPosition(); // Restituisce le coordinate dietro al corpo (stabilito in base alla direzione)

@@ -19,7 +19,7 @@ int main() {
     int max_enemies = 2;
     Screen screen = Screen();
     Map *map = new Map(NULL, 3, difficulty);
-    Player player = Player(MAX_LIFE, Pixel('<', PLAYER_HEAD_COLOR, true), Pixel('>', PLAYER_HEAD_COLOR, true), Pixel(char(219), PLAYER_BODY_COLOR, true), map->getLeftPosition(), assault_rifle);
+    Player player = Player(MAX_LIFE, Pixel('<', PLAYER_HEAD_COLOR, true), Pixel('>', PLAYER_HEAD_COLOR, true), Pixel(char(219), PLAYER_BODY_COLOR, true), map->getLeftPosition(), laser);
     EnemyList enemylist;
     BulletList bulletlist;
     
@@ -33,7 +33,7 @@ int main() {
     screen.write_ammobox(player.getWeapon().getCurrAmmo());
 
 
-    while (true) {
+    while (player.getHealth() > 0) {
         if (screen.canRotateWeaponbox()) {
             screen.rotate_weaponbox();
         }
@@ -171,14 +171,22 @@ int main() {
             Bullet bullet = bulletlist.getCurrent();
 
             if (bullet.canRefresh()) {
-                screen.resetTerrain(map, bullet.getPosition());
 
                 if (bullet.isHostile()) {
+                    if (player.getBodyPosition().equals(bullet.getPosition()) || player.getHeadPosition().equals(bullet.getPosition())) {
+                        player.take_damage(bullet.hit());
+                        screen.write_hp(player.getHealth());
 
+                        /*if (player.isDead()) {
+                            screen.resetTerrain(map, hit_enemy.getHeadPosition());
+                            screen.resetTerrain(map, hit_enemy.getBodyPosition());
+                        }*/
+                    }
                 }
                 else {
                     if (enemylist.pointAt(bullet.getPosition())) {
                         Enemy hit_enemy = enemylist.getCurrent();
+                        //screen.write_entity(hit_enemy);
                         hit_enemy.take_damage(bullet.hit());
 
                         if (hit_enemy.isDead()) {
@@ -194,8 +202,17 @@ int main() {
                     }
                 }
                 
+                if (!enemylist.existsAt(bullet.getPosition()) &&
+                    !player.getBodyPosition().equals(bullet.getPosition()) &&
+                    !player.getHeadPosition().equals(bullet.getPosition())) {
+                    screen.resetTerrain(map, bullet.getPosition());
+                }
                 if (bullet.travel()) {
-                    screen.write_at(bullet.getTexture(), bullet.getPosition());
+                    if (!enemylist.existsAt(bullet.getPosition()) && 
+                        !player.getBodyPosition().equals(bullet.getPosition()) && 
+                        !player.getHeadPosition().equals(bullet.getPosition())) {
+                        screen.write_at(bullet.getTexture(), bullet.getPosition());
+                    }
                 }
             }
 
@@ -255,7 +272,18 @@ int main() {
                     }
                 }
                 else if (action == ACTION_ATTACK) {
+                    if (enemy.isOnTerrain()) {
+                        if (enemy.canAttack()) {
+                            map->addBullet(enemy.attack());
 
+                            screen.write_at(enemy.getWeapon().getTexture(enemy.getDirection()), enemy.getFrontPosition());
+                        }
+                        else {
+                            if (enemy.canReload() && !enemy.getWeapon().hasAmmo()) {
+                                enemy.reload();
+                            }
+                        }
+                    }
                 }
             }
 
@@ -307,19 +335,30 @@ int main() {
             if (bulletlist.pointAt(enemy.getHeadPosition(), enemy.getBodyPosition())) {
                 Bullet hit_bullet = bulletlist.getCurrent();
 
-                enemy.take_damage(hit_bullet.hit());
-                if (enemy.isDead()) {
-                    screen.resetTerrain(map, enemy.getHeadPosition());
-                    screen.resetTerrain(map, enemy.getBodyPosition());
-                    player.incPoints(enemy.getPoints());
-                    screen.write_points(player.getPoints());
-                    player.incMoney(enemy.getMoney());
-                    screen.write_money(player.getMoney());
-                }
+                if (!hit_bullet.isHostile()) {
+                    enemy.take_damage(hit_bullet.hit());
+                    if (enemy.isDead()) {
+                        screen.resetTerrain(map, enemy.getHeadPosition());
+                        screen.resetTerrain(map, enemy.getBodyPosition());
+                        player.incPoints(enemy.getPoints());
+                        screen.write_points(player.getPoints());
+                        player.incMoney(enemy.getMoney());
+                        screen.write_money(player.getMoney());
+                    }
 
-                bulletlist.updateCurrent(hit_bullet);
-                map->setBulletList(bulletlist);
+                    bulletlist.updateCurrent(hit_bullet);
+                    map->setBulletList(bulletlist);
+                }
             }
+
+            /*** Gestione animazione arma ***/
+            if (enemy.endWeaponDisplay()) {
+                screen.resetTerrain(map, enemy.getFrontPosition());
+                enemy.setCanMove(true);
+            }
+
+            enemy.hasReloadFinished();
+            enemy.hasShootDelayFinished();
 
             enemy.incCounters();
 

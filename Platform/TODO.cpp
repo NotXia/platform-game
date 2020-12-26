@@ -3,7 +3,7 @@
 	X S per scendere - DONE
 	X Classe entità armata
 	X Umarells
-	- Attacco umarells
+	X Attacco umarells
 	- Bonus
 	X La funzione attack di player restituisce un proiettile
 	X Weapons
@@ -17,6 +17,7 @@
 	- Easter eggs
 	- Rework range visione nemici
 	- LASER DELLA MORTE
+	- Piattaforme che si muovono
 */
 
 

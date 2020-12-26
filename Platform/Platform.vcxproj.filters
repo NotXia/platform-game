@@ -64,6 +64,15 @@
     <ClCompile Include="BulletList.cpp">
       <Filter>List</Filter>
     </ClCompile>
+    <ClCompile Include="Block.cpp">
+      <Filter>Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="Bonus.cpp">
+      <Filter>Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="BonusList.cpp">
+      <Filter>List</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="colors.h">
@@ -110,6 +119,15 @@
     </ClInclude>
     <ClInclude Include="weapons.h">
       <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Block.hpp">
+      <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Bonus.hpp">
+      <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="BonusList.hpp">
+      <Filter>List</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

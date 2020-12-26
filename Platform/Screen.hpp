@@ -20,7 +20,7 @@ class Screen {
 
 		const char MONEY_SYMBOL = char(207);
 
-		const int WEAPONBOX_ROTATION_SPEED = 10000;
+		const int WEAPONBOX_ROTATION_SPEED = 8000;
 
 
 		HANDLE console;
@@ -138,5 +138,10 @@ class Screen {
 		*/
 		void write_ammobox(int ammo);
 
+		/*
+			Prende in input un intero.
+			Aggiorna il numero di cuori visualizzato
+		*/
+		void write_hp(int hp);
 
 };
