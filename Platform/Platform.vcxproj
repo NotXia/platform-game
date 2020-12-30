@@ -156,6 +156,7 @@
     <ClCompile Include="Position.cpp" />
     <ClCompile Include="Screen.cpp" />
     <ClCompile Include="Weapon.cpp" />
+    <ClCompile Include="WeaponContainer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArmedEntity.hpp" />
@@ -175,6 +176,7 @@
     <ClInclude Include="Screen.hpp" />
     <ClInclude Include="settings.h" />
     <ClInclude Include="Weapon.hpp" />
+    <ClInclude Include="WeaponContainer.hpp" />
     <ClInclude Include="weapons.h" />
   </ItemGroup>
   <ItemGroup>

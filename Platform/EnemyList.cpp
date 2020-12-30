@@ -7,7 +7,7 @@ EnemyList::EnemyList() {
 }
 
 /*
-	Inizializza iter alla testa della lista
+	Inizializza iter alla testa della lista e prev a NULL
 */
 void EnemyList::initIter() {
 	iter = list;

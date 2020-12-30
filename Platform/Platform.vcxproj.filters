@@ -73,6 +73,9 @@
     <ClCompile Include="BonusList.cpp">
       <Filter>List</Filter>
     </ClCompile>
+    <ClCompile Include="WeaponContainer.cpp">
+      <Filter>Weapon</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="colors.h">
@@ -128,6 +131,9 @@
     </ClInclude>
     <ClInclude Include="BonusList.hpp">
       <Filter>List</Filter>
+    </ClInclude>
+    <ClInclude Include="WeaponContainer.hpp">
+      <Filter>Weapon</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

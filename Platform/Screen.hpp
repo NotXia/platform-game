@@ -17,8 +17,6 @@ class Screen {
 		const int TEXTBOX_HEIGHT = 5;
 		const int TEXTBOX_MIN_WIDTH = 15;
 
-		const char MONEY_SYMBOL = char(207);
-
 		const int WEAPONBOX_ROTATION_SPEED = 8000;
 
 
@@ -26,7 +24,7 @@ class Screen {
 
 		int hp_x, hp_y;
 		int weapon_x, weapon_y;
-		int textBox_x, textBox_y;
+		int textBox_x, textBox_y, textBox_width;
 		int weaponbox_width, ammobox_width;
 
 		int start_index;
@@ -77,6 +75,12 @@ class Screen {
 		void write_game_area(Map *map);
 
 		/*
+			Prende in input un oggetto Map
+			Stampa il terreno del gioco
+		*/
+		void write_terrain(Map *map);
+
+		/*
 			Prende in input un Pixel e una Position.
 			Imposta il pixel nella posizione indicata.
 		*/
@@ -100,6 +104,12 @@ class Screen {
 		*/
 		void write_enemies(EnemyList list);
 
+		/*
+			Prende in input un oggetto BonusList.
+			Stampa sullo schermo tutti i bonus
+		*/
+		void write_bonuses(BonusList list);
+
 		/* FINE GESTIONE AREA DI GIOCO  
 		*******************************/
 
@@ -107,12 +117,22 @@ class Screen {
 		/*****************************
 		   INIZIO GESTIONE TEXT BOX   
 		*****************************/
+		/*
+			Rimuove tutto il testo nell'area di testo
+		*/
+		void clear_textbox();
 
 		/*
 			Prende in input una stringa.
-			Inserisce la stringa nell'area di testo (in basso a destra).
+			Inserisce la stringa nell'area di testo.
 		*/
 		void write_textbox(const char string[]);
+
+		/*
+			Prende in input un oggetto Weapon.
+			Inserisce nella textbox il testo previsto quando il giocatore si posiziona sopra un bonus di tipo arma.
+		*/
+		void write_textbox_weaponbonus(Weapon bonus_weapon, Weapon player_weapon);
 
 		/* FINE GESTIONE TEXT BOX  
 		**************************/

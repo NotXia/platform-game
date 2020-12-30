@@ -3,10 +3,10 @@
 
 class WeaponContainer {
 	protected:
-		Weapon tier1[50]; int tier1_size;
-		Weapon tier2[50]; int tier2_size;
-		Weapon tier3[50]; int tier3_size;
-		Weapon special[50]; int special_size;
+		Weapon tier1[20]; int tier1_size;
+		Weapon tier2[20]; int tier2_size;
+		Weapon tier3[20]; int tier3_size;
+		Weapon special[20]; int special_size;
 
 		/*
 			Prende in input un oggetto Weapon.

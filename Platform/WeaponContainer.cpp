@@ -25,20 +25,20 @@ WeaponContainer::WeaponContainer() {
 	Inizializza gli array con le armi destinate al giocatore
 */
 void WeaponContainer::initForPlayer() {
-	insert_tier3(Weapon(
+	insert_tier1(Weapon(
 		"Coltellino",
-		Pixel('-', FG_DARKBLUE | BACKGROUND_DEFAULT, false),
-		Pixel('-', FG_DARKBLUE | BACKGROUND_DEFAULT, false),
+		Pixel('-', FG_BLACK | BACKGROUND_DEFAULT, false),
+		Pixel('-', FG_BLACK | BACKGROUND_DEFAULT, false),
 		Bullet(Pixel(' ', BACKGROUND_DEFAULT | BACKGROUND_DEFAULT, false), 1, 2),
 		1,
 		0,
 		3500
 	));
 
-	insert_tier3(Weapon(
+	insert_tier1(Weapon(
 		"Fionda",
-		Pixel('Y', FG_DARKBLUE | BACKGROUND_DEFAULT, false),
-		Pixel('Y', FG_DARKBLUE | BACKGROUND_DEFAULT, false),
+		Pixel('Y', FG_BLACK | BACKGROUND_DEFAULT, false),
+		Pixel('Y', FG_BLACK | BACKGROUND_DEFAULT, false),
 		Bullet(Pixel('.', FG_BLACK | BACKGROUND_DEFAULT, false), 1, 5),
 		1,
 		5000,
@@ -48,8 +48,8 @@ void WeaponContainer::initForPlayer() {
 	// TODO: la spada non lancia proiettili, ma una linea retta continua
 	insert_tier2(Weapon(
 		"Spada",
-		Pixel(char(196), FG_DARKBLUE | BACKGROUND_DEFAULT, false),
-		Pixel(char(196), FG_DARKBLUE | BACKGROUND_DEFAULT, false),
+		Pixel(char(196), FG_BLACK | BACKGROUND_DEFAULT, false),
+		Pixel(char(196), FG_BLACK | BACKGROUND_DEFAULT, false),
 		Bullet(Pixel(' ', BACKGROUND_DEFAULT | BACKGROUND_DEFAULT, false), 5, 3),
 		1,
 		0,
@@ -58,38 +58,38 @@ void WeaponContainer::initForPlayer() {
 
 	insert_tier2(Weapon(
 		"Pistola",
-		Pixel(char(191), FG_DARKBLUE | BACKGROUND_DEFAULT, false),
-		Pixel(char(218), FG_DARKBLUE | BACKGROUND_DEFAULT, false),
+		Pixel(char(191), FG_BLACK | BACKGROUND_DEFAULT, false),
+		Pixel(char(218), FG_BLACK | BACKGROUND_DEFAULT, false),
 		Bullet(Pixel('o', FG_BLACK | BACKGROUND_DEFAULT, false), 2, 10),
 		10,
 		15000,
 		12000
 	));
 
-	insert_tier1(Weapon(
+	insert_tier3(Weapon(
 		"Mitraglietta",
-		Pixel(char(191), FG_DARKBLUE | BACKGROUND_DEFAULT, false),
-		Pixel(char(218), FG_DARKBLUE | BACKGROUND_DEFAULT, false),
+		Pixel(char(191), FG_BLACK | BACKGROUND_DEFAULT, false),
+		Pixel(char(218), FG_BLACK | BACKGROUND_DEFAULT, false),
 		Bullet(Pixel('-', BACKGROUND_DEFAULT | BACKGROUND_DEFAULT, false), 5, 15),
 		20,
 		12000,
 		5000
 	));
 
-	insert_tier1(Weapon(
+	insert_tier3(Weapon(
 		"Fucile d'assalto",
-		Pixel(char(191), FG_DARKBLUE | BACKGROUND_DEFAULT, false),
-		Pixel(char(218), FG_DARKBLUE | BACKGROUND_DEFAULT, false),
+		Pixel(char(191), FG_BLACK | BACKGROUND_DEFAULT, false),
+		Pixel(char(218), FG_BLACK | BACKGROUND_DEFAULT, false),
 		Bullet(Pixel('-', BACKGROUND_DEFAULT | BACKGROUND_DEFAULT, false), 8, 20),
 		35,
 		15000,
 		3500
 	));
 
-	insert_tier1(Weapon(
+	insert_tier3(Weapon(
 		"Fucile di precisione",
-		Pixel(char(191), FG_DARKBLUE | BACKGROUND_DEFAULT, false),
-		Pixel(char(218), FG_DARKBLUE | BACKGROUND_DEFAULT, false),
+		Pixel(char(191), FG_BLACK | BACKGROUND_DEFAULT, false),
+		Pixel(char(218), FG_BLACK | BACKGROUND_DEFAULT, false),
 		Bullet(Pixel('-', BACKGROUND_DEFAULT | BACKGROUND_DEFAULT, false), 10, GAME_WIDTH),
 		5,
 		30000,
@@ -101,8 +101,8 @@ void WeaponContainer::initForPlayer() {
 	// TODO: Migliorare il laser (togliere il proiettile e fare un effettivo laser)
 	insert_special(Weapon(
 		"Laser",
-		Pixel(char(191), FG_DARKBLUE | BACKGROUND_DEFAULT, false),
-		Pixel(char(218), FG_DARKBLUE | BACKGROUND_DEFAULT, false),
+		Pixel(char(191), FG_BLACK | BACKGROUND_DEFAULT, false),
+		Pixel(char(218), FG_BLACK | BACKGROUND_DEFAULT, false),
 		Bullet(Pixel(char(196), FG_DARKRED | BACKGROUND_DEFAULT, false), 30, GAME_WIDTH),
 		1,
 		100000,
@@ -115,20 +115,20 @@ void WeaponContainer::initForPlayer() {
 	Inizializza gli array con le armi destinate ai nemici
 */
 void WeaponContainer::initForEnemy() {
-	insert_tier3(Weapon(
+	insert_tier1(Weapon(
 		"Coltellino",
-		Pixel('-', FG_DARKBLUE | BACKGROUND_DEFAULT, false),
-		Pixel('-', FG_DARKBLUE | BACKGROUND_DEFAULT, false),
+		Pixel('-', FG_BLACK | BACKGROUND_DEFAULT, false),
+		Pixel('-', FG_BLACK | BACKGROUND_DEFAULT, false),
 		Bullet(Pixel(' ', BACKGROUND_DEFAULT | BACKGROUND_DEFAULT, false), 1, 2),
 		1,
 		0,
 		3500
 	));
 
-	insert_tier3(Weapon(
+	insert_tier1(Weapon(
 		"Fionda",
-		Pixel('Y', FG_DARKBLUE | BACKGROUND_DEFAULT, false),
-		Pixel('Y', FG_DARKBLUE | BACKGROUND_DEFAULT, false),
+		Pixel('Y', FG_BLACK | BACKGROUND_DEFAULT, false),
+		Pixel('Y', FG_BLACK | BACKGROUND_DEFAULT, false),
 		Bullet(Pixel('.', FG_BLACK | BACKGROUND_DEFAULT, false), 1, 5),
 		1,
 		5000,
@@ -137,8 +137,8 @@ void WeaponContainer::initForEnemy() {
 
 	insert_tier2(Weapon(
 		"Spada",
-		Pixel(char(196), FG_DARKBLUE | BACKGROUND_DEFAULT, false),
-		Pixel(char(196), FG_DARKBLUE | BACKGROUND_DEFAULT, false),
+		Pixel(char(196), FG_BLACK | BACKGROUND_DEFAULT, false),
+		Pixel(char(196), FG_BLACK | BACKGROUND_DEFAULT, false),
 		Bullet(Pixel(' ', BACKGROUND_DEFAULT | BACKGROUND_DEFAULT, false), 2, 3),
 		1,
 		0,
@@ -147,38 +147,38 @@ void WeaponContainer::initForEnemy() {
 
 	insert_tier2(Weapon(
 		"Pistola",
-		Pixel(char(191), FG_DARKBLUE | BACKGROUND_DEFAULT, false),
-		Pixel(char(218), FG_DARKBLUE | BACKGROUND_DEFAULT, false),
+		Pixel(char(191), FG_BLACK | BACKGROUND_DEFAULT, false),
+		Pixel(char(218), FG_BLACK | BACKGROUND_DEFAULT, false),
 		Bullet(Pixel('o', FG_BLACK | BACKGROUND_DEFAULT, false), 2, 10),
 		10,
 		15000,
 		12000
 	));
 
-	insert_tier1(Weapon(
+	insert_tier3(Weapon(
 		"Mitraglietta",
-		Pixel(char(191), FG_DARKBLUE | BACKGROUND_DEFAULT, false),
-		Pixel(char(218), FG_DARKBLUE | BACKGROUND_DEFAULT, false),
+		Pixel(char(191), FG_BLACK | BACKGROUND_DEFAULT, false),
+		Pixel(char(218), FG_BLACK | BACKGROUND_DEFAULT, false),
 		Bullet(Pixel('-', BACKGROUND_DEFAULT | BACKGROUND_DEFAULT, false), 2, 15),
 		20,
 		12000,
 		5000
 	));
 
-	insert_tier1(Weapon(
+	insert_tier3(Weapon(
 		"Fucile d'assalto",
-		Pixel(char(191), FG_DARKBLUE | BACKGROUND_DEFAULT, false),
-		Pixel(char(218), FG_DARKBLUE | BACKGROUND_DEFAULT, false),
+		Pixel(char(191), FG_BLACK | BACKGROUND_DEFAULT, false),
+		Pixel(char(218), FG_BLACK | BACKGROUND_DEFAULT, false),
 		Bullet(Pixel('-', BACKGROUND_DEFAULT | BACKGROUND_DEFAULT, false), 3, 20),
 		35,
 		15000,
 		3500
 	));
 
-	insert_tier1(Weapon(
+	insert_tier3(Weapon(
 		"Fucile di precisione",
-		Pixel(char(191), FG_DARKBLUE | BACKGROUND_DEFAULT, false),
-		Pixel(char(218), FG_DARKBLUE | BACKGROUND_DEFAULT, false),
+		Pixel(char(191), FG_BLACK | BACKGROUND_DEFAULT, false),
+		Pixel(char(218), FG_BLACK | BACKGROUND_DEFAULT, false),
 		Bullet(Pixel('-', BACKGROUND_DEFAULT | BACKGROUND_DEFAULT, false), 5, GAME_WIDTH),
 		5,
 		30000,

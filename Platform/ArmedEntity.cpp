@@ -11,6 +11,10 @@ Weapon ArmedEntity::getWeapon() {
 	return this->weapon;
 }
 
+void ArmedEntity::setWeapon(Weapon weapon) {
+	this->weapon = weapon;
+}
+
 
 /****************************
    INIZIO GESTIONE ATTACCO

@@ -12,6 +12,10 @@ Screen::Screen() {
 	this->weapon_y = this->hp_y;
 	this->textBox_x = this->weapon_x + (WEAPON_WIDTH+2) + GAMEBAR_PADDING;
 	this->textBox_y = GAME_HEIGHT + 2;
+	this->textBox_width = GAME_WIDTH-textBox_x;
+	if (textBox_width < TEXTBOX_MIN_WIDTH) {
+		textBox_width = TEXTBOX_MIN_WIDTH;
+	}
 	this->ammobox_width = 2;
 	this->weaponbox_width = WEAPON_WIDTH - ammobox_width - 1;
 
@@ -115,10 +119,10 @@ void Screen::init() {
 
 	// Text box
 	int textBox_height = 2*GAMEBAR_OFFSET + 3;
-	int textBox_width = GAME_WIDTH-textBox_x;
-	if (textBox_width < TEXTBOX_MIN_WIDTH) {
-		textBox_width = TEXTBOX_MIN_WIDTH;
-	}
+	//int textBox_width = GAME_WIDTH-textBox_x;
+	//if (textBox_width < TEXTBOX_MIN_WIDTH) {
+	//	textBox_width = TEXTBOX_MIN_WIDTH;
+	//}
 
 	moveCursor(textBox_x, textBox_y);
 	cout <<char(218); // ┌
@@ -154,6 +158,16 @@ void Screen::init() {
 	Stampa l'area di gioco
 */
 void Screen::write_game_area(Map *map) {
+	write_terrain(map);
+	write_enemies(map->getEnemyList());
+	write_bonuses(map->getBonusList());
+}
+
+/*
+	Prende in input un oggetto Map
+	Stampa il terreno del gioco
+*/
+void Screen::write_terrain(Map *map) {
 	for (int i=1; i<=GAME_HEIGHT; i++) {
 		moveCursor(1, i);
 		for (int j=1; j<=GAME_WIDTH; j++) {
@@ -163,7 +177,6 @@ void Screen::write_game_area(Map *map) {
 	}
 	resetColor();
 }
-
 
 /*
 	Prende in input un Pixel e una Position.
@@ -193,7 +206,14 @@ void Screen::write_entity(Entity entity) {
 	Imposta in posizione position il valore previsto dalla mappa.
 */
 void Screen::resetTerrain(Map *map, Position position) {
-	write_at(map->getTerrainAt(position), position);
+	BonusList bonuslist = map->getBonusList();
+
+	if (bonuslist.pointAt(position)) {
+		write_at(bonuslist.getCurrent().getBody(), position);
+	}
+	else {
+		write_at(map->getTerrainAt(position), position);
+	}
 }
 
 /*
@@ -210,6 +230,21 @@ void Screen::write_enemies(EnemyList list) {
 	}
 }
 
+/*
+	Prende in input un oggetto BonusList.
+	Stampa sullo schermo tutti i bonus
+*/
+void Screen::write_bonuses(BonusList list) {
+	list.initIter();
+
+	while (!list.isNull()) {
+		Bonus bonus = list.getCurrent();
+		write_at(bonus.getBody(), bonus.getBodyPosition());
+
+		list.goNext();
+	}
+}
+
 /* FINE GESTIONE AREA DI GIOCO
 *******************************/
 
@@ -219,16 +254,59 @@ void Screen::write_enemies(EnemyList list) {
 *****************************/
 
 /*
+	Rimuove tutto il testo nell'area di testo
+*/
+void Screen::clear_textbox() {
+	int start_x = textBox_x+1;
+	int start_y = textBox_y+1;
+
+	resetColor();
+
+	for (int i=0; i<TEXTBOX_HEIGHT; i++) {
+		moveCursor(start_x, start_y+i);
+		for (int j=0; j<textBox_width; j++) {
+			cout <<" ";
+		}
+	}
+}
+
+/*
 	Prende in input una stringa.
 	Inserisce la stringa nell'area di testo (in basso a destra).
 */
 void Screen::write_textbox(const char string[]) {
+	clear_textbox();
 	int start_x = textBox_x+1;
 	int start_y = textBox_y+1;
 
 	moveCursor(start_x, start_y);
 	resetColor();
 	cout <<string;
+}
+
+/*
+	Prende in input un oggetto Weapon.
+	Inserisce nella textbox il testo previsto quando il giocatore si posiziona sopra un bonus di tipo arma.
+*/
+void Screen::write_textbox_weaponbonus(Weapon bonus_weapon, Weapon player_weapon) {
+	clear_textbox();
+	int start_x = textBox_x+1;
+	int start_y = textBox_y+1;
+
+	resetColor();
+	moveCursor(start_x, start_y);
+	cout <<"Hai trovato questa arma:";
+	moveCursor(start_x, start_y+1);
+	cout <<bonus_weapon.getName();
+	moveCursor(start_x, start_y+2);
+	cout <<"(" <<bonus_weapon.higherDamage(player_weapon) <<") danni | " 
+		 <<"(" <<bonus_weapon.higherAmmo(player_weapon) <<") munizioni | " 
+		 <<"(" <<bonus_weapon.higherRange(player_weapon) <<") range";
+	moveCursor(start_x, start_y+3);
+	cout <<"(" <<bonus_weapon.fasterReload(player_weapon) <<") tempo ricarica | " 
+		 <<"(" <<bonus_weapon.fasterShootRate(player_weapon) <<") velocita' attacco";
+	moveCursor(start_x, start_y+5);
+	cout <<"[E] Prendi";
 }
 
 /* FINE GESTIONE TEXT BOX
@@ -247,7 +325,7 @@ void Screen::write_money(int money) {
 	moveCursor(hp_x, hp_y + 1);
 	cout <<"Soldi " <<money <<" ";
 	setColor(FG_DARKYELLOW | BG_BLACK);
-	cout <<char(207);
+	cout <<MONEY_SYMBOL;
 	resetColor();
 }
 
@@ -279,7 +357,12 @@ void Screen::write_hp(int hp) {
 		moveCursor(7, hp_y);
 		setColor(HP_COLOR);
 		for (int i=0; i<hp; i++) {
-			cout <<char(3) <<" "; // ♥
+			cout <<HP_SYMBOL <<" ";
+		}
+
+		setColor(FG_GREY | BG_BLACK);
+		for (int i=0; i<MAX_LIFE-hp; i++) {
+			cout <<HP_SYMBOL <<" ";
 		}
 		resetColor();
 	}
@@ -314,6 +397,7 @@ void Screen::write_weaponbox(char name[]) {
 		}
 	}
 	else {
+		need_rotate = false;
 		cout <<name;
 	}
 }

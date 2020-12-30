@@ -5,6 +5,7 @@
 #include <iostream>
 #include "EnemyList.hpp"
 #include "BulletList.hpp"
+#include "BonusList.hpp"
 
 class Map {
 	protected:
@@ -13,9 +14,16 @@ class Map {
 		Map *prev;
 		Position left_position;
 		Position right_position;
+		int level_number;
 
 		EnemyList enemyList;
 		BulletList bulletList;
+		BonusList bonusList;
+
+		/*
+			Restituisce la difficoltà corrente, calcolata in base al numero di livelli superati
+		*/
+		int getDifficulty();
 
 		/*
 			Inizializza la matrice terrain con gli elementi base della mappa
@@ -28,8 +36,14 @@ class Map {
 		*/
 		void generateEnemy(int max_enemies, int difficulty);
 
+		/*
+			Prende in input due interi, rispettivamente il numero massimo di bonus generabili e la difficoltà.
+			Genera e inizializza i bonus e li inserisce in bonusList
+		*/
+		void generateBonus(int max_bonus, int difficulty);
+
 	public:
-		Map(Map *prev=NULL, int max_enemies=0, int difficulty=1);
+		Map(Map *prev=NULL, int max_enemies=0, int level_number=0);
 
 		Position getLeftPosition();
 		Position getRightPosition();
@@ -37,6 +51,8 @@ class Map {
 		void setEnemyList(EnemyList enemylist);
 		BulletList getBulletList();
 		void setBulletList(BulletList bulletlist);
+		BonusList getBonusList();
+		void setBonusList(BonusList bonuslist);
 
 		/*
 			Restituisce true se *prev è NULL, false altrimenti
@@ -53,7 +69,7 @@ class Map {
 			Prende in input la posizione da cui il giocatore è uscito nel livello corrente.
 			Restituisce il puntatore al livello successivo, impostando left_position con il parametro in input.
 		*/
-		Map *gotoNext(Position enter_position, int max_enemy, int difficulty);
+		Map *gotoNext(Position enter_position, int max_enemy);
 
 		/*
 			Prende in input una posizione.
@@ -72,5 +88,11 @@ class Map {
 			Inserisce il parametro nella lista BulletList
 		*/
 		void addBullet(Bullet bullet);
+
+		/*
+			Prende in input un oggetto Bonus.
+			Inserisce il parametro nella lista BonusList
+		*/
+		Position addBonus(Bonus bonus);
 };
 

@@ -140,3 +140,49 @@ void Weapon::endShoot() {
 
 /* FINE GESTIONE SPARO
 ***********************/
+
+
+
+/******************************
+   INIZIO GESTIONE CONFRONTO
+******************************/
+
+/*
+	Serve per le funzioni di confronto
+	Prende in input un intero.
+	Restituisce un carattere in base al valore.
+*/
+char Weapon::getCheckSymbol(int check) {
+	if (check > 0) { 
+		return '+'; 
+	}
+	else if (check == 0) {
+		return '='; 
+	}
+	else {
+		return '-'; 
+	}
+}
+
+char Weapon::higherDamage(Weapon weapon) {
+	return getCheckSymbol(this->bullet.getDamage() - weapon.bullet.getDamage());
+}
+
+char Weapon::higherAmmo(Weapon weapon) {
+	return getCheckSymbol(this->ammo - weapon.ammo);
+}
+
+char Weapon::higherRange(Weapon weapon) {
+	return getCheckSymbol(this->bullet.getRange() - weapon.bullet.getRange());
+}
+
+char Weapon::fasterReload(Weapon weapon) {
+	return getCheckSymbol(this->reloadDelay - weapon.reloadDelay);
+}
+
+char Weapon::fasterShootRate(Weapon weapon) {
+	return getCheckSymbol(this->shootDelay - weapon.shootDelay);
+}
+
+/* FINE GESTIONE CONFRONTO
+***************************/

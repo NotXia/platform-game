@@ -15,6 +15,13 @@ class Weapon {
 		bool shooting;
 		int shootDelay, curr_shootDelay;
 
+		/*
+			Serve per le funzioni di confronto
+			Prende in input un intero.
+			Restituisce un carattere in base al valore.
+		*/
+		char getCheckSymbol(int check);
+
 	public:
 		Weapon(const char name[]="", Pixel left=Pixel(), Pixel right=Pixel(), Bullet bullet=Bullet(), int ammo=1, int reloadDelay=1000, int shootDelay=1000);
 
@@ -87,5 +94,33 @@ class Weapon {
 		***********************/
 
 
+		/******************************
+		   INIZIO GESTIONE CONFRONTO   
+		******************************/
+
+		/*
+			Queste funzioni restituiscono:
+			'+' se il campo confrontato di questo oggetto è maggiore di quello del parametro
+			'=' se il campo confrontato di questo oggetto è uguale a quello del parametro
+			'-' se il campo confrontato di questo oggetto è minore di quello del parametro
+		*/
+
+		// Confronto danni
+		char higherDamage(Weapon weapon);
+
+		// Confronto capienza caricatore
+		char higherAmmo(Weapon weapon);
+
+		// Contronto distanza di sparo
+		char higherRange(Weapon weapon);
+
+		// Confronto velocità ricarica
+		char fasterReload(Weapon weapon);
+
+		// Confronto velocità sparo
+		char fasterShootRate(Weapon weapon);
+
+		/* FINE GESTIONE CONFRONTO
+		***************************/
 };
 
