@@ -181,7 +181,7 @@ char Weapon::fasterReload(Weapon weapon) {
 }
 
 char Weapon::fasterShootRate(Weapon weapon) {
-	return getCheckSymbol(this->shootDelay - weapon.shootDelay);
+	return getCheckSymbol(weapon.shootDelay - this->shootDelay);
 }
 
 /* FINE GESTIONE CONFRONTO

@@ -14,7 +14,7 @@ class Screen {
 		const int WEAPON_WIDTH = 20;
 		const int WEAPON_HEIGHT = 1;
 
-		const int TEXTBOX_HEIGHT = 5;
+		const int TEXTBOX_HEIGHT = 7;
 		const int TEXTBOX_MIN_WIDTH = 15;
 
 		const int WEAPONBOX_ROTATION_SPEED = 8000;

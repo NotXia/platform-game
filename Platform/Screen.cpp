@@ -118,7 +118,7 @@ void Screen::init() {
 
 
 	// Text box
-	int textBox_height = 2*GAMEBAR_OFFSET + 3;
+	//int textBox_height = 2*GAMEBAR_OFFSET + 3;
 	//int textBox_width = GAME_WIDTH-textBox_x;
 	//if (textBox_width < TEXTBOX_MIN_WIDTH) {
 	//	textBox_width = TEXTBOX_MIN_WIDTH;
@@ -130,21 +130,19 @@ void Screen::init() {
 		cout <<char(196); // ─
 	}
 	cout <<char(191); // ┐
-	for (int i=0; i<textBox_height-2; i++) {
-		textBox_y++;
-		moveCursor(textBox_x, textBox_y);
+	for (int i=1; i<=TEXTBOX_HEIGHT; i++) {
+		moveCursor(textBox_x, textBox_y+i);
 		cout <<char(179); // │
-		moveCursor(textBox_x+textBox_width+1, textBox_y);
+		moveCursor(textBox_x+textBox_width+1, textBox_y+i);
 		cout <<char(179); // │
 	}
-	moveCursor(textBox_x, textBox_y+1);
+	moveCursor(textBox_x, textBox_y+TEXTBOX_HEIGHT+1);
 	cout <<char(192); // ┌
 	for (int i=0; i<textBox_width; i++) {
 		cout <<char(196); // ─
 	}
 	cout <<char(217); // ┘
 	
-	textBox_y = textBox_y - textBox_height + 2;
 	resetColor();
 }
 
