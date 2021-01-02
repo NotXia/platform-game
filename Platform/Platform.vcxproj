@@ -177,7 +177,6 @@
     <ClInclude Include="settings.h" />
     <ClInclude Include="Weapon.hpp" />
     <ClInclude Include="WeaponContainer.hpp" />
-    <ClInclude Include="weapons.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="TODO.cpp" />
