@@ -31,6 +31,11 @@ class Map {
 		void generateTerrain();
 
 		/*
+			Inizializza la matrice terrain con le piattaforme
+		*/
+		void generatePlatforms();
+
+		/*
 			Prende in input due interi, rispettivamente il numero massimo di nemici generabili e la difficoltà.
 			Genera e inizializza i nemici e li inserisce in enemyList
 		*/
@@ -41,6 +46,11 @@ class Map {
 			Genera e inizializza i bonus e li inserisce in bonusList
 		*/
 		void generateBonus(int max_bonus, int difficulty);
+
+		/*
+			Inizializza la matrice terrain con gli elementi di un villaggio
+		*/
+		void generateTown();
 
 	public:
 		Map(Map *prev=NULL, int max_enemies=0, int level_number=0);

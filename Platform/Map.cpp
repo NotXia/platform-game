@@ -5,34 +5,39 @@
 #include "colors.h"
 #include "WeaponContainer.hpp"
 #include <cmath>
+#include "TownGraphics.hpp"
 
 const int TERRAIN_HEIGHT = 3;
 const int PLATFORM_MAX_LENGTH = 25;
 const int PLATFORM_MIN_LENGTH = 5;
 const int EMPTYZONE_LENGTH = 5;
 
-const Pixel PLATFORM_TEXTURE = Pixel(char(219), PLATFORM_COLOR, true);
-const Pixel TERRAIN_TEXTURE = Pixel(' ', TERRAIN_COLOR, true);
-const Pixel SKY_TEXTURE = Pixel(' ', BACKGROUND_DEFAULT, false);
+const Pixel PLATFORM_TEXTURE = Pixel(char(219), PLATFORM_COLOR_FG, PLATFORM_COLOR_BG, true);
+const Pixel TERRAIN_TEXTURE = Pixel(' ', TERRAIN_COLOR_FG, TERRAIN_COLOR_BG, true);
+const Pixel SKY_TEXTURE = Pixel(' ', 0, BACKGROUND_DEFAULT, false);
 
 int platform_chance = 20;
 
 Map::Map(Map *prev, int max_enemies, int level_number) {
-	generateTerrain();
 	next = NULL;
 	this->prev = prev;
-	this->level_number = level_number;
-
 	left_position = Position(1, GAME_HEIGHT-TERRAIN_HEIGHT);
 	right_position = Position(GAME_WIDTH, GAME_HEIGHT-TERRAIN_HEIGHT);
 
 	enemyList = EnemyList();
-	generateEnemy(max_enemies, getDifficulty());
-	
 	bonusList = BonusList();
-	generateBonus(rand() % 4 + 1, getDifficulty());
-
 	bulletList = BulletList();
+	
+	if (false) {
+		generatePlatforms();
+		this->level_number = level_number;
+		generateEnemy(max_enemies, getDifficulty());
+		generateBonus(rand() % 4 + 1, getDifficulty());
+	}
+	else {
+		generateTerrain();
+		generateTown();
+	}
 }
 
 /*
@@ -46,6 +51,25 @@ int Map::getDifficulty() {
 	Inizializza la matrice terrain con gli elementi base della mappa
 */
 void Map::generateTerrain() {
+	// Generazione "pavimento"
+	for (int i=0; i<TERRAIN_HEIGHT; i++) {
+		for (int j=0; j<GAME_WIDTH; j++) {
+			terrain[j][GAME_HEIGHT-1-i] = TERRAIN_TEXTURE;
+		}
+	}
+
+	// Generazione cielo
+	for (int i=TERRAIN_HEIGHT; i<GAME_HEIGHT; i++) {
+		for (int j=0; j<GAME_WIDTH; j++) {
+			terrain[j][GAME_HEIGHT-1-i] = SKY_TEXTURE;
+		}
+	}
+}
+
+/*
+	Inizializza la matrice terrain con gli elementi base della mappa
+*/
+void Map::generatePlatforms() {
 	// Generazione "pavimento"
 	for (int i=0; i<TERRAIN_HEIGHT; i++) {
 		for (int j=0; j<GAME_WIDTH; j++) {
@@ -143,7 +167,10 @@ void Map::generateEnemy(int max_enemies, int difficulty) {
 							weapon = weapon_container->getRandomTier3();
 						}
 
-						Enemy new_enemy = Enemy(hp, points, money, Pixel('<', ENEMY_HEAD_COLOR, true), Pixel('>', ENEMY_HEAD_COLOR, true), Pixel(char(219), ENEMY_BODY_COLOR, true), Position(j+1, i), weapon);
+						Enemy new_enemy = Enemy(hp, points, money, 
+							Pixel('<', ENEMY_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true), 
+							Pixel('>', ENEMY_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true),
+							Pixel(char(219), ENEMY_BODY_COLOR_FG, BACKGROUND_DEFAULT, true), Position(j+1, i), weapon);
 						enemyList.add(new_enemy);
 						max_enemies--;
 						chance = base_chance;
@@ -184,10 +211,10 @@ void Map::generateBonus(int max_bonus, int difficulty) {
 					if (generate == 0 && max_bonus > 0) {
 						int type = rand() % 100;
 						if (type < 40) { // Bonus soldi
-							bonusList.insert(Bonus(Pixel(MONEY_SYMBOL, FG_DARKYELLOW | BACKGROUND_DEFAULT, false), Position(j+1, i), ENEMY_BASE_POINTS * difficulty, rand() % difficulty + 1, 0));
+							bonusList.insert(Bonus(Pixel(MONEY_SYMBOL, FG_DARKYELLOW, BACKGROUND_DEFAULT, false), Position(j+1, i), ENEMY_BASE_POINTS * difficulty, rand() % difficulty + 1, 0));
 						}
 						else if (type < 80) { // Bonus hp
-							bonusList.insert(Bonus(Pixel(char(3), FG_DARKRED | BACKGROUND_DEFAULT, false), Position(j+1, i), ENEMY_BASE_POINTS * difficulty, 0, ceil((1/(log10(getDifficulty())+1))*5)));
+							bonusList.insert(Bonus(Pixel(char(3), FG_DARKRED, BACKGROUND_DEFAULT, false), Position(j+1, i), ENEMY_BASE_POINTS * difficulty, 0, ceil((1/(log10(getDifficulty())+1))*5)));
 						}
 						else { // Bonus arma
 							WeaponContainer *weaponcontainer = new WeaponContainer();
@@ -210,7 +237,7 @@ void Map::generateBonus(int max_bonus, int difficulty) {
 
 							delete weaponcontainer;
 
-							bonusList.insert(Bonus(Pixel(char(170), FG_BLACK | BACKGROUND_DEFAULT, false), Position(j+1, i), 0, 0, 0, weapon));
+							bonusList.insert(Bonus(Pixel(char(170), FG_BLACK, BACKGROUND_DEFAULT, false), Position(j+1, i), 0, 0, 0, weapon));
 						}
 						
 						max_bonus--;
@@ -226,6 +253,13 @@ void Map::generateBonus(int max_bonus, int difficulty) {
 			}
 		}
 	}
+}
+
+/*
+	Inizializza la matrice terrain con gli elementi di un villaggio
+*/
+void Map::generateTown() {
+	TownGraphics(terrain, EMPTYZONE_LENGTH, GAME_HEIGHT-TERRAIN_HEIGHT-1);
 }
 
 Position Map::getLeftPosition() {

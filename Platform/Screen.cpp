@@ -118,12 +118,6 @@ void Screen::init() {
 
 
 	// Text box
-	//int textBox_height = 2*GAMEBAR_OFFSET + 3;
-	//int textBox_width = GAME_WIDTH-textBox_x;
-	//if (textBox_width < TEXTBOX_MIN_WIDTH) {
-	//	textBox_width = TEXTBOX_MIN_WIDTH;
-	//}
-
 	moveCursor(textBox_x, textBox_y);
 	cout <<char(218); // ┌
 	for (int i=0; i<textBox_width; i++) {
@@ -157,8 +151,8 @@ void Screen::init() {
 */
 void Screen::write_game_area(Map *map) {
 	write_terrain(map);
-	write_enemies(map->getEnemyList());
-	write_bonuses(map->getBonusList());
+	write_enemies(map, map->getEnemyList());
+	write_bonuses(map, map->getBonusList());
 }
 
 /*
@@ -177,26 +171,37 @@ void Screen::write_terrain(Map *map) {
 }
 
 /*
-	Prende in input un Pixel e una Position.
+	Prende in input un oggetto Map, Pixel e Position.
 	Imposta il pixel nella posizione indicata.
+	Cambia lo sfondo se necessario.
 */
-void Screen::write_at(Pixel pixel, Position position) {
+void Screen::write_at(Map *map, Pixel pixel, Position position) {
 	moveCursor(position.getX(), position.getY());
+	pixel.setBackgroundColor(map->getTerrainAt(position).getBackgroundColor());
 	setColor(pixel.getColor());
 	cout <<pixel.getValue();
 	resetColor();
+
 }
 
 /*
-	Prende in input un oggetto di tipo Entity
+	Prende in input un oggetto Map ed Entity
 	Inserisce l'entità nell'area di gioco
 */
-void Screen::write_entity(Entity entity) {
+void Screen::write_entity(Map *map, Entity entity) {
 	// Corpo
-	write_at(entity.getBody(), entity.getBodyPosition());
+	write_at(map, entity.getBody(), entity.getBodyPosition());
 	
 	// Testa
-	write_at(entity.getHead(), entity.getHeadPosition());
+	write_at(map, entity.getHead(), entity.getHeadPosition());
+}
+
+/*
+	Prende in input un oggetto Map e Bullet
+	Inserisce un proiettile nell'area di gioco
+*/
+void Screen::write_bullet(Map *map, Bullet bullet) {
+	write_at(map, bullet.getTexture(), bullet.getPosition());
 }
 
 /*
@@ -207,37 +212,37 @@ void Screen::resetTerrain(Map *map, Position position) {
 	BonusList bonuslist = map->getBonusList();
 
 	if (bonuslist.pointAt(position)) {
-		write_at(bonuslist.getCurrent().getBody(), position);
+		write_at(map, bonuslist.getCurrent().getBody(), position);
 	}
 	else {
-		write_at(map->getTerrainAt(position), position);
+		write_at(map, map->getTerrainAt(position), position);
 	}
 }
 
 /*
-	Prende in input un oggetto EnemyList.
+	Prende in input un oggetto Map ed EnemyList.
 	Stampa sullo schermo tutti i nemici
 */
-void Screen::write_enemies(EnemyList list) {
+void Screen::write_enemies(Map *map, EnemyList list) {
 	list.initIter();
 
 	while (!list.isNull()) {
-		write_entity(list.getCurrent());
+		write_entity(map, list.getCurrent());
 
 		list.goNext();
 	}
 }
 
 /*
-	Prende in input un oggetto BonusList.
+	Prende in input un oggetto Map e BonusList.
 	Stampa sullo schermo tutti i bonus
 */
-void Screen::write_bonuses(BonusList list) {
+void Screen::write_bonuses(Map *map, BonusList list) {
 	list.initIter();
 
 	while (!list.isNull()) {
 		Bonus bonus = list.getCurrent();
-		write_at(bonus.getBody(), bonus.getBodyPosition());
+		write_at(map, bonus.getBody(), bonus.getBodyPosition());
 
 		list.goNext();
 	}

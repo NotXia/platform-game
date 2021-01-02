@@ -58,16 +58,16 @@ void Enemy::search4Player(Player player) {
 
 		visualRange = 2 * ENEMY_RANGE;
 
-		head_left = Pixel(head_left.getValue(), ANGRY_ENEMY_HEAD_COLOR, true);
-		head_right = Pixel(head_right.getValue(), ANGRY_ENEMY_HEAD_COLOR, true);
-		body = Pixel(body.getValue(), ANGRY_ENEMY_HEAD_COLOR, true);
+		head_left = Pixel(head_left.getValue(), ANGRY_ENEMY_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true);
+		head_right = Pixel(head_right.getValue(), ANGRY_ENEMY_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true);
+		body = Pixel(body.getValue(), ANGRY_ENEMY_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true);
 	}
 	else {
 		visualRange = ENEMY_RANGE;
 
-		head_left = Pixel(head_left.getValue(), ENEMY_HEAD_COLOR, true);
-		head_right = Pixel(head_right.getValue(), ENEMY_HEAD_COLOR, true);
-		body = Pixel(body.getValue(), ENEMY_HEAD_COLOR, true);
+		head_left = Pixel(head_left.getValue(), ENEMY_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true);
+		head_right = Pixel(head_right.getValue(), ENEMY_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true);
+		body = Pixel(body.getValue(), ENEMY_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true);
 	}
 }
 

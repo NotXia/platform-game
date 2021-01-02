@@ -17,7 +17,7 @@ class ArmedEntity : public Entity {
 		void incWeaponDisplay();
 
 	public:
-		ArmedEntity(int health=0, Pixel head_left=Pixel(' ', 0, false), Pixel head_right=Pixel(' ', 0, false), Pixel body=Pixel(' ', 0, false), Position position=Position(0, 0), Weapon weapon=Weapon());
+		ArmedEntity(int health=0, Pixel head_left=Pixel(), Pixel head_right=Pixel(), Pixel body=Pixel(), Position position=Position(0, 0), Weapon weapon=Weapon());
 
 		Weapon getWeapon();
 		void setWeapon(Weapon weapon);

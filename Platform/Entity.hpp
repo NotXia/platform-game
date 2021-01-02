@@ -36,7 +36,7 @@ class Entity : public Block {
 		void incFallLoopCounter();
 
 	public:
-		Entity(int health=0, Pixel head_left=Pixel(' ', 0, false), Pixel head_right=Pixel(' ', 0, false), Pixel body=Pixel(' ', 0, false), Position position=Position(0, 0));
+		Entity(int health=0, Pixel head_left=Pixel(), Pixel head_right=Pixel(), Pixel body=Pixel(), Position position=Position(0, 0));
 
 		int getHealth();
 		Pixel getHead();

@@ -81,16 +81,23 @@ class Screen {
 		void write_terrain(Map *map);
 
 		/*
-			Prende in input un Pixel e una Position.
+			Prende in input un oggetto Map, Pixel e Position.
 			Imposta il pixel nella posizione indicata.
+			Cambia lo sfondo se necessario.
 		*/
-		void write_at(Pixel pixel, Position position);
+		void write_at(Map *map, Pixel pixel, Position position);
 
 		/*
-			Prende in input un oggetto di tipo Entity
+			Prende in input un oggetto Map ed Entity
 			Inserisce l'entità nell'area di gioco
 		*/
-		void write_entity(Entity entity);
+		void write_entity(Map *map, Entity entity);
+
+		/*
+			Prende in input un oggetto Map e Bullet
+			Inserisce un proiettile nell'area di gioco
+		*/
+		void write_bullet(Map *map, Bullet bullet);
 
 		/*
 			Prende in input una posizione e la mappa.
@@ -99,16 +106,16 @@ class Screen {
 		void resetTerrain(Map *map, Position position);
 
 		/*
-			Prende in input un oggetto EnemyList.
+			Prende in input un oggetto Map ed EnemyList.
 			Stampa sullo schermo tutti i nemici
 		*/
-		void write_enemies(EnemyList list);
+		void write_enemies(Map *map, EnemyList list);
 
 		/*
-			Prende in input un oggetto BonusList.
+			Prende in input un oggetto Map e BonusList.
 			Stampa sullo schermo tutti i bonus
 		*/
-		void write_bonuses(BonusList list);
+		void write_bonuses(Map *map, BonusList list);
 
 		/* FINE GESTIONE AREA DI GIOCO  
 		*******************************/

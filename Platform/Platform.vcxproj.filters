@@ -76,6 +76,9 @@
     <ClCompile Include="WeaponContainer.cpp">
       <Filter>Weapon</Filter>
     </ClCompile>
+    <ClCompile Include="TownGraphics.cpp">
+      <Filter>Screen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="colors.h">
@@ -131,6 +134,9 @@
     </ClInclude>
     <ClInclude Include="WeaponContainer.hpp">
       <Filter>Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="TownGraphics.hpp">
+      <Filter>Screen</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
