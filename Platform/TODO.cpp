@@ -13,14 +13,17 @@
 	X Classe contenente le armi
 	X Mettere la difficoltà in Map e non in main
 	X Calcolare probabilità armi nemici
-	- Arma attaccata al player
-	- Villaggi NPC
-	- Come gestire l'aumento di difficoltà infinito?
+	X Villaggi NPC
 	- Ogni livello ha un nome generato casualmente
+	- Creare classe per i timer delle animazioni
+	- Arma attaccata al player
+	- Come gestire l'aumento di difficoltà infinito?
 	- Chiave di fine livello
 	- Boss
+	- Bilanciare armi speciali
 	- Lava
 	- Rework range visione nemici
 	- LASER DELLA MORTE CYERTA
-	- Piattaforme che si muovono
+	- Piattaforme che si muovono (?)
+	- Animazioni NPC 
 */

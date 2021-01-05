@@ -27,7 +27,7 @@ class Weapon {
 
 		Pixel getTexture(bool direction);
 		Bullet getBullet();
-		char* getName();
+		void getName(char name[]);
 		int getCurrAmmo();
 		bool isShooting();
 		bool isReloading();
@@ -119,6 +119,12 @@ class Weapon {
 
 		// Confronto velocità sparo
 		char fasterShootRate(Weapon weapon);
+
+		/*
+			Prende in input un oggetto Weapon
+			Confronta l'oggetto corrente con il parametro e dice se sono uguali
+		*/
+		bool equals(Weapon weapon);
 
 		/* FINE GESTIONE CONFRONTO
 		***************************/

@@ -141,6 +141,18 @@ class Screen {
 		*/
 		void write_textbox_weaponbonus(Weapon bonus_weapon, Weapon player_weapon);
 
+		/*
+			Prende in input un oggetto NPC e un intero.
+			Inserisce nella textbox il dialogo di un NPC medico
+		*/
+		void write_textbox_npc_hp(NPC npc, int missing_hp);
+
+		/*
+			Prende in input un oggetto NPC e un oggetto Weapon
+			Inserisce nella textbox il dialogo di un NPC mercante
+		*/
+		void write_textbox_npc_weapon(NPC npc, Weapon player_weapon);
+
 		/* FINE GESTIONE TEXT BOX  
 		**************************/
 

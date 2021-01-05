@@ -33,8 +33,8 @@ Bullet Weapon::getBullet() {
 	return bullet;
 }
 
-char* Weapon::getName() {
-	return name;
+void Weapon::getName(char name[]) {
+	strncpy(name, this->name, STRING_LEN);
 }
 
 int Weapon::getCurrAmmo() {
@@ -164,25 +164,39 @@ char Weapon::getCheckSymbol(int check) {
 	}
 }
 
+// Confronto danni
 char Weapon::higherDamage(Weapon weapon) {
 	return getCheckSymbol(this->bullet.getDamage() - weapon.bullet.getDamage());
 }
 
+// Confronto capienza caricatore
 char Weapon::higherAmmo(Weapon weapon) {
 	return getCheckSymbol(this->ammo - weapon.ammo);
 }
 
+// Contronto distanza di sparo
 char Weapon::higherRange(Weapon weapon) {
 	return getCheckSymbol(this->bullet.getRange() - weapon.bullet.getRange());
 }
 
+// Confronto velocità ricarica
 char Weapon::fasterReload(Weapon weapon) {
-	return getCheckSymbol(this->reloadDelay - weapon.reloadDelay);
+	return getCheckSymbol(weapon.reloadDelay - this->reloadDelay);
 }
 
+// Confronto velocità sparo
 char Weapon::fasterShootRate(Weapon weapon) {
 	return getCheckSymbol(weapon.shootDelay - this->shootDelay);
 }
+
+/*
+	Prende in input un oggetto Weapon
+	Confronta l'oggetto corrente con il parametro e dice se sono uguali
+*/
+bool Weapon::equals(Weapon weapon) {
+	return this->bullet.equals(weapon.bullet) && this->ammo == weapon.ammo && (strcmp(this->name, weapon.name) == 0);
+}
+
 
 /* FINE GESTIONE CONFRONTO
 ***************************/

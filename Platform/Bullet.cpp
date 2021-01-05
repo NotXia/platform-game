@@ -115,3 +115,11 @@ int Bullet::hit() {
 	range = -1;
 	return damage;
 }
+
+/*
+	Prende in input un oggetto Bullet
+	Confronta l'oggetto corrente con il parametro e dice se sono uguali
+*/
+bool Bullet::equals(Bullet bullet) {
+	return this->damage == bullet.damage && this->range == bullet.range;
+}

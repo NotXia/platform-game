@@ -24,21 +24,28 @@ int main() {
     Screen screen = Screen();
     Map *map = new Map(NULL, 2);
     Player player = Player(MAX_LIFE, 
-        Pixel('<', PLAYER_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true),
-        Pixel('>', PLAYER_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true),
+        Pixel(char(17), PLAYER_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true),
+        Pixel(char(16), PLAYER_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true),
         Pixel(char(219), PLAYER_BODY_COLOR_FG, BACKGROUND_DEFAULT, true), map->getLeftPosition(), weapon_container->getRandomTier3());
     EnemyList enemylist;
     BulletList bulletlist;
 
     Bonus *curr_bonus = NULL;
+    NPC *curr_npc = NULL;
     bool hasMoved;
+    bool showNPCs = true;
+    char weapon_name[STRING_LEN];
     
     screen.init();
+
     screen.write_game_area(map);
     screen.write_entity(map, player);
 
-    screen.write_weaponbox(player.getWeapon().getName());
+    player.getWeapon().getName(weapon_name);
+    screen.write_weaponbox(weapon_name);
     screen.write_ammobox(player.getWeapon().getCurrAmmo());
+    screen.write_money(player.getMoney());
+    screen.write_hp(player.getHealth());
 
 
     while (!player.isDead()) {
@@ -68,6 +75,7 @@ int main() {
                             screen.write_game_area(map);
                             player.setPosition(map->getRightPosition());
                             screen.write_entity(map, player);
+                            showNPCs = true;
                         }
                     }
                 }
@@ -85,6 +93,7 @@ int main() {
                         screen.write_game_area(map);
                         player.setPosition(map->getLeftPosition());
                         screen.write_entity(map, player);
+                        showNPCs = true;
                     }
                 }
             }
@@ -127,9 +136,10 @@ int main() {
                 screen.write_ammobox(player.getWeapon().getCurrAmmo());
             }
 
-            // Se hasMoved è true, il giocatore si è mosso dall'eventuale bonus su cui si trovava
+            // Se hasMoved è true, il giocatore si è mosso dall'eventuale bonus/NPC su cui si trovava
             if (hasMoved) {
                 curr_bonus = NULL;
+                curr_npc = NULL;
                 screen.write_textbox("");
             }
 
@@ -147,8 +157,69 @@ int main() {
                     map->setBonusList(bonuslist);
 
                     screen.write_textbox_weaponbonus(curr_bonus->getWeapon(), player.getWeapon());
-                    screen.write_weaponbox(player.getWeapon().getName());
+                    player.getWeapon().getName(weapon_name);
+                    screen.write_weaponbox(weapon_name);
                     screen.write_ammobox(player.getWeapon().getCurrAmmo());
+                }
+            }
+
+            // Gestione NPC
+            if (curr_npc != NULL) {
+                if (curr_npc->getType() == NPC_HOSPITAL) {
+                    if (ch == 'e' || ch == 'E') {
+                        if (player.getHealth() != MAX_LIFE) {
+                            if (player.getMoney() >= curr_npc->getPriceHP()) {
+                                player.decMoney(curr_npc->getPriceHP());
+                                player.heal(1);
+                                screen.write_hp(player.getHealth());
+                                screen.write_money(player.getMoney());
+                                char name[STRING_LEN];
+                                curr_npc->getName(name);
+                                screen.write_textbox_npc_hp(*curr_npc, player.getMissingHp());
+                            }
+                        }
+                    }
+                    else if (ch == 'q' || ch == 'Q') {
+                        if (player.getMoney() >= curr_npc->getPriceHP()*(MAX_LIFE-player.getHealth())) {
+                            player.decMoney(curr_npc->getPriceHP() *(MAX_LIFE-player.getHealth()));
+                            player.heal(MAX_LIFE-player.getHealth());
+                            screen.write_hp(player.getHealth());
+                            screen.write_money(player.getMoney());
+                            char name[STRING_LEN];
+                            curr_npc->getName(name);
+                            screen.write_textbox_npc_hp(*curr_npc, player.getMissingHp());
+                        }
+                    }
+                }
+                else if (curr_npc->getType() == NPC_WEAPONSHOP) {
+                    if (curr_npc->getWeaponNumber() > 0) {
+                        if (ch == 'o' || ch == 'O') {
+                            curr_npc->setCurrSelected(curr_npc->getCurrSelected() - 1);
+                            screen.write_textbox_npc_weapon(*curr_npc, player.getWeapon());
+                        }
+                        else if (ch == 'p' || ch == 'P') {
+                            curr_npc->setCurrSelected(curr_npc->getCurrSelected() + 1);
+                            screen.write_textbox_npc_weapon(*curr_npc, player.getWeapon());
+                        }
+                        else if (ch == 'e' || ch == 'E') {
+                            if (player.getMoney() >= curr_npc->getCurrWeaponPrice()) {
+                                player.decMoney(curr_npc->getCurrWeaponPrice());
+                                screen.write_money(player.getMoney());
+                                player.setWeapon(curr_npc->getCurrWeapon());
+                                char weapon_name[STRING_LEN];
+                                player.getWeapon().getName(weapon_name);
+                                screen.write_weaponbox(weapon_name);
+                                screen.write_ammobox(player.getWeapon().getCurrAmmo());
+                                curr_npc->deleteCurrentWeapon();
+                                NPCList npclist = map->getNPCList();
+                                npclist.pointAt(curr_npc->getBodyPosition());
+                                npclist.setCurrent(*curr_npc);
+                                map->setNPCList(npclist);
+                                screen.write_textbox_npc_weapon(*curr_npc, player.getWeapon());
+                            }
+                        }
+
+                    }
                 }
             }
 
@@ -225,6 +296,7 @@ int main() {
                 }
                 else if (bonus.getType() == BONUS_TYPE_WEAPON) {
                     screen.write_textbox_weaponbonus(bonus.getWeapon(), player.getWeapon());
+                    delete curr_bonus;
                     curr_bonus = new Bonus();
                     *curr_bonus = bonus;
                 }
@@ -445,8 +517,51 @@ int main() {
             enemylist.updateCurrent(enemy);
             map->setEnemyList(enemylist);
         }
-        /* FINE GESTIONE NEMICI     
+        /* FINE GESTIONE NEMICI
         ----------------------- */
+
+
+
+        /* ----------------------
+           INIZIO GESTIONE NPC   
+        ---------------------- */
+
+        NPCList npcList = map->getNPCList();
+
+        // Visualizza gli NPC sulla mappa
+        if (showNPCs) {
+            npcList.initIter();
+            while(!npcList.isNull()) {
+                screen.write_entity(map, npcList.getCurrent());
+                npcList.goNext();
+            }
+
+            showNPCs = false;
+        }
+
+        // Gestisce l'interazione con gli NPC
+        if (curr_npc == NULL) {
+            if (npcList.inPlayerRange(player.getBodyPosition())) {
+                NPC npc = npcList.getCurrent();
+                char name[STRING_LEN];
+                npc.getName(name);
+
+                if (npc.getType() == NPC_HOSPITAL) {
+                    screen.write_textbox_npc_hp(npc, player.getMissingHp());
+                }
+                else if (npc.getType() == NPC_WEAPONSHOP) {
+                    screen.write_textbox_npc_weapon(npc, player.getWeapon());
+                }
+
+                delete curr_npc;
+                curr_npc = new NPC();
+                *curr_npc = npc;
+            }
+        }
+
+        /* FINE GESTIONE NPC
+        -------------------- */
+
         
         screen.incWeaponboxRotateCounter();
     } // while (true)

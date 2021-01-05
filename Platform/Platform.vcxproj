@@ -151,6 +151,8 @@
     <ClCompile Include="BulletList.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
+    <ClCompile Include="NPC.cpp" />
+    <ClCompile Include="NPCList.cpp" />
     <ClCompile Include="Pixel.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Position.cpp" />
@@ -171,6 +173,8 @@
     <ClInclude Include="Entity.hpp" />
     <ClInclude Include="BulletList.hpp" />
     <ClInclude Include="Map.hpp" />
+    <ClInclude Include="NPC.hpp" />
+    <ClInclude Include="NPCList.hpp" />
     <ClInclude Include="Pixel.hpp" />
     <ClInclude Include="Player.hpp" />
     <ClInclude Include="Position.hpp" />

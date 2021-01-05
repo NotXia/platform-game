@@ -210,9 +210,13 @@ void Screen::write_bullet(Map *map, Bullet bullet) {
 */
 void Screen::resetTerrain(Map *map, Position position) {
 	BonusList bonuslist = map->getBonusList();
+	NPCList npclist = map->getNPCList();
 
 	if (bonuslist.pointAt(position)) {
 		write_at(map, bonuslist.getCurrent().getBody(), position);
+	}
+	else if (npclist.pointAt(position)) {
+		write_entity(map, npclist.getCurrent());
 	}
 	else {
 		write_at(map, map->getTerrainAt(position), position);
@@ -292,6 +296,9 @@ void Screen::write_textbox(const char string[]) {
 	Inserisce nella textbox il testo previsto quando il giocatore si posiziona sopra un bonus di tipo arma.
 */
 void Screen::write_textbox_weaponbonus(Weapon bonus_weapon, Weapon player_weapon) {
+	char weapon_name[STRING_LEN];
+	bonus_weapon.getName(weapon_name);
+	
 	clear_textbox();
 	int start_x = textBox_x+1;
 	int start_y = textBox_y+1;
@@ -300,17 +307,94 @@ void Screen::write_textbox_weaponbonus(Weapon bonus_weapon, Weapon player_weapon
 	moveCursor(start_x, start_y);
 	cout <<"Hai trovato questa arma:";
 	moveCursor(start_x, start_y+1);
-	cout <<bonus_weapon.getName();
+	cout <<weapon_name;
 	moveCursor(start_x, start_y+2);
 	cout <<"(" <<bonus_weapon.higherDamage(player_weapon) <<") danni | " 
 		 <<"(" <<bonus_weapon.higherAmmo(player_weapon) <<") munizioni | " 
 		 <<"(" <<bonus_weapon.higherRange(player_weapon) <<") range";
 	moveCursor(start_x, start_y+3);
-	cout <<"(" <<bonus_weapon.fasterReload(player_weapon) <<") tempo ricarica | " 
-		 <<"(" <<bonus_weapon.fasterShootRate(player_weapon) <<") velocita' attacco";
+	cout <<"(" <<bonus_weapon.fasterReload(player_weapon) <<") velocita' ricarica | " 
+		 <<"(" <<bonus_weapon.fasterShootRate(player_weapon) <<") rateo attacco";
 	moveCursor(start_x, start_y+5);
 	cout <<"[E] Prendi";
 }
+
+/*
+	Prende in input un oggetto NPC e un intero.
+	Inserisce nella textbox il dialogo di un NPC medico
+*/
+void Screen::write_textbox_npc_hp(NPC npc, int missing_hp) {
+	char name[STRING_LEN];
+	npc.getName(name);
+
+	clear_textbox();
+	int start_x = textBox_x+1;
+	int start_y = textBox_y+1;
+
+	resetColor();
+	moveCursor(start_x, start_y);
+	cout <<name <<": Ciao, sono il medico di questo";
+	moveCursor(start_x, start_y+1);
+	cout <<"villaggio, come posso aiutare?";
+	moveCursor(start_x, start_y+3);
+	cout <<"[E] Cura 1 (" <<npc.getPriceHP() <<" ";
+	setColor(FG_DARKYELLOW);
+	cout <<MONEY_SYMBOL;
+	resetColor();
+	cout <<")";
+	moveCursor(start_x, start_y+4);
+	cout <<"[Q] Cura tutto (" <<npc.getPriceHP()*missing_hp <<" ";
+	setColor(FG_DARKYELLOW);
+	cout <<MONEY_SYMBOL;
+	resetColor();
+	cout <<")";
+}
+
+/*
+	Prende in input un oggetto NPC e un oggetto Weapon
+	Inserisce nella textbox il dialogo di un NPC mercante
+*/
+void Screen::write_textbox_npc_weapon(NPC npc, Weapon player_weapon) {
+	char name[STRING_LEN];
+	char weapon_name[STRING_LEN];
+	npc.getName(name);
+	Weapon weapon = npc.getCurrWeapon();
+	weapon.getName(weapon_name);
+
+	clear_textbox();
+	int start_x = textBox_x+1;
+	int start_y = textBox_y+1;
+	resetColor();
+
+	if (npc.getWeaponNumber() > 0) {
+		moveCursor(start_x, start_y);
+		cout <<name <<": Ciao, sono il mercante di questo";
+		moveCursor(start_x, start_y+1);
+		cout <<"villaggio, ti serve qualcosa?";
+		moveCursor(start_x, start_y+2);
+		cout <<char(17) <<" " <<weapon_name <<" (" <<npc.getCurrSelected()+1 <<"/" <<npc.getWeaponNumber() <<") " <<char(16);
+		moveCursor(start_x, start_y+3);
+		cout <<"(" <<weapon.higherDamage(player_weapon) <<") danni | "
+			<<"(" <<weapon.higherAmmo(player_weapon) <<") munizioni | "
+			<<"(" <<weapon.higherRange(player_weapon) <<") range";
+		moveCursor(start_x, start_y+4);
+		cout <<"(" <<weapon.fasterReload(player_weapon) <<") velocita' ricarica | "
+			 <<"(" <<weapon.fasterShootRate(player_weapon) <<") rateo attacco";
+		moveCursor(start_x, start_y+6);
+		cout <<"[E] Compra (" <<npc.getCurrWeaponPrice() <<" ";
+		setColor(FG_DARKYELLOW);
+		cout <<MONEY_SYMBOL;
+		resetColor();
+		cout <<")  [<] Indietro  [>] Avanti";
+	}
+	else {
+		moveCursor(start_x, start_y);
+		cout <<name <<": Ciao, sfortunatamente oggi ho";
+		moveCursor(start_x, start_y+1);
+		cout <<"finito la merce :-(";
+	}
+}
+
 
 /* FINE GESTIONE TEXT BOX
 **************************/
@@ -325,6 +409,9 @@ void Screen::write_textbox_weaponbonus(Weapon bonus_weapon, Weapon player_weapon
 	Aggiorna la quantità di soldi visualizzata
 */
 void Screen::write_money(int money) {
+	moveCursor(hp_x, hp_y + 1);
+	cout <<"Soldi " <<"      ";
+
 	moveCursor(hp_x, hp_y + 1);
 	cout <<"Soldi " <<money <<" ";
 	setColor(FG_DARKYELLOW | BG_BLACK);

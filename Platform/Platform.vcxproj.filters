@@ -79,6 +79,12 @@
     <ClCompile Include="TownGraphics.cpp">
       <Filter>Screen</Filter>
     </ClCompile>
+    <ClCompile Include="NPC.cpp">
+      <Filter>Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="NPCList.cpp">
+      <Filter>List</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="colors.h">
@@ -137,6 +143,12 @@
     </ClInclude>
     <ClInclude Include="TownGraphics.hpp">
       <Filter>Screen</Filter>
+    </ClInclude>
+    <ClInclude Include="NPC.hpp">
+      <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="NPCList.hpp">
+      <Filter>List</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

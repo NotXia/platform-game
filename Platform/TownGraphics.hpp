@@ -4,12 +4,9 @@
 
 class TownGraphics {
 	protected:
-		//Pixel terrain[GAME_WIDTH][GAME_HEIGHT];
-		void createHouse1(Pixel terrain[GAME_WIDTH][GAME_HEIGHT], int& start_x, int start_y);
-
+		void createHouse1(Pixel terrain[GAME_WIDTH][GAME_HEIGHT], int& start_x, int max_width, int start_y);
 
 	public:
-		TownGraphics(Pixel terrain[GAME_WIDTH][GAME_HEIGHT], int start_x, int start_y);
-
+		TownGraphics(Pixel terrain[GAME_WIDTH][GAME_HEIGHT], int start_x, int end_x, int start_y);
 };
 

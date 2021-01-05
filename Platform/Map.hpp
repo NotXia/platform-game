@@ -6,6 +6,7 @@
 #include "EnemyList.hpp"
 #include "BulletList.hpp"
 #include "BonusList.hpp"
+#include "NPCList.hpp"
 
 class Map {
 	protected:
@@ -19,6 +20,7 @@ class Map {
 		EnemyList enemyList;
 		BulletList bulletList;
 		BonusList bonusList;
+		NPCList npcList;
 
 		/*
 			Restituisce la difficoltà corrente, calcolata in base al numero di livelli superati
@@ -63,6 +65,8 @@ class Map {
 		void setBulletList(BulletList bulletlist);
 		BonusList getBonusList();
 		void setBonusList(BonusList bonuslist);
+		NPCList getNPCList();
+		void setNPCList(NPCList npclist);
 
 		/*
 			Restituisce true se *prev è NULL, false altrimenti
@@ -104,5 +108,6 @@ class Map {
 			Inserisce il parametro nella lista BonusList
 		*/
 		Position addBonus(Bonus bonus);
+
 };
 

@@ -57,4 +57,10 @@ class Bullet {
 		*/
 		int hit();
 
+		/*
+			Prende in input un oggetto Bullet
+			Confronta l'oggetto corrente con il parametro e dice se sono uguali
+		*/
+		bool equals(Bullet bullet);
+
 };

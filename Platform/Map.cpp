@@ -27,14 +27,16 @@ Map::Map(Map *prev, int max_enemies, int level_number) {
 	enemyList = EnemyList();
 	bonusList = BonusList();
 	bulletList = BulletList();
+	npcList = NPCList();
 	
-	if (false) {
+	if (rand() % 3 != 0) {
 		generatePlatforms();
 		this->level_number = level_number;
 		generateEnemy(max_enemies, getDifficulty());
 		generateBonus(rand() % 4 + 1, getDifficulty());
 	}
 	else {
+		this->level_number = level_number - 1;
 		generateTerrain();
 		generateTown();
 	}
@@ -160,7 +162,7 @@ void Map::generateEnemy(int max_enemies, int difficulty) {
 						if (generate < tier1_chance) {
 							weapon = weapon_container->getRandomTier1();
 						}
-						else if (generate >= tier1_chance && generate < tier2_chance) {
+						else if (generate < tier1_chance+tier2_chance) {
 							weapon = weapon_container->getRandomTier2();
 						}
 						else {
@@ -259,7 +261,18 @@ void Map::generateBonus(int max_bonus, int difficulty) {
 	Inizializza la matrice terrain con gli elementi di un villaggio
 */
 void Map::generateTown() {
-	TownGraphics(terrain, EMPTYZONE_LENGTH, GAME_HEIGHT-TERRAIN_HEIGHT-1);
+	TownGraphics(terrain, EMPTYZONE_LENGTH, GAME_WIDTH-EMPTYZONE_LENGTH, GAME_HEIGHT-TERRAIN_HEIGHT-1);
+
+	npcList.insert(NPC(1, Pixel('<', NPC_HEAD_COLOR_FG, BACKGROUND_DEFAULT, false), Pixel('<', NPC_HEAD_COLOR_FG, BACKGROUND_DEFAULT, false),
+				  Pixel(char(219), NPC_HEAD_COLOR_FG, BACKGROUND_DEFAULT, false),
+				  Position(rand() % (GAME_WIDTH-EMPTYZONE_LENGTH-EMPTYZONE_LENGTH) + EMPTYZONE_LENGTH , GAME_HEIGHT-TERRAIN_HEIGHT),
+				  NPC_HOSPITAL, getDifficulty()
+	));
+	npcList.insert(NPC(1, Pixel('<', NPC_HEAD_COLOR_FG, BACKGROUND_DEFAULT, false), Pixel('<', NPC_HEAD_COLOR_FG, BACKGROUND_DEFAULT, false),
+				  Pixel(char(219), NPC_HEAD_COLOR_FG, BACKGROUND_DEFAULT, false),
+				  Position(rand() % (GAME_WIDTH-EMPTYZONE_LENGTH-EMPTYZONE_LENGTH) + EMPTYZONE_LENGTH, GAME_HEIGHT-TERRAIN_HEIGHT),
+				  NPC_WEAPONSHOP, getDifficulty()
+	));
 }
 
 Position Map::getLeftPosition() {
@@ -294,6 +307,14 @@ BonusList Map::getBonusList() {
 void Map::setBonusList(BonusList bonuslist) {
 	bonuslist.initIter();
 	this->bonusList = bonuslist;
+}
+
+NPCList Map::getNPCList() {
+	return npcList;
+}
+
+void Map::setNPCList(NPCList npclist) {
+	this->npcList = npclist;
 }
 
 
