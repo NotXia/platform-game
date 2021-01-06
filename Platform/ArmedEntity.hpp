@@ -8,7 +8,7 @@ class ArmedEntity : public Entity {
 	protected:
 		Weapon weapon;
 		bool is_attacking;
-		int weapon_display_counter;
+		AnimationTimer weapon_animation;
 
 		/*
 			Se is_attacking è true: incrementa weapon_loop_counter di 1.

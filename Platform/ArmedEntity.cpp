@@ -4,7 +4,7 @@
 ArmedEntity::ArmedEntity(int health, Pixel head_left, Pixel head_right, Pixel body, Position position, Weapon weapon) : Entity(health, head_left, head_right, body, position) {
 	this->weapon = weapon;
 	is_attacking = false;
-	weapon_display_counter = 0;
+	weapon_animation = AnimationTimer(WEAPON_DISPLAY_TIME);
 }
 
 Weapon ArmedEntity::getWeapon() {
@@ -26,10 +26,7 @@ void ArmedEntity::setWeapon(Weapon weapon) {
 */
 void ArmedEntity::incWeaponDisplay() {
 	if (is_attacking) {
-		weapon_display_counter++;
-		if (weapon_display_counter > WEAPON_DISPLAY_TIME) {
-			weapon_display_counter = 0;
-		}
+		weapon_animation.incTimer();
 	}
 }
 
@@ -37,7 +34,7 @@ void ArmedEntity::incWeaponDisplay() {
 	Indica se terminare la visualizzazione dell'arma quando il giocatore attacca
 */
 bool ArmedEntity::endWeaponDisplay() {
-	if (weapon_display_counter >= WEAPON_DISPLAY_TIME && is_attacking) {
+	if (weapon_animation.limit() && is_attacking) {
 		is_attacking = false;
 		return true;
 	}
@@ -53,7 +50,7 @@ Bullet ArmedEntity::attack() {
 	if (weapon.hasAmmo()) {
 		weapon.startShootDelay();
 		setCanMove(false);
-		weapon_display_counter = 0;
+		weapon_animation.reset();
 		is_attacking = true;
 
 		Bullet out_bullet = weapon.getBullet();

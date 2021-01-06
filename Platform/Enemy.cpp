@@ -8,8 +8,7 @@ Enemy::Enemy(int health, int points, int money, Pixel head_left, Pixel head_righ
 	this->money = money;
 	lastPlayerPosition = NULL;
 	this->visualRange = ENEMY_RANGE;
-	this->refreshTime = 8000;
-	this->currRefresh = 0;
+	this->refresh = AnimationTimer(8000);
 }
 
 int Enemy::getPoints() {
@@ -24,17 +23,14 @@ int Enemy::getMoney() {
 	Indica se è possibile eseguire la prossima azione (currRefresh ha raggiunto refreshTime)
 */
 bool Enemy::canRefresh() {
-	return currRefresh == refreshTime;
+	return refresh.limit();
 }
 
 /*
 	Incrementa currRefresh di 1. Se supera refreshTime, viene azzerato
 */
 void Enemy::incRefresh() {
-	currRefresh++;
-	if (currRefresh > refreshTime) {
-		currRefresh = 0;
-	}
+	refresh.incTimer();
 }
 
 /*

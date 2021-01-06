@@ -19,7 +19,7 @@ Screen::Screen() {
 	this->ammobox_width = 2;
 	this->weaponbox_width = WEAPON_WIDTH - ammobox_width - 1;
 
-	this->rotation_counter = 0;
+	this->rotation = AnimationTimer(WEAPONBOX_ROTATION_SPEED);
 	this->need_rotate = false;
 	this->start_index = 0;
 }
@@ -497,10 +497,7 @@ void Screen::write_weaponbox(char name[]) {
 */
 void Screen::incWeaponboxRotateCounter() {
 	if (need_rotate) {
-		rotation_counter++;
-		if (rotation_counter > WEAPONBOX_ROTATION_SPEED) {
-			rotation_counter = 0;
-		}
+		rotation.incTimer();
 	}
 }
 
@@ -508,7 +505,7 @@ void Screen::incWeaponboxRotateCounter() {
 	Restituisce true se rotation_counter ha raggiunto WEAPONBOX_ROTATION_SPEED e need_rotate è true
 */
 bool Screen::canRotateWeaponbox() {
-	return rotation_counter >= WEAPONBOX_ROTATION_SPEED && need_rotate;
+	return rotation.limit() && need_rotate;
 }
 
 /*

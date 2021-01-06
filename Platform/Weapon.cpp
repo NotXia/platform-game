@@ -12,13 +12,11 @@ Weapon::Weapon(const char name[], Pixel left, Pixel right, Bullet bullet, int am
 	this->curr_ammo = ammo;
 
 	this->reloading = false;
-	this->curr_reloadDelay = 0;
-	this->reloadDelay = reloadDelay;
+	this->reload_delay = AnimationTimer(reloadDelay);
 
 
 	this->shooting = false;
-	this->curr_shootDelay = 0;
-	this->shootDelay = shootDelay;
+	this->shoot_delay = AnimationTimer(shootDelay);
 }
 
 Pixel Weapon::getTexture(bool direction) {
@@ -69,7 +67,7 @@ bool Weapon::hasAmmo() {
 void Weapon::startReloadDelay() {
 	if (!reloading) {
 		reloading = true;
-		curr_reloadDelay = 0;
+		reload_delay.reset();
 		curr_ammo = -1;
 	}
 }
@@ -79,7 +77,7 @@ void Weapon::startReloadDelay() {
 */
 void Weapon::incReloadDelay() {
 	if (reloading) {
-		curr_reloadDelay++;
+		reload_delay.incTimer();
 	}
 }
 
@@ -87,7 +85,7 @@ void Weapon::incReloadDelay() {
 	Restituisce true se curr_reloadDelay ha raggiunto reloadDelay
 */
 bool Weapon::canEndReloadDelay() {
-	return (curr_reloadDelay >= reloadDelay) && reloading;
+	return reload_delay.limit() && reloading;
 }
 
 /*
@@ -111,7 +109,7 @@ void Weapon::endReload() {
 */
 void Weapon::startShootDelay() {
 	shooting = true;
-	curr_shootDelay = 0;
+	shoot_delay.reset();
 	curr_ammo--;
 }
 
@@ -120,7 +118,7 @@ void Weapon::startShootDelay() {
 */
 void Weapon::incShootDelay() {
 	if (shooting) {
-		curr_shootDelay++;
+		shoot_delay.incTimer();
 	}
 }
 
@@ -128,7 +126,7 @@ void Weapon::incShootDelay() {
 	Restituisce true se curr_shootDelay ha raggiunto shootDelay
 */
 bool Weapon::canEndShootDelay() {
-	return curr_shootDelay >= shootDelay && shooting;
+	return shoot_delay.limit() && shooting;
 }
 
 /*
@@ -181,12 +179,12 @@ char Weapon::higherRange(Weapon weapon) {
 
 // Confronto velocità ricarica
 char Weapon::fasterReload(Weapon weapon) {
-	return getCheckSymbol(weapon.reloadDelay - this->reloadDelay);
+	return getCheckSymbol(weapon.reload_delay.getMaxTimer() - this->reload_delay.getMaxTimer());
 }
 
 // Confronto velocità sparo
 char Weapon::fasterShootRate(Weapon weapon) {
-	return getCheckSymbol(weapon.shootDelay - this->shootDelay);
+	return getCheckSymbol(weapon.shoot_delay.getMaxTimer() - this->shoot_delay.getMaxTimer());
 }
 
 /*

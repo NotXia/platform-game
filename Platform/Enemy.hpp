@@ -18,7 +18,7 @@ class Enemy : public ArmedEntity {
 		Position *lastPlayerPosition;
 		int visualRange;
 
-		int refreshTime, currRefresh;
+		AnimationTimer refresh;
 
 		/*
 			Incrementa currRefresh di 1. Se supera refreshTime, viene azzerato

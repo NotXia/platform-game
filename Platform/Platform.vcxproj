@@ -140,6 +140,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AnimationTimer.cpp" />
     <ClCompile Include="ArmedEntity.cpp" />
     <ClCompile Include="Block.cpp" />
     <ClCompile Include="Bonus.cpp" />
@@ -162,6 +163,7 @@
     <ClCompile Include="WeaponContainer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AnimationTimer.hpp" />
     <ClInclude Include="ArmedEntity.hpp" />
     <ClInclude Include="Block.hpp" />
     <ClInclude Include="Bonus.hpp" />

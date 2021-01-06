@@ -85,6 +85,9 @@
     <ClCompile Include="NPCList.cpp">
       <Filter>List</Filter>
     </ClCompile>
+    <ClCompile Include="AnimationTimer.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="colors.h">
@@ -149,6 +152,9 @@
     </ClInclude>
     <ClInclude Include="NPCList.hpp">
       <Filter>List</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationTimer.hpp">
+      <Filter>Utilities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

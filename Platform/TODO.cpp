@@ -14,8 +14,8 @@
 	X Mettere la difficoltà in Map e non in main
 	X Calcolare probabilità armi nemici
 	X Villaggi NPC
+	X Creare classe per i timer delle animazioni
 	- Ogni livello ha un nome generato casualmente
-	- Creare classe per i timer delle animazioni
 	- Arma attaccata al player
 	- Come gestire l'aumento di difficoltà infinito?
 	- Chiave di fine livello
@@ -27,3 +27,4 @@
 	- Piattaforme che si muovono (?)
 	- Animazioni NPC 
 */
+

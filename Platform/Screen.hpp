@@ -30,7 +30,7 @@ class Screen {
 		int start_index;
 		char weaponbox_text[STRING_LEN];
 		bool need_rotate;
-		int rotation_counter;
+		AnimationTimer rotation;
 
 		/*
 			Prende in input un intero che rappresenta il colore 

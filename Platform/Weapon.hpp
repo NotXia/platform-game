@@ -11,9 +11,9 @@ class Weapon {
 		Bullet bullet;
 		int ammo, curr_ammo;
 		bool reloading;
-		int reloadDelay, curr_reloadDelay;
+		AnimationTimer reload_delay;
 		bool shooting;
-		int shootDelay, curr_shootDelay;
+		AnimationTimer shoot_delay;
 
 		/*
 			Serve per le funzioni di confronto

@@ -3,6 +3,7 @@
 #include "Pixel.hpp"
 #include "Position.hpp"
 #include "Block.hpp"
+#include "AnimationTimer.hpp"
 
 const bool DIRECTION_LEFT = false;
 const bool DIRECTION_RIGHT = true;
@@ -17,10 +18,10 @@ class Entity : public Block {
 
 		bool is_jumping;
 		int jump_status; 
-		int jump_loop_counter;
+		AnimationTimer jump_animation;
 
 		bool on_terrain;
-		int fall_loop_counter;
+		AnimationTimer fall_animation;
 
 
 		/*

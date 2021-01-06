@@ -10,9 +10,9 @@ Entity::Entity(int health, Pixel head_left, Pixel head_right, Pixel body, Positi
 
 	this->is_jumping = false;
 	this->jump_status = 0;
-	this->jump_loop_counter = 0;
+	this->jump_animation = AnimationTimer(JUMP_SPEED);
 	this->on_terrain = true;
-	this->fall_loop_counter = 0;
+	this->fall_animation = AnimationTimer(FALL_SPEED);
 }
 
 int Entity::getHealth() {
@@ -172,10 +172,7 @@ void Entity::stopJump() {
 */
 void Entity::incJumpLoopCounter() {
 	if (is_jumping) {
-		jump_loop_counter++;
-		if (jump_loop_counter > JUMP_SPEED) {
-			jump_loop_counter = 0;
-		}
+		jump_animation.incTimer();
 	}
 }
 
@@ -183,7 +180,7 @@ void Entity::incJumpLoopCounter() {
 	Restituisce true quando è possibile avanzare nell'animazione del salto
 */
 bool Entity::canJump() {
-	return (jump_loop_counter >= JUMP_SPEED && is_jumping);
+	return (jump_animation.limit() && is_jumping);
 }
 
 /* FINE GESTIONE SALTO
@@ -200,10 +197,7 @@ bool Entity::canJump() {
 */
 void Entity::incFallLoopCounter() {
 	if (!on_terrain) {
-		fall_loop_counter++;
-		if (fall_loop_counter > FALL_SPEED) {
-			fall_loop_counter = 0;
-		}
+		fall_animation.incTimer();
 	}
 }
 
@@ -218,7 +212,7 @@ void Entity::fall() {
 	Restituisce true quando è possibile avanzare nell'animazione della caduta
 */
 bool Entity::canFall() {
-	return (fall_loop_counter >= FALL_SPEED && !on_terrain && !is_jumping);
+	return (fall_animation.limit() && !on_terrain && !is_jumping);
 }
 
 /* FINE GESTIONE CADUTA

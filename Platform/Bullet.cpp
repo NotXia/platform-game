@@ -8,8 +8,7 @@ Bullet::Bullet(Pixel texture, int damage, int range, Position position, bool dir
 	this->range = range;
 	this->position = position;
 	this->direction = direction;
-	this->refreshTime = 1500;
-	this->currRefresh = 0;
+	this->refresh = AnimationTimer(1500);
 	this->hostile = false;
 }
 
@@ -20,8 +19,7 @@ Bullet::Bullet(Pixel textureLeft, Pixel textureRight, int damage, int range, Pos
 	this->range = range;
 	this->position = position;
 	this->direction = direction;
-	this->refreshTime = 1500;
-	this->currRefresh = 0;
+	this->refresh = AnimationTimer(1500);
 	this->hostile = false;
 }
 
@@ -95,17 +93,14 @@ bool Bullet::travel() {
 	Indica se è possibile aggiornare lo stato del Bullet
 */
 bool Bullet::canRefresh() {
-	return currRefresh >= refreshTime;
+	return refresh.limit();
 }
 
 /*
 	Incrementa  currRefresh di 1. Se supera refreshTime, viene azzerato
 */
 void Bullet::incRefresh() {
-	currRefresh++;
-	if (currRefresh > refreshTime) {
-		currRefresh = 0;
-	}
+	refresh.incTimer();
 }
 
 /*
