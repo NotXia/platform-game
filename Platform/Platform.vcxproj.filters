@@ -8,9 +8,6 @@
     <Filter Include="Utilities">
       <UniqueIdentifier>{bce6d954-18ed-4168-9788-403d115d5466}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Main">
-      <UniqueIdentifier>{28e172ce-0d97-4dc5-b44f-539f9c259348}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Entity">
       <UniqueIdentifier>{52042e8c-9280-4395-92d3-6d8e3419fab7}</UniqueIdentifier>
     </Filter>
@@ -23,18 +20,27 @@
     <Filter Include="List">
       <UniqueIdentifier>{e89c0539-3611-464b-93ac-7ac494ea1ca4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Entity\Hostile">
+      <UniqueIdentifier>{6a0ee3c0-d494-4f63-be33-c849c1934dae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entity\Friendly">
+      <UniqueIdentifier>{e1d941f1-8032-43ca-94e7-0598beebd760}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="List\Bonus">
+      <UniqueIdentifier>{9f6a9d23-4645-4b22-a6f8-63afe4228659}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="List\Bullet">
+      <UniqueIdentifier>{e5cc4b4c-c860-48b3-a78f-84f7f705086a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="List\Enemy">
+      <UniqueIdentifier>{c0b57bae-bd26-4524-8932-c92d89afd07d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="List\NPC">
+      <UniqueIdentifier>{5370afad-98e7-4c0f-9a4c-4884e39d3fbd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Main</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Entity</Filter>
-    </ClCompile>
     <ClCompile Include="Entity.cpp">
-      <Filter>Entity</Filter>
-    </ClCompile>
-    <ClCompile Include="Enemy.cpp">
       <Filter>Entity</Filter>
     </ClCompile>
     <ClCompile Include="Weapon.cpp">
@@ -58,20 +64,11 @@
     <ClCompile Include="ArmedEntity.cpp">
       <Filter>Entity</Filter>
     </ClCompile>
-    <ClCompile Include="EnemyList.cpp">
-      <Filter>List</Filter>
-    </ClCompile>
-    <ClCompile Include="BulletList.cpp">
-      <Filter>List</Filter>
-    </ClCompile>
     <ClCompile Include="Block.cpp">
       <Filter>Entity</Filter>
     </ClCompile>
     <ClCompile Include="Bonus.cpp">
       <Filter>Entity</Filter>
-    </ClCompile>
-    <ClCompile Include="BonusList.cpp">
-      <Filter>List</Filter>
     </ClCompile>
     <ClCompile Include="WeaponContainer.cpp">
       <Filter>Weapon</Filter>
@@ -79,18 +76,34 @@
     <ClCompile Include="TownGraphics.cpp">
       <Filter>Screen</Filter>
     </ClCompile>
-    <ClCompile Include="NPC.cpp">
-      <Filter>Entity</Filter>
-    </ClCompile>
-    <ClCompile Include="NPCList.cpp">
-      <Filter>List</Filter>
-    </ClCompile>
     <ClCompile Include="AnimationTimer.cpp">
       <Filter>Utilities</Filter>
     </ClCompile>
     <ClCompile Include="Boss.cpp">
-      <Filter>Entity</Filter>
+      <Filter>Entity\Hostile</Filter>
     </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Entity\Hostile</Filter>
+    </ClCompile>
+    <ClCompile Include="NPC.cpp">
+      <Filter>Entity\Friendly</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Entity\Friendly</Filter>
+    </ClCompile>
+    <ClCompile Include="BonusList.cpp">
+      <Filter>List\Bonus</Filter>
+    </ClCompile>
+    <ClCompile Include="BulletList.cpp">
+      <Filter>List\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyList.cpp">
+      <Filter>List\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="NPCList.cpp">
+      <Filter>List\NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="colors.h">
@@ -99,13 +112,7 @@
     <ClInclude Include="settings.h">
       <Filter>Utilities</Filter>
     </ClInclude>
-    <ClInclude Include="Enemy.hpp">
-      <Filter>Entity</Filter>
-    </ClInclude>
     <ClInclude Include="Entity.hpp">
-      <Filter>Entity</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.hpp">
       <Filter>Entity</Filter>
     </ClInclude>
     <ClInclude Include="Weapon.hpp">
@@ -129,20 +136,11 @@
     <ClInclude Include="ArmedEntity.hpp">
       <Filter>Entity</Filter>
     </ClInclude>
-    <ClInclude Include="EnemyList.hpp">
-      <Filter>List</Filter>
-    </ClInclude>
-    <ClInclude Include="BulletList.hpp">
-      <Filter>List</Filter>
-    </ClInclude>
     <ClInclude Include="Block.hpp">
       <Filter>Entity</Filter>
     </ClInclude>
     <ClInclude Include="Bonus.hpp">
       <Filter>Entity</Filter>
-    </ClInclude>
-    <ClInclude Include="BonusList.hpp">
-      <Filter>List</Filter>
     </ClInclude>
     <ClInclude Include="WeaponContainer.hpp">
       <Filter>Weapon</Filter>
@@ -150,17 +148,32 @@
     <ClInclude Include="TownGraphics.hpp">
       <Filter>Screen</Filter>
     </ClInclude>
-    <ClInclude Include="NPC.hpp">
-      <Filter>Entity</Filter>
-    </ClInclude>
-    <ClInclude Include="NPCList.hpp">
-      <Filter>List</Filter>
-    </ClInclude>
     <ClInclude Include="AnimationTimer.hpp">
       <Filter>Utilities</Filter>
     </ClInclude>
     <ClInclude Include="Boss.hpp">
-      <Filter>Entity</Filter>
+      <Filter>Entity\Hostile</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.hpp">
+      <Filter>Entity\Hostile</Filter>
+    </ClInclude>
+    <ClInclude Include="NPC.hpp">
+      <Filter>Entity\Friendly</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.hpp">
+      <Filter>Entity\Friendly</Filter>
+    </ClInclude>
+    <ClInclude Include="BonusList.hpp">
+      <Filter>List\Bonus</Filter>
+    </ClInclude>
+    <ClInclude Include="BulletList.hpp">
+      <Filter>List\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyList.hpp">
+      <Filter>List\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="NPCList.hpp">
+      <Filter>List\NPC</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

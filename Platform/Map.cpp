@@ -393,7 +393,7 @@ bool Map::prevNull() {
 	Restituisce il puntatore al livello precedente, impostando right_position con il parametro in input.
 */
 Map* Map::gotoPrevious(Position exit_position) {
-	this->prev->right_position.setY(exit_position.getY());
+	this->prev->right_position = Position(GAME_WIDTH, exit_position.getY());
 	return this->prev;
 }
 
@@ -406,7 +406,7 @@ Map* Map::gotoNext(Position enter_position) {
 	if (this->next == NULL) {
 		this->next = new Map(this, max_enemies, level_number+1);
 	}
-	this->next->left_position.setY(enter_position.getY());
+	this->next->left_position = Position(1, enter_position.getY());
 	return this->next;
 }
 
