@@ -15,16 +15,20 @@
 	X Calcolare probabilità armi nemici
 	X Villaggi NPC
 	X Creare classe per i timer delle animazioni
-	- Ogni livello ha un nome generato casualmente
-	- Arma attaccata al player
-	- Come gestire l'aumento di difficoltà infinito?
-	- Chiave di fine livello
-	- Boss
+	X Boss
+	X Chiave di fine livello
+	- Altri boss
+	- Rework armi corpo a corpo
+	- Gestire il numero di nemici
 	- Bilanciare armi speciali
 	- Lava
 	- Rework range visione nemici
 	- LASER DELLA MORTE CYERTA
 	- Piattaforme che si muovono (?)
 	- Animazioni NPC 
+	- Come gestire l'aumento di difficoltà infinito?
+	- Bilanciamento armi
+	- Arma attaccata al player
+	- Ogni livello ha un nome generato casualmente
 */
 

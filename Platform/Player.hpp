@@ -44,9 +44,5 @@ class Player : public ArmedEntity {
 		*/
 		Bullet attack();
 
-		/*
-			Restituisce la quantità di vita mancante rispetto al massimo
-		*/
-		int getMissingHp();
 };
 

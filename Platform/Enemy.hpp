@@ -11,12 +11,13 @@ const int ACTION_JUMP = 3;
 const int ACTION_FALL = 4;
 const int ACTION_ATTACK = 5;
 
+
 class Enemy : public ArmedEntity {
 	protected:
 		int points;
 		int money;
 		Position *lastPlayerPosition;
-		int visualRange;
+		int visualRange, default_visualRange;
 
 		AnimationTimer refresh;
 
@@ -30,6 +31,7 @@ class Enemy : public ArmedEntity {
 
 		int getPoints();
 		int getMoney();
+		void setMoney(int money);
 
 		/*
 			Indica se è possibile eseguire la prossima azione (currRefresh ha raggiunto refreshTime)

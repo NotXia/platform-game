@@ -3,13 +3,15 @@
 
 Entity::Entity(int health, Pixel head_left, Pixel head_right, Pixel body, Position position) : Block(body, position) {
 	this->health = health;
+	this->max_health = health;
 	this->head_left = head_left;
 	this->head_right = head_right;
-	this->direction = DIRECTION_RIGHT;
+	this->direction = DIRECTION_LEFT;
 	this->can_move = true;
 
 	this->is_jumping = false;
 	this->jump_status = 0;
+	this->max_jump_height = JUMP_HEIGHT;
 	this->jump_animation = AnimationTimer(JUMP_SPEED);
 	this->on_terrain = true;
 	this->fall_animation = AnimationTimer(FALL_SPEED);
@@ -125,6 +127,28 @@ void Entity::goRight() {
 	direction = DIRECTION_RIGHT;
 }
 
+/*
+	Restituisce la quantità di vita mancante rispetto al massimo
+*/
+int Entity::getMissingHp() {
+	return max_health - health;
+}
+
+/*
+	Restituisce la quantità di vita sottoforma di percentuale
+*/
+int Entity::percHealth() {
+	return (100 * health) / max_health;
+}
+
+/*
+	Prende in input un oggetto Position.
+	Restituisce true se la posizione presa in input coincide con una parte dell'entità
+*/
+bool Entity::existsAt(Position position) {
+	return getBodyPosition().equals(position) || getHeadPosition().equals(position);
+}
+
 
 /**************************
    INIZIO GESTIONE SALTO
@@ -149,7 +173,7 @@ void Entity::initJump() {
 */
 void Entity::jump() {
 	jump_status++;
-	if (jump_status < JUMP_HEIGHT) {
+	if (jump_status < max_jump_height) {
 		is_jumping = true;
 		position.setY(position.getY()-1);
 	}
@@ -226,3 +250,4 @@ void Entity::incCounters() {
 	incFallLoopCounter();
 	incJumpLoopCounter();
 }
+

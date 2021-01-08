@@ -88,6 +88,9 @@
     <ClCompile Include="AnimationTimer.cpp">
       <Filter>Utilities</Filter>
     </ClCompile>
+    <ClCompile Include="Boss.cpp">
+      <Filter>Entity</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="colors.h">
@@ -155,6 +158,9 @@
     </ClInclude>
     <ClInclude Include="AnimationTimer.hpp">
       <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss.hpp">
+      <Filter>Entity</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

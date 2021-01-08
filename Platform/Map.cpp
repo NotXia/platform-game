@@ -7,16 +7,10 @@
 #include <cmath>
 #include "TownGraphics.hpp"
 
-const int TERRAIN_HEIGHT = 3;
-const int PLATFORM_MAX_LENGTH = 25;
-const int PLATFORM_MIN_LENGTH = 5;
-const int EMPTYZONE_LENGTH = 5;
-
 const Pixel PLATFORM_TEXTURE = Pixel(char(219), PLATFORM_COLOR_FG, PLATFORM_COLOR_BG, true);
 const Pixel TERRAIN_TEXTURE = Pixel(' ', TERRAIN_COLOR_FG, TERRAIN_COLOR_BG, true);
 const Pixel SKY_TEXTURE = Pixel(' ', 0, BACKGROUND_DEFAULT, false);
-
-int platform_chance = 20;
+const Pixel WALL_TEXTURE = Pixel(char(177), FG_DARKRED, BG_BLACK, true);
 
 Map::Map(Map *prev, int max_enemies, int level_number) {
 	next = NULL;
@@ -28,17 +22,26 @@ Map::Map(Map *prev, int max_enemies, int level_number) {
 	bonusList = BonusList();
 	bulletList = BulletList();
 	npcList = NPCList();
-	
-	if (rand() % 3 != 0) {
-		generatePlatforms();
-		this->level_number = level_number;
-		generateEnemy(max_enemies, getDifficulty());
-		generateBonus(rand() % 4 + 1, getDifficulty());
+	boss = NULL;
+	this->level_number = level_number;
+
+	if (level_number == getDifficulty()*DIFFICULTY_INCREASE_RATE-1) {
+		// Boss
+		boss = new Boss(getDifficulty());
+		boss->initTerrain(terrain);
+		place_wall();
+		left_position.setX(left_position.getX() + 1);
 	}
-	else {
-		this->level_number = level_number - 1;
+	else if (level_number == getDifficulty()*DIFFICULTY_INCREASE_RATE-2) {
+		// Villaggio
 		generateTerrain();
 		generateTown();
+	}
+	else {
+		// Livello
+		generatePlatforms();
+		generateEnemies(max_enemies);
+		generateBonuses(rand() % 4 + 1);
 	}
 }
 
@@ -94,7 +97,7 @@ void Map::generatePlatforms() {
 
 		// Area centrale con possibilità di generare piattaforme
 		for (width; width<GAME_WIDTH-EMPTYZONE_LENGTH; width++) {
-			bool generate_platform = (rand() % platform_chance) == 0;
+			bool generate_platform = (rand() % PLATFORM_CHANCE) == 0;
 
 			/* 
 				La piattaforma viene generata se:
@@ -132,47 +135,28 @@ void Map::generatePlatforms() {
 	Prende in input due interi, rispettivamente il numero massimo di nemici generabili e la difficoltà.
 	Genera e inizializza i nemici e li inserisce in enemyList
 */
-void Map::generateEnemy(int max_enemies, int difficulty) {
+void Map::generateEnemies(int max_enemies) {
 	if (max_enemies != 0) {
 		int base_chance = 2000 + 500*max_enemies;
 		int chance = base_chance;
 		int generate;
-		WeaponContainer *weapon_container = new WeaponContainer();
-		weapon_container->initForEnemy();
-		Weapon weapon;
+
+		int i = GAME_HEIGHT - TERRAIN_HEIGHT;
+		int j;
 
 		// La generazione inizia dall'angolo in basso a destra, scorrendo orizzontalmente l'area di gioco fino a raggiungere l'angolo in alto a sinistra
-		for (int i=GAME_HEIGHT-TERRAIN_HEIGHT; i>0; i--) {
+		while(i >= 0 && max_enemies > 0) {
 			base_chance -= 200 * max_enemies;
 			if (base_chance <= 0) { base_chance = 1000; }
 
-			for (int j=GAME_WIDTH-(EMPTYZONE_LENGTH*2); j>(EMPTYZONE_LENGTH*2); j--) {
+			j = GAME_WIDTH - (EMPTYZONE_LENGTH * 2);
+			while (j > (EMPTYZONE_LENGTH*2) && max_enemies > 0) {
 				if (terrain[j][i].isSolid() && !terrain[j][i-1].isSolid() && !terrain[j][i-2].isSolid()) {
 					generate = rand() % chance;
+
 					if (generate == 0 && max_enemies > 0) {
-						int hp = rand() % (difficulty*2 - difficulty + 1) + difficulty;
-						int points = ENEMY_BASE_POINTS * difficulty;
-						int money = rand() % difficulty + 1;
-
-						int tier1_chance = 100;
-						int tier2_chance = (getDifficulty()-1) * 25;
-						int tier3_chance = (getDifficulty()-1) * 11;
-						
-						int generate = rand() % (tier1_chance+tier2_chance+tier3_chance);
-						if (generate < tier1_chance) {
-							weapon = weapon_container->getRandomTier1();
-						}
-						else if (generate < tier1_chance+tier2_chance) {
-							weapon = weapon_container->getRandomTier2();
-						}
-						else {
-							weapon = weapon_container->getRandomTier3();
-						}
-
-						Enemy new_enemy = Enemy(hp, points, money, 
-							Pixel('<', ENEMY_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true), 
-							Pixel('>', ENEMY_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true),
-							Pixel(char(219), ENEMY_BODY_COLOR_FG, BACKGROUND_DEFAULT, true), Position(j+1, i), weapon);
+						Enemy new_enemy = createEnemy();
+						new_enemy.setPosition(Position(j+1, i));
 						enemyList.add(new_enemy);
 						max_enemies--;
 						chance = base_chance;
@@ -184,10 +168,10 @@ void Map::generateEnemy(int max_enemies, int difficulty) {
 						}
 					}
 				}
+				j--;
 			}
+			i--;
 		}
-
-		delete weapon_container;
 	}
 }
 
@@ -195,52 +179,30 @@ void Map::generateEnemy(int max_enemies, int difficulty) {
 	Prende in input due interi, rispettivamente il numero massimo di bonus generabili e la difficoltà.
 	Genera e inizializza i bonus e li inserisce in bonusList
 */
-void Map::generateBonus(int max_bonus, int difficulty) {
+void Map::generateBonuses(int max_bonus) {
 	if (max_bonus != 0) {
 		int base_chance = 1000 + 500*max_bonus;
 		int chance = base_chance;
 		int generate;
 
+		int i = 2;
+		int j;
+
 		// La generazione inizia dall'angolo in alto a destra, scorrendo orizzontalmente l'area di gioco fino a raggiungere l'angolo in basso a sinistra
-		for (int i=2; i<GAME_HEIGHT-TERRAIN_HEIGHT; i++) {
+		while (i<GAME_HEIGHT-TERRAIN_HEIGHT && max_bonus > 0) {
 			base_chance -= 100 * max_bonus;
 			if (base_chance <= 0) { base_chance = 1000; }
 
-			for (int j=GAME_WIDTH-(EMPTYZONE_LENGTH*2); j>(EMPTYZONE_LENGTH*2); j--) {
+			j = GAME_WIDTH-(EMPTYZONE_LENGTH*2);
+			while  (j>(EMPTYZONE_LENGTH*2) && max_bonus > 0) {
 				if (terrain[j][i].isSolid() && !terrain[j][i-1].isSolid() && !terrain[j][i-2].isSolid()) {
 					generate = rand() % chance;
 
 					if (generate == 0 && max_bonus > 0) {
-						int type = rand() % 100;
-						if (type < 40) { // Bonus soldi
-							bonusList.insert(Bonus(Pixel(MONEY_SYMBOL, FG_DARKYELLOW, BACKGROUND_DEFAULT, false), Position(j+1, i), ENEMY_BASE_POINTS * difficulty, rand() % difficulty + 1, 0));
-						}
-						else if (type < 80) { // Bonus hp
-							bonusList.insert(Bonus(Pixel(char(3), FG_DARKRED, BACKGROUND_DEFAULT, false), Position(j+1, i), ENEMY_BASE_POINTS * difficulty, 0, ceil((1/(log10(getDifficulty())+1))*5)));
-						}
-						else { // Bonus arma
-							WeaponContainer *weaponcontainer = new WeaponContainer();
-							weaponcontainer->initForPlayer();
-							Weapon *weapon = new Weapon();
-							int tier1_chance = 100;
-							int tier2_chance = (getDifficulty()-1) * 25;
-							int tier3_chance = (getDifficulty()-1) * 11;
+						Bonus bonus = createBonus();
+						bonus.setPosition(Position(j+1, i));
 
-							int generate = rand() % (tier1_chance+tier2_chance+tier3_chance);
-							if (generate < tier1_chance) {
-								*weapon = weaponcontainer->getRandomTier1();
-							}
-							else if (generate >= tier1_chance && generate < tier2_chance) {
-								*weapon = weaponcontainer->getRandomTier2();
-							}
-							else {
-								*weapon = weaponcontainer->getRandomTier3();
-							}
-
-							delete weaponcontainer;
-
-							bonusList.insert(Bonus(Pixel(char(170), FG_BLACK, BACKGROUND_DEFAULT, false), Position(j+1, i), 0, 0, 0, weapon));
-						}
+						bonusList.insert(bonus);
 						
 						max_bonus--;
 						chance = base_chance;
@@ -252,7 +214,9 @@ void Map::generateBonus(int max_bonus, int difficulty) {
 						}
 					}
 				}
+				j--;
 			}
+			i++;
 		}
 	}
 }
@@ -275,6 +239,103 @@ void Map::generateTown() {
 	));
 }
 
+/*
+	Crea un'arma per il giocatore e lo restituisce
+*/
+Weapon Map::createPlayerWeapon() {
+	WeaponContainer *weaponcontainer = new WeaponContainer();
+	weaponcontainer->initForPlayer();
+	Weapon weapon;
+
+	int tier1_chance = 100;
+	int tier2_chance = (getDifficulty()-1) * 25;
+	int tier3_chance = (getDifficulty()-1) * 11;
+
+	int generate = rand() % (tier1_chance+tier2_chance+tier3_chance);
+	if (generate < tier1_chance) {
+		weapon = weaponcontainer->getRandomTier1();
+	}
+	else if (generate < tier1_chance+tier2_chance) {
+		weapon = weaponcontainer->getRandomTier2();
+	}
+	else {
+		weapon = weaponcontainer->getRandomTier3();
+	}
+	delete weaponcontainer;
+
+	return weapon;
+}
+
+/*
+	Crea un'arma per nemici e lo restituisce
+*/
+Weapon Map::createEnemyWeapon() {
+	WeaponContainer *weaponcontainer = new WeaponContainer();
+	weaponcontainer->initForEnemy();
+	Weapon weapon;
+
+	int tier1_chance = 100;
+	int tier2_chance = (getDifficulty()-1) * 25;
+	int tier3_chance = (getDifficulty()-1) * 11;
+
+	int generate = rand() % (tier1_chance+tier2_chance+tier3_chance);
+	if (generate < tier1_chance) {
+		weapon = weaponcontainer->getRandomTier1();
+	}
+	else if (generate < tier1_chance+tier2_chance) {
+		weapon = weaponcontainer->getRandomTier2();
+	}
+	else {
+		weapon = weaponcontainer->getRandomTier3();
+	}
+	delete weaponcontainer;
+
+	return weapon;
+}
+
+/*
+	Crea un nemico e lo restituisce
+*/
+Enemy Map::createEnemy() {
+	int hp = rand() % (getDifficulty()*2 - getDifficulty() + 1) + getDifficulty();
+	int points = ENEMY_BASE_POINTS * getDifficulty();
+	int money = rand() % getDifficulty() + 1;
+
+	Enemy new_enemy = Enemy(
+		hp, points, money,
+		Pixel('<', ENEMY_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true),
+		Pixel('>', ENEMY_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true),
+		Pixel(char(219), ENEMY_BODY_COLOR_FG, BACKGROUND_DEFAULT, true), Position(), createEnemyWeapon()
+	);
+
+	return new_enemy;
+}
+
+/*
+	Crea un bonus e lo restituisce
+*/
+Bonus Map::createBonus() {
+	int type = rand() % 100;
+	Bonus bonus;
+
+	int points = BONUS_BASE_POINTS * getDifficulty();
+	if (type < 40) { // Bonus soldi
+		int money = rand() % getDifficulty() + 1;
+		bonus = Bonus(Pixel(MONEY_SYMBOL, FG_DARKYELLOW, BACKGROUND_DEFAULT, false), Position(), points, money, 0, NULL);
+	}
+	else if (type < 80) { // Bonus hp
+		int hp = floor( (1/(log10(getDifficulty())+1)) * 5 );
+		bonus = Bonus(Pixel(char(3), FG_DARKRED, BACKGROUND_DEFAULT, false), Position(), points, 0, hp, NULL);
+	}
+	else { // Bonus arma
+		Weapon *weapon = new Weapon;
+		*weapon = createPlayerWeapon();
+		bonus = Bonus(Pixel(char(170), FG_BLACK, BACKGROUND_DEFAULT, false), Position(), 0, 0, 0, weapon);
+	}
+
+	return bonus;
+}
+
 Position Map::getLeftPosition() {
 	return this->left_position;
 }
@@ -285,16 +346,14 @@ Position Map::getRightPosition() {
 EnemyList Map::getEnemyList() {
 	return enemyList;
 }
-
-BulletList Map::getBulletList() {
-	return bulletList;
-}
-
 void Map::setEnemyList(EnemyList enemylist) {
 	enemylist.initIter();
 	this->enemyList = enemylist;
 }
 
+BulletList Map::getBulletList() {
+	return bulletList;
+}
 void Map::setBulletList(BulletList bulletlist) {
 	bulletlist.initIter();
 	this->bulletList = bulletlist;
@@ -303,7 +362,6 @@ void Map::setBulletList(BulletList bulletlist) {
 BonusList Map::getBonusList() {
 	return bonusList;
 }
-
 void Map::setBonusList(BonusList bonuslist) {
 	bonuslist.initIter();
 	this->bonusList = bonuslist;
@@ -312,11 +370,16 @@ void Map::setBonusList(BonusList bonuslist) {
 NPCList Map::getNPCList() {
 	return npcList;
 }
-
 void Map::setNPCList(NPCList npclist) {
 	this->npcList = npclist;
 }
 
+Boss *Map::getBoss() {
+	return boss;
+}
+void Map::setBoss(Boss *boss) {
+	this->boss = boss;
+}
 
 /*
 	Restituisce true se *prev è NULL, false altrimenti
@@ -338,9 +401,10 @@ Map* Map::gotoPrevious(Position exit_position) {
 	Prende in input la posizione da cui il giocatore è uscito nel livello corrente.
 	Restituisce il puntatore al livello successivo, impostando left_position con il parametro in input.
 */
-Map* Map::gotoNext(Position enter_position, int max_enemy) {
+Map* Map::gotoNext(Position enter_position) {
+	int max_enemies = 2;
 	if (this->next == NULL) {
-		this->next = new Map(this, max_enemy, level_number+1);
+		this->next = new Map(this, max_enemies, level_number+1);
 	}
 	this->next->left_position.setY(enter_position.getY());
 	return this->next;
@@ -358,6 +422,11 @@ bool Map::isSolidAt(Position position) {
 	}
 	else if(terrain[position.getX()-1][position.getY()-1].isSolid()) {
 		out = true;
+	}
+	else if (isBossFight()) {
+		if (boss->existsAt(position)) {
+			out = true;
+		}
 	}
 	return out;
 }
@@ -403,4 +472,28 @@ Position Map::addBonus(Bonus bonus) {
 	bonusList.insert(bonus);
 
 	return spawn_position;
+}
+
+/*
+	Restituisce true boss non è NULL
+*/
+bool Map::isBossFight() {
+	return boss != NULL;
+}
+
+/*
+	Imposta la matrice terrain in modo da avere l'entrata e l'uscita del livello bloccati
+*/
+void Map::place_wall() {
+	for (int i=0; i<GAME_HEIGHT; i++) {
+		terrain[0][i] = WALL_TEXTURE;
+		terrain[GAME_WIDTH-1][i] = WALL_TEXTURE;
+	}
+}
+
+/*
+	Imposta la matrice terrain alla mappa basilare
+*/
+void Map::endBossFight() {
+	generateTerrain();
 }

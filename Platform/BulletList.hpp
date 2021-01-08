@@ -48,6 +48,14 @@ class BulletList {
 		*/
 		bool pointAt(Position position1, Position position2);
 
+		/*
+			Prende in input tre oggetti Position.
+			Restituisce true se è presente un Bullet in una delle tre posizioni. False altrimenti.
+			Iter punterà a quel nodo, se esiste.
+			Prev punterà al nodo precedente, se esiste.
+		*/
+		bool pointAt(Position position1, Position position2, Position position3);
+
 };
 
 

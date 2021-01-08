@@ -94,3 +94,26 @@ bool BulletList::pointAt(Position position1, Position position2) {
 
 	return found;
 }
+
+/*
+	Prende in input tre oggetti Position.
+	Restituisce true se è presente un Bullet in una delle tre posizioni. False altrimenti.
+	Iter punterà a quel nodo, se esiste.
+	Prev punterà al nodo precedente, se esiste.
+*/
+bool BulletList::pointAt(Position position1, Position position2, Position position3) {
+	initIter();
+	bool found = false;
+
+	while (iter != NULL && !found) {
+		if (iter->bullet.getPosition().equals(position1) || iter->bullet.getPosition().equals(position2) || iter->bullet.getPosition().equals(position3)) {
+			found = true;
+		}
+		else {
+			prev = iter;
+			iter = iter->next;
+		}
+	}
+
+	return found;
+}

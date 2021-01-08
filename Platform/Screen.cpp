@@ -197,6 +197,15 @@ void Screen::write_entity(Map *map, Entity entity) {
 }
 
 /*
+	Prende in input un oggetto Map ed Entity
+	Rimuove l'entità dall'area di gioco
+*/
+void Screen::remove_entity(Map *map, Entity entity) {
+	resetTerrain(map, entity.getBodyPosition());
+	resetTerrain(map, entity.getHeadPosition());
+}
+
+/*
 	Prende in input un oggetto Map e Bullet
 	Inserisce un proiettile nell'area di gioco
 */
@@ -250,6 +259,29 @@ void Screen::write_bonuses(Map *map, BonusList list) {
 
 		list.goNext();
 	}
+}
+
+/*
+	Prende in input un oggetto Map e Boss
+	Inserisce l'entità nell'area di gioco
+*/
+void Screen::write_boss(Map *map, Boss boss) {
+	// Corpo
+	write_at(map, boss.getBody(), boss.getBodyPosition());
+	write_at(map, boss.getBody(), boss.getBody2Position());
+
+	// Testa
+	write_at(map, boss.getHead(), boss.getHeadPosition());
+}
+
+/*
+	Prende in input un oggetto Map e Boss
+	Rimuove il boss dall'area di gioco
+*/
+void Screen::remove_boss(Map *map, Boss boss) {
+	resetTerrain(map, boss.getBodyPosition());
+	resetTerrain(map, boss.getBody2Position());
+	resetTerrain(map, boss.getHeadPosition());
 }
 
 /* FINE GESTIONE AREA DI GIOCO
@@ -385,13 +417,34 @@ void Screen::write_textbox_npc_weapon(NPC npc, Weapon player_weapon) {
 		setColor(FG_DARKYELLOW);
 		cout <<MONEY_SYMBOL;
 		resetColor();
-		cout <<")  [<] Indietro  [>] Avanti";
+		cout <<")  [o] Indietro  [p] Avanti";
 	}
 	else {
 		moveCursor(start_x, start_y);
 		cout <<name <<": Ciao, sfortunatamente oggi ho";
 		moveCursor(start_x, start_y+1);
 		cout <<"finito la merce :-(";
+	}
+}
+
+/*
+	Prende in input un oggetto Boss.
+	Visualizza nell'area di testo la sua barra della vita.
+*/
+void Screen::write_write_boss_hp(Boss boss) {
+	int health_len = ((textBox_width * boss.percHealth()) / 100);
+
+	if (health_len > 0) {
+		moveCursor(textBox_x+1, textBox_y + 4);
+
+		setColor(FG_DARKRED);
+		for (int i=0; i<health_len; i++) {
+			cout <<char(178);
+		}
+		resetColor();
+		for (int i=0; i<textBox_width-health_len; i++) {
+			cout <<" ";
+		}
 	}
 }
 
@@ -493,6 +546,39 @@ void Screen::write_weaponbox(char name[]) {
 }
 
 /*
+	Prende in input un intero.
+	Aggiorna la quantità di munizioni visualizzata
+*/
+void Screen::write_ammobox(int ammo) {
+	moveCursor(weapon_x+WEAPON_WIDTH-ammobox_width, weapon_y+1);
+	cout <<"|  ";
+	moveCursor(weapon_x+WEAPON_WIDTH-ammobox_width, weapon_y+1);
+
+	if (ammo < 0) {
+		cout <<"| R";
+	}
+	else {
+		if (ammo > 9) {
+			cout <<"|" <<ammo;
+		}
+		else {
+			cout <<"| " <<ammo;
+		}
+	}
+}
+
+/*
+	Prende in input un oggetto Weapon.
+	Scrive nell'area del nome dell'arma e il numero di munizioni le rispettive quantità
+*/
+void Screen::write_weaponInfo(Weapon weapon) {
+	char weapon_name[STRING_LEN];
+	weapon.getName(weapon_name);
+	write_weaponbox(weapon_name);
+	write_ammobox(weapon.getCurrAmmo());
+}
+
+/*
 	Incrementa di 1 rotation_counter
 */
 void Screen::incWeaponboxRotateCounter() {
@@ -529,27 +615,6 @@ void Screen::rotate_weaponbox() {
 	}
 }
 
-/*
-	Prende in input un intero.
-	Aggiorna la quantità di munizioni visualizzata
-*/
-void Screen::write_ammobox(int ammo) {
-	moveCursor(weapon_x+WEAPON_WIDTH-ammobox_width, weapon_y+1);
-	cout <<"|  ";
-	moveCursor(weapon_x+WEAPON_WIDTH-ammobox_width, weapon_y+1);
-
-	if (ammo < 0) {
-		cout <<"| R";
-	}
-	else {
-		if (ammo > 9) {
-			cout <<"|" <<ammo;
-		}
-		else {
-			cout <<"| " <<ammo;
-		}
-	}
-}
 
 /* FINE GESTIONE DATI ARMA
 ***************************/

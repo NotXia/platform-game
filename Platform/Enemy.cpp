@@ -7,6 +7,7 @@ Enemy::Enemy(int health, int points, int money, Pixel head_left, Pixel head_righ
 	this->points = points;
 	this->money = money;
 	lastPlayerPosition = NULL;
+	this->default_visualRange = ENEMY_RANGE;
 	this->visualRange = ENEMY_RANGE;
 	this->refresh = AnimationTimer(8000);
 }
@@ -17,6 +18,10 @@ int Enemy::getPoints() {
 
 int Enemy::getMoney() {
 	return money;
+}
+
+void Enemy::setMoney(int money) {
+	this->money = money;
 }
 
 /*
@@ -52,14 +57,14 @@ void Enemy::search4Player(Player player) {
 		delete lastPlayerPosition;
 		lastPlayerPosition = new Position(player_pos.getX(), player_pos.getY());
 
-		visualRange = 2 * ENEMY_RANGE;
+		visualRange = 2 * default_visualRange;
 
 		head_left = Pixel(head_left.getValue(), ANGRY_ENEMY_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true);
 		head_right = Pixel(head_right.getValue(), ANGRY_ENEMY_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true);
 		body = Pixel(body.getValue(), ANGRY_ENEMY_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true);
 	}
 	else {
-		visualRange = ENEMY_RANGE;
+		visualRange = default_visualRange;
 
 		head_left = Pixel(head_left.getValue(), ENEMY_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true);
 		head_right = Pixel(head_right.getValue(), ENEMY_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true);

@@ -94,6 +94,12 @@ class Screen {
 		void write_entity(Map *map, Entity entity);
 
 		/*
+			Prende in input un oggetto Map ed Entity
+			Rimuove l'entità dall'area di gioco
+		*/
+		void remove_entity(Map *map, Entity entity);
+
+		/*
 			Prende in input un oggetto Map e Bullet
 			Inserisce un proiettile nell'area di gioco
 		*/
@@ -116,6 +122,19 @@ class Screen {
 			Stampa sullo schermo tutti i bonus
 		*/
 		void write_bonuses(Map *map, BonusList list);
+
+		/*
+			Prende in input un oggetto Map e Boss
+			Inserisce il boss nell'area di gioco
+		*/
+		void write_boss(Map *map, Boss boss);
+
+		/*
+			Prende in input un oggetto Map e Boss
+			Rimuove il boss dall'area di gioco
+		*/
+		void remove_boss(Map *map, Boss boss);
+
 
 		/* FINE GESTIONE AREA DI GIOCO  
 		*******************************/
@@ -152,6 +171,12 @@ class Screen {
 			Inserisce nella textbox il dialogo di un NPC mercante
 		*/
 		void write_textbox_npc_weapon(NPC npc, Weapon player_weapon);
+
+		/*
+			Prende in input un oggetto Boss.
+			Visualizza nell'area di testo la sua barra della vita.
+		*/
+		void write_write_boss_hp(Boss boss);
 
 		/* FINE GESTIONE TEXT BOX  
 		**************************/
@@ -198,6 +223,12 @@ class Screen {
 			Scrive il parametro nell'area del nome dell'arma. Se la stringa è troppo lunga, vengono inizializzati i parametri per la rotazione
 		*/
 		void write_weaponbox(char name[]);
+
+		/*
+			Prende in input un oggetto Weapon.
+			Scrive nell'area del nome dell'arma e il numero di munizioni le rispettive quantità
+		*/
+		void write_weaponInfo(Weapon weapon);
 
 		/*
 			Incrementa di 1 rotation_counter

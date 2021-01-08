@@ -123,3 +123,18 @@ void EnemyList::updateCurrent(Enemy enemy) {
 		}
 	}
 }
+
+/*
+	Restituisce il numero di nodi nella lista
+*/
+int EnemyList::size() {
+	int i=0;
+	EnemyNode *iterator = list;
+
+	while (iterator != NULL) {
+		i++;
+		iterator = iterator->next;
+	}
+
+	return i;
+}

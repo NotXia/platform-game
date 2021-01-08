@@ -60,10 +60,3 @@ Bullet Player::attack() {
 	bullet.setHostile(false);
 	return bullet;
 }
-
-/*
-	Restituisce la quantità di vita mancante rispetto al massimo
-*/
-int Player::getMissingHp() {
-	return MAX_LIFE - health;
-}

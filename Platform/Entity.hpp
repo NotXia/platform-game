@@ -10,14 +10,14 @@ const bool DIRECTION_RIGHT = true;
 
 class Entity : public Block {
 	protected:
-		int health;
+		int health, max_health;
 		Pixel head_left;
 		Pixel head_right;
 		bool direction; // false = left | true = right
 		bool can_move;
 
 		bool is_jumping;
-		int jump_status; 
+		int jump_status, max_jump_height; 
 		AnimationTimer jump_animation;
 
 		bool on_terrain;
@@ -75,6 +75,22 @@ class Entity : public Block {
 		*/
 		void goRight();
 
+		/*
+			Restituisce la quantità di vita mancante rispetto al massimo
+		*/
+		int getMissingHp();
+
+		/*
+			Restituisce la quantità di vita sottoforma di percentuale
+		*/
+		int percHealth();
+
+		/*
+			Prende in input un oggetto Position.
+			Restituisce true se la posizione presa in input coincide con una parte dell'entità
+		*/
+		bool existsAt(Position position);
+
 
 		/**************************
 		   INIZIO GESTIONE SALTO   
@@ -129,6 +145,7 @@ class Entity : public Block {
 			Incrementa i vari contatori
 		*/
 		void incCounters();
+
 };
 
 

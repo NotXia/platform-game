@@ -63,4 +63,9 @@ class EnemyList {
 		*/
 		void updateCurrent(Enemy enemy);
 
+		/*
+			Restituisce il numero di nodi nella lista
+		*/
+		int size();
+
 };
