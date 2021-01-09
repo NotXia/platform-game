@@ -1,5 +1,6 @@
 #include "Boss.hpp"
 #include <cstdlib>
+#include "Map.hpp"
 
 Boss::Boss(int difficulty) {
 	// Enemy(int health=0, int points=0, int money=0, Pixel head_left=Pixel(), Pixel head_right=Pixel(), Pixel body=Pixel(), Position position=Position(), Weapon weapon=Weapon());
@@ -21,7 +22,7 @@ Boss::Boss(int difficulty) {
 		head_left = Pixel('<', FG_DARKRED , BACKGROUND_DEFAULT, true);
 		head_right = Pixel('>', FG_DARKRED, BACKGROUND_DEFAULT, true);
 		body = Pixel(char(219), FG_DARKRED, BACKGROUND_DEFAULT, true);
-		position = Position(GAME_WIDTH-(GAME_WIDTH*0.25), 1);
+		position = Position(GAME_WIDTH-int(GAME_WIDTH*0.25), 1);
 		weapon = Weapon();
 		default_visualRange = GAME_WIDTH;
 		visualRange = GAME_WIDTH;
@@ -134,17 +135,21 @@ int Boss::getAction(Map *map, Player player) {
 			}
 		}
 		else if (phase == 1) {
-			if (direction == DIRECTION_LEFT && getBodyPosition().getX() > 1) {
-				action_code = ACTION_GO_LEFT;
+			if (!map->isSolidAt(getFrontPosition())) {
+				if (direction == DIRECTION_LEFT) {
+					action_code = ACTION_GO_LEFT;
+				}
+				else {
+					action_code = ACTION_GO_RIGHT;
+				}
 			}
-			else if (direction == DIRECTION_LEFT && getBodyPosition().getX() == 1) {
-				action_code = ACTION_GO_RIGHT;
-			}
-			else if (direction == DIRECTION_RIGHT && getBodyPosition().getX() < GAME_WIDTH) {
-				action_code = ACTION_GO_RIGHT;
-			}
-			else if (direction == DIRECTION_RIGHT && getBodyPosition().getX() == GAME_WIDTH) {
-				action_code = ACTION_GO_LEFT;
+			else if (map->isSolidAt(getFrontPosition())) {
+				if (direction == DIRECTION_LEFT) {
+					action_code = ACTION_GO_RIGHT;
+				}
+				else {
+					action_code = ACTION_GO_LEFT;
+				}
 			}
 		}
 		else if (phase == 2) {

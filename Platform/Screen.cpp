@@ -206,11 +206,20 @@ void Screen::remove_entity(Map *map, Entity entity) {
 }
 
 /*
-	Prende in input un oggetto Map e Bullet
-	Inserisce un proiettile nell'area di gioco
+	Prende in input un oggetto Map, Player e Bullet
+	Inserisce un proiettile nell'area di gioco, se non ci sono altre entità
 */
-void Screen::write_bullet(Map *map, Bullet bullet) {
-	write_at(map, bullet.getTexture(), bullet.getPosition());
+void Screen::write_bullet(Map *map, Player player, Bullet bullet) {
+	EnemyList enemylist = map->getEnemyList();
+	BonusList bonuslist = map->getBonusList();
+	bool boss_exists = false;
+	if (map->isBossFight()) {
+		boss_exists = map->getBoss()->existsAt(bullet.getPosition());
+	}
+
+	if (!enemylist.existsAt(bullet.getPosition()) && !player.existsAt(bullet.getPosition()) && !boss_exists && !bonuslist.pointAt(bullet.getPosition())) {
+		write_at(map, bullet.getTexture(), bullet.getPosition());
+	}
 }
 
 /*

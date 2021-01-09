@@ -68,7 +68,7 @@ class Map {
 		Bonus createBonus();
 
 	public:
-		Map(Map *prev=NULL, int max_enemies=0, int level_number=0);
+		Map(Map *prev=NULL, int level_number=0);
 
 		Position getLeftPosition();
 		Position getRightPosition();

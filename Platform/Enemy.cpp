@@ -79,7 +79,7 @@ void Enemy::search4Player(Player player) {
 int Enemy::getAction(Map *map, Player player) {
 	int action_code = ACTION_DO_NOTHING;
 	int weapon_range;
-	weapon_range = weapon.getBullet().getRange();
+	weapon_range = weapon.getRange();
 	
 
 	if (lastPlayerPosition != NULL) { // Il nemico ha visto il giocatore almeno una volta

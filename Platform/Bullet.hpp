@@ -1,4 +1,5 @@
 #pragma once
+#include "Block.hpp"
 #include "Pixel.hpp"
 #include "Position.hpp"
 #include "AnimationTimer.hpp"
@@ -6,13 +7,11 @@
 const bool BULLET_LEFT = false;
 const bool BULLET_RIGHT = true;
 
-class Bullet {
+class Bullet : public Block {
 	protected:
-		Pixel textureLeft;
 		Pixel textureRight;
 		int damage;
 		int range;
-		Position position;
 		bool hostile;
 		bool direction;
 
@@ -25,6 +24,7 @@ class Bullet {
 		Pixel getTexture();
 		int getDamage();
 		int getRange();
+		void setRange(int range);
 		void setHostile(bool hostile);
 		bool isHostile();
 		Position getPosition();

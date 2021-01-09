@@ -17,17 +17,17 @@
 	X Creare classe per i timer delle animazioni
 	X Boss
 	X Chiave di fine livello
+	X Convertire Bullet in modo tale che erediti Block
+	X Rework armi corpo a corpo
+	X LASER DELLA MORTE CYERTA
+	X Gestire il numero di nemici
 	- Altri boss
-	- Rework armi corpo a corpo
-	- Gestire il numero di nemici
-	- Bilanciare armi speciali
+	- Rework armi
 	- Lava
 	- Rework range visione nemici
-	- LASER DELLA MORTE CYERTA
 	- Piattaforme che si muovono (?)
 	- Animazioni NPC 
 	- Come gestire l'aumento di difficoltà infinito?
-	- Bilanciamento armi
 	- Arma attaccata al player
 	- Ogni livello ha un nome generato casualmente
 */

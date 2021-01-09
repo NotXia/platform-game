@@ -18,7 +18,7 @@ int main() {
     srand(time(0));
 
     Screen screen = Screen();
-    Map *map = new Map(NULL, 2);
+    Map *map = new Map();
 
     WeaponContainer *weapon_container = new WeaponContainer();
     weapon_container->initForPlayer();
@@ -112,9 +112,38 @@ int main() {
             else if (ch == KEY_SPACEBAR) {
                 if (player.isOnTerrain()) {
                     if (player.canAttack()) {
-                        map->addBullet(player.attack());
-
-                        screen.write_at(map, player.getWeapon().getTexture(player.getDirection()), player.getFrontPosition());
+                        if (player.getWeapon().getType() == WEAPON_MELEE) {
+                            Bullet melee_bullet = player.attack();
+                            int range = player.getWeapon().getRange();
+                            int i = 0;
+                            if (player.getDirection() == DIRECTION_LEFT) {
+                                while (i < range && melee_bullet.getPosition().getX()-i >= 1) {
+                                    Bullet temp = melee_bullet;
+                                    temp.setRange(1);
+                                    temp.setPosition(Position(melee_bullet.getPosition().getX()-i, melee_bullet.getPosition().getY()));
+                                    map->addBullet(temp);
+                                    screen.write_bullet(map, player, temp);
+                                    i++;
+                                }
+                            }
+                            else {
+                                while (i < range && melee_bullet.getPosition().getX()+i <= GAME_WIDTH) {
+                                    Bullet temp = melee_bullet;
+                                    temp.setRange(1);
+                                    temp.setPosition(Position(melee_bullet.getPosition().getX()+i, melee_bullet.getPosition().getY()));
+                                    map->addBullet(temp);
+                                    screen.write_bullet(map, player, temp);
+                                    i++;
+                                }
+                            }
+                            player.reload();
+                            screen.write_ammobox(player.getWeapon().getCurrAmmo());
+                        }
+                        else {
+                            Bullet bullet = player.attack();
+                            map->addBullet(bullet);
+                            screen.write_bullet(map, player, bullet);
+                        }
                     }
                     else {
                         if (player.canReload() && !player.getWeapon().hasAmmo()) {
@@ -122,6 +151,7 @@ int main() {
                         }
                     }
                 }
+                if(player.getWeapon().hasAmmo())
                 screen.write_ammobox(player.getWeapon().getCurrAmmo());
             }
             else if (ch == 'r' || ch == 'R') {
@@ -365,14 +395,7 @@ int main() {
                     screen.resetTerrain(map, bullet.getPosition());
                 }
                 if (bullet.travel()) {
-                    boss_exists = false;
-                    if (map->isBossFight()) {
-                        boss_exists = map->getBoss()->existsAt(bullet.getPosition());
-                    }
-
-                    if (!enemylist.existsAt(bullet.getPosition()) && !player.existsAt(bullet.getPosition()) && !boss_exists) {
-                        screen.write_bullet(map, bullet);
-                    }
+                    screen.write_bullet(map, player, bullet);
                 }
             }
 
@@ -432,9 +455,37 @@ int main() {
                 else if (action == ACTION_ATTACK) {
                     if (enemy.isOnTerrain()) {
                         if (enemy.canAttack()) {
-                            map->addBullet(enemy.attack());
-
-                            screen.write_at(map, enemy.getWeapon().getTexture(enemy.getDirection()), enemy.getFrontPosition());
+                            if (enemy.getWeapon().getType() == WEAPON_MELEE) {
+                                Bullet melee_bullet = enemy.attack();
+                                int range = enemy.getWeapon().getRange();
+                                int i = 0;
+                                if (enemy.getDirection() == DIRECTION_LEFT) {
+                                    while (i < range && melee_bullet.getPosition().getX()-i >= 1) {
+                                        Bullet temp = melee_bullet;
+                                        temp.setRange(1);
+                                        temp.setPosition(Position(melee_bullet.getPosition().getX()-i, melee_bullet.getPosition().getY()));
+                                        map->addBullet(temp);
+                                        screen.write_bullet(map, player, temp);
+                                        i++;
+                                    }
+                                }
+                                else {
+                                    while (i < range && melee_bullet.getPosition().getX()+i <= GAME_WIDTH) {
+                                        Bullet temp = melee_bullet;
+                                        temp.setRange(1);
+                                        temp.setPosition(Position(melee_bullet.getPosition().getX()+i, melee_bullet.getPosition().getY()));
+                                        map->addBullet(temp);
+                                        screen.write_bullet(map, player, temp);
+                                        i++;
+                                    }
+                                }
+                                enemy.reload();
+                            }
+                            else {
+                                Bullet bullet = enemy.attack();
+                                map->addBullet(bullet);
+                                screen.write_bullet(map, player, bullet);
+                            }
                         }
                         else {
                             if (enemy.canReload() && !enemy.getWeapon().hasAmmo()) {
@@ -697,6 +748,7 @@ int main() {
                         map->endBossFight();
                         screen.write_terrain(map);
                         screen.write_entity(map, player);
+                        screen.write_bonuses(map, map->getBonusList());
                         screen.clear_textbox();
                         print_boss_hp = true;
                     }

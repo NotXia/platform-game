@@ -67,9 +67,6 @@
     <ClCompile Include="Block.cpp">
       <Filter>Entity</Filter>
     </ClCompile>
-    <ClCompile Include="Bonus.cpp">
-      <Filter>Entity</Filter>
-    </ClCompile>
     <ClCompile Include="WeaponContainer.cpp">
       <Filter>Weapon</Filter>
     </ClCompile>
@@ -104,6 +101,9 @@
       <Filter>List\NPC</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Bonus.cpp">
+      <Filter>Entity\Friendly</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="colors.h">
@@ -139,9 +139,6 @@
     <ClInclude Include="Block.hpp">
       <Filter>Entity</Filter>
     </ClInclude>
-    <ClInclude Include="Bonus.hpp">
-      <Filter>Entity</Filter>
-    </ClInclude>
     <ClInclude Include="WeaponContainer.hpp">
       <Filter>Weapon</Filter>
     </ClInclude>
@@ -175,10 +172,16 @@
     <ClInclude Include="NPCList.hpp">
       <Filter>List\NPC</Filter>
     </ClInclude>
+    <ClInclude Include="Bonus.hpp">
+      <Filter>Entity\Friendly</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="TODO.cpp">
       <Filter>Resource Files</Filter>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
 </Project>

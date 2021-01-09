@@ -12,7 +12,7 @@ const Pixel TERRAIN_TEXTURE = Pixel(' ', TERRAIN_COLOR_FG, TERRAIN_COLOR_BG, tru
 const Pixel SKY_TEXTURE = Pixel(' ', 0, BACKGROUND_DEFAULT, false);
 const Pixel WALL_TEXTURE = Pixel(char(177), FG_DARKRED, BG_BLACK, true);
 
-Map::Map(Map *prev, int max_enemies, int level_number) {
+Map::Map(Map *prev, int level_number) {
 	next = NULL;
 	this->prev = prev;
 	left_position = Position(1, GAME_HEIGHT-TERRAIN_HEIGHT);
@@ -40,7 +40,7 @@ Map::Map(Map *prev, int max_enemies, int level_number) {
 	else {
 		// Livello
 		generatePlatforms();
-		generateEnemies(max_enemies);
+		generateEnemies(ceil(1 + log2(getDifficulty())));
 		generateBonuses(rand() % 4 + 1);
 	}
 }
@@ -402,9 +402,8 @@ Map* Map::gotoPrevious(Position exit_position) {
 	Restituisce il puntatore al livello successivo, impostando left_position con il parametro in input.
 */
 Map* Map::gotoNext(Position enter_position) {
-	int max_enemies = 2;
 	if (this->next == NULL) {
-		this->next = new Map(this, max_enemies, level_number+1);
+		this->next = new Map(this, level_number+1);
 	}
 	this->next->left_position = Position(1, enter_position.getY());
 	return this->next;

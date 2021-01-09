@@ -2,7 +2,7 @@
 #include "Entity.hpp"
 #include <cstring>
 
-Weapon::Weapon(const char name[], Pixel left, Pixel right, Bullet bullet, int ammo, int reloadDelay, int shootDelay) {
+Weapon::Weapon(const char name[], Pixel left, Pixel right, Bullet bullet, int ammo, int reloadDelay, int shootDelay, bool type, int range) {
 	strncpy(this->name, name, STRING_LEN);
 	this->textureLeft = left;
 	this->textureRight = right;
@@ -14,9 +14,11 @@ Weapon::Weapon(const char name[], Pixel left, Pixel right, Bullet bullet, int am
 	this->reloading = false;
 	this->reload_delay = AnimationTimer(reloadDelay);
 
-
 	this->shooting = false;
 	this->shoot_delay = AnimationTimer(shootDelay);
+
+	this->type = type;
+	this->range = range;
 }
 
 Pixel Weapon::getTexture(bool direction) {
@@ -27,12 +29,25 @@ Pixel Weapon::getTexture(bool direction) {
 	}
 }
 
-Bullet Weapon::getBullet() {
-	return bullet;
-}
-
 void Weapon::getName(char name[]) {
 	strncpy(name, this->name, STRING_LEN);
+}
+
+/*
+	Restituisce l'oggetto Bullet associato all'arma.
+	Se si tratta di un'arma a distanza, viene impostato la distanza di percorrenza del proiettile uguale a range
+	Se si tratta di un'arma corpo a corpo, viene impostato la distanza di percorrenza del proiettile a 1
+*/
+Bullet Weapon::getBullet() {
+	Bullet out = bullet;
+	if (type == WEAPON_MELEE) {
+		out.setRange(1);
+		return out;
+	}
+	else {
+		out.setRange(range);
+		return out;
+	}
 }
 
 int Weapon::getCurrAmmo() {
@@ -46,6 +61,14 @@ bool Weapon::isShooting() {
 
 bool Weapon::isReloading() {
 	return reloading;
+}
+
+bool Weapon::getType() {
+	return type;
+}
+
+int Weapon::getRange() {
+	return range;
 }
 
 /*

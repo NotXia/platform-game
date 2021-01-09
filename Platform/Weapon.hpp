@@ -3,12 +3,18 @@
 #include "Bullet.hpp"
 #include "settings.h"
 
+const bool WEAPON_MELEE = false;
+const bool WEAPON_RANGED = true;
+
 class Weapon {
 	protected:
 		char name[STRING_LEN];
 		Pixel textureLeft;
 		Pixel textureRight;
 		Bullet bullet;
+		bool type;
+		int range;
+
 		int ammo, curr_ammo;
 		bool reloading;
 		AnimationTimer reload_delay;
@@ -23,14 +29,22 @@ class Weapon {
 		char getCheckSymbol(int check);
 
 	public:
-		Weapon(const char name[]="", Pixel left=Pixel(), Pixel right=Pixel(), Bullet bullet=Bullet(), int ammo=1, int reloadDelay=1000, int shootDelay=1000);
+		Weapon(const char name[]="", Pixel left=Pixel(), Pixel right=Pixel(), Bullet bullet=Bullet(), int ammo=1, int reloadDelay=1000, int shootDelay=1000, bool type=WEAPON_RANGED, int range=1);
 
 		Pixel getTexture(bool direction);
-		Bullet getBullet();
 		void getName(char name[]);
 		int getCurrAmmo();
 		bool isShooting();
 		bool isReloading();
+		bool getType();
+		int getRange();
+
+		/*
+			Restituisce l'oggetto Bullet associato all'arma.
+			Se si tratta di un'arma a distanza, viene impostato la distanza di percorrenza del proiettile uguale a range
+			Se si tratta di un'arma corpo a corpo, viene impostato la distanza di percorrenza del proiettile a 1
+		*/
+		Bullet getBullet();
 
 		/*
 			Restituisce true se curr_ammo è maggiore di 0, false altrimenti

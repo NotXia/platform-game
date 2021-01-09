@@ -100,10 +100,10 @@ class Screen {
 		void remove_entity(Map *map, Entity entity);
 
 		/*
-			Prende in input un oggetto Map e Bullet
-			Inserisce un proiettile nell'area di gioco
+			Prende in input un oggetto Map, Player e Bullet 
+			Inserisce un proiettile nell'area di gioco, se non ci sono altre entità
 		*/
-		void write_bullet(Map *map, Bullet bullet);
+		void write_bullet(Map *map, Player player, Bullet bullet);
 
 		/*
 			Prende in input una posizione e la mappa.

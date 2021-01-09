@@ -1,23 +1,19 @@
 #include "Bullet.hpp"
 #include "settings.h"
 
-Bullet::Bullet(Pixel texture, int damage, int range, Position position, bool direction) {
-	this->textureLeft = texture;
+Bullet::Bullet(Pixel texture, int damage, int range, Position position, bool direction) : Block(texture, position) {
 	this->textureRight = texture;
 	this->damage = damage;
 	this->range = range;
-	this->position = position;
 	this->direction = direction;
 	this->refresh = AnimationTimer(1500);
 	this->hostile = false;
 }
 
-Bullet::Bullet(Pixel textureLeft, Pixel textureRight, int damage, int range, Position position, bool direction) {
-	this->textureLeft = textureLeft;
+Bullet::Bullet(Pixel textureLeft, Pixel textureRight, int damage, int range, Position position, bool direction) : Block(textureLeft, position) {
 	this->textureRight = textureRight;
 	this->damage = damage;
 	this->range = range;
-	this->position = position;
 	this->direction = direction;
 	this->refresh = AnimationTimer(1500);
 	this->hostile = false;
@@ -25,7 +21,7 @@ Bullet::Bullet(Pixel textureLeft, Pixel textureRight, int damage, int range, Pos
 
 Pixel Bullet::getTexture() {
 	if (direction == BULLET_LEFT) {
-		return textureLeft;
+		return getBody();
 	}
 	else {
 		return textureRight;
@@ -36,6 +32,9 @@ int Bullet::getDamage() {
 }
 int Bullet::getRange() {
 	return range;
+}
+void Bullet::setRange(int range) {
+	this->range = range;
 }
 void Bullet::setHostile(bool hostile) {
 	this->hostile = hostile;
