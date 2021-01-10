@@ -6,11 +6,13 @@
 #include "WeaponContainer.hpp"
 #include <cmath>
 #include "TownGraphics.hpp"
+#include "EntityGenerator.h"
 
 const Pixel PLATFORM_TEXTURE = Pixel(char(219), PLATFORM_COLOR_FG, PLATFORM_COLOR_BG, true);
 const Pixel TERRAIN_TEXTURE = Pixel(' ', TERRAIN_COLOR_FG, TERRAIN_COLOR_BG, true);
 const Pixel SKY_TEXTURE = Pixel(' ', 0, BACKGROUND_DEFAULT, false);
 const Pixel WALL_TEXTURE = Pixel(char(177), FG_DARKRED, BG_BLACK, true);
+const Pixel LAVA_TEXTURE = Pixel(char(176), FG_DARKYELLOW, BG_DARKRED, true);
 
 Map::Map(Map *prev, int level_number) {
 	next = NULL;
@@ -22,12 +24,15 @@ Map::Map(Map *prev, int level_number) {
 	bonusList = BonusList();
 	bulletList = BulletList();
 	npcList = NPCList();
+	lavaList = LavaList();
 	boss = NULL;
 	this->level_number = level_number;
 
 	if (level_number == getDifficulty()*DIFFICULTY_INCREASE_RATE-1) {
 		// Boss
-		boss = new Boss(getDifficulty());
+		delete boss;
+		boss = new Boss();
+		*boss = createBoss(getDifficulty());
 		boss->initTerrain(terrain);
 		place_wall();
 		left_position.setX(left_position.getX() + 1);
@@ -40,6 +45,7 @@ Map::Map(Map *prev, int level_number) {
 	else {
 		// Livello
 		generatePlatforms();
+		generateLava();
 		generateEnemies(ceil(1 + log2(getDifficulty())));
 		generateBonuses(rand() % 4 + 1);
 	}
@@ -151,11 +157,11 @@ void Map::generateEnemies(int max_enemies) {
 
 			j = GAME_WIDTH - (EMPTYZONE_LENGTH * 2);
 			while (j > (EMPTYZONE_LENGTH*2) && max_enemies > 0) {
-				if (terrain[j][i].isSolid() && !terrain[j][i-1].isSolid() && !terrain[j][i-2].isSolid()) {
+				if (terrain[j][i].isSolid() && !lavaList.existsAt(Position(j+1, i+1)) && !terrain[j][i-1].isSolid() && !terrain[j][i-2].isSolid()) {
 					generate = rand() % chance;
 
 					if (generate == 0 && max_enemies > 0) {
-						Enemy new_enemy = createEnemy();
+						Enemy new_enemy = createEnemy(getDifficulty());
 						new_enemy.setPosition(Position(j+1, i));
 						enemyList.add(new_enemy);
 						max_enemies--;
@@ -195,11 +201,11 @@ void Map::generateBonuses(int max_bonus) {
 
 			j = GAME_WIDTH-(EMPTYZONE_LENGTH*2);
 			while  (j>(EMPTYZONE_LENGTH*2) && max_bonus > 0) {
-				if (terrain[j][i].isSolid() && !terrain[j][i-1].isSolid() && !terrain[j][i-2].isSolid()) {
+				if (terrain[j][i].isSolid() && !lavaList.existsAt(Position(j+1, i+1)) && !terrain[j][i-1].isSolid() && !terrain[j][i-2].isSolid()) {
 					generate = rand() % chance;
 
 					if (generate == 0 && max_bonus > 0) {
-						Bonus bonus = createBonus();
+						Bonus bonus = createBonus(getDifficulty());
 						bonus.setPosition(Position(j+1, i));
 
 						bonusList.insert(bonus);
@@ -240,101 +246,23 @@ void Map::generateTown() {
 }
 
 /*
-	Crea un'arma per il giocatore e lo restituisce
+	Inserisce nella matrice terrain la lava.
+	Imposta lavaList.
 */
-Weapon Map::createPlayerWeapon() {
-	WeaponContainer *weaponcontainer = new WeaponContainer();
-	weaponcontainer->initForPlayer();
-	Weapon weapon;
-
-	int tier1_chance = 100;
-	int tier2_chance = (getDifficulty()-1) * 25;
-	int tier3_chance = (getDifficulty()-1) * 11;
-
-	int generate = rand() % (tier1_chance+tier2_chance+tier3_chance);
-	if (generate < tier1_chance) {
-		weapon = weaponcontainer->getRandomTier1();
+void Map::generateLava() {
+	int h = GAME_HEIGHT - TERRAIN_HEIGHT - 3;
+	for (int i=2; i<GAME_WIDTH-2; i++) {
+		if (terrain[i][h].isSolid() && 
+			terrain[i-1][h].isSolid() && terrain[i-2][h].isSolid() && 
+			terrain[i+1][h].isSolid() && terrain[i+2][h].isSolid()) {
+			for (int j=0; j<TERRAIN_HEIGHT; j++) {
+				terrain[i][GAME_HEIGHT-j-1] = LAVA_TEXTURE;
+				lavaList.insert(Position(i+1, GAME_HEIGHT-j));
+			}
+		}
 	}
-	else if (generate < tier1_chance+tier2_chance) {
-		weapon = weaponcontainer->getRandomTier2();
-	}
-	else {
-		weapon = weaponcontainer->getRandomTier3();
-	}
-	delete weaponcontainer;
-
-	return weapon;
 }
 
-/*
-	Crea un'arma per nemici e lo restituisce
-*/
-Weapon Map::createEnemyWeapon() {
-	WeaponContainer *weaponcontainer = new WeaponContainer();
-	weaponcontainer->initForEnemy();
-	Weapon weapon;
-
-	int tier1_chance = 100;
-	int tier2_chance = (getDifficulty()-1) * 25;
-	int tier3_chance = (getDifficulty()-1) * 11;
-
-	int generate = rand() % (tier1_chance+tier2_chance+tier3_chance);
-	if (generate < tier1_chance) {
-		weapon = weaponcontainer->getRandomTier1();
-	}
-	else if (generate < tier1_chance+tier2_chance) {
-		weapon = weaponcontainer->getRandomTier2();
-	}
-	else {
-		weapon = weaponcontainer->getRandomTier3();
-	}
-	delete weaponcontainer;
-
-	return weapon;
-}
-
-/*
-	Crea un nemico e lo restituisce
-*/
-Enemy Map::createEnemy() {
-	int hp = rand() % (getDifficulty()*2 - getDifficulty() + 1) + getDifficulty();
-	int points = ENEMY_BASE_POINTS * getDifficulty();
-	int money = rand() % getDifficulty() + 1;
-
-	Enemy new_enemy = Enemy(
-		hp, points, money,
-		Pixel('<', ENEMY_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true),
-		Pixel('>', ENEMY_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true),
-		Pixel(char(219), ENEMY_BODY_COLOR_FG, BACKGROUND_DEFAULT, true), Position(), createEnemyWeapon()
-	);
-
-	return new_enemy;
-}
-
-/*
-	Crea un bonus e lo restituisce
-*/
-Bonus Map::createBonus() {
-	int type = rand() % 100;
-	Bonus bonus;
-
-	int points = BONUS_BASE_POINTS * getDifficulty();
-	if (type < 40) { // Bonus soldi
-		int money = rand() % getDifficulty() + 1;
-		bonus = Bonus(Pixel(MONEY_SYMBOL, FG_DARKYELLOW, BACKGROUND_DEFAULT, false), Position(), points, money, 0, NULL);
-	}
-	else if (type < 80) { // Bonus hp
-		int hp = floor( (1/(log10(getDifficulty())+1)) * 5 );
-		bonus = Bonus(Pixel(char(3), FG_DARKRED, BACKGROUND_DEFAULT, false), Position(), points, 0, hp, NULL);
-	}
-	else { // Bonus arma
-		Weapon *weapon = new Weapon;
-		*weapon = createPlayerWeapon();
-		bonus = Bonus(Pixel(char(170), FG_BLACK, BACKGROUND_DEFAULT, false), Position(), 0, 0, 0, weapon);
-	}
-
-	return bonus;
-}
 
 Position Map::getLeftPosition() {
 	return this->left_position;
@@ -495,4 +423,12 @@ void Map::place_wall() {
 */
 void Map::endBossFight() {
 	generateTerrain();
+}
+
+/*
+	Prende in input un oggetto Position.
+	Restituisce true se c'è della lava in quella posizione
+*/
+bool Map::isLava(Position position) {
+	return lavaList.existsAt(position);
 }

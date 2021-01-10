@@ -45,6 +45,7 @@ class Entity : public Block {
 		Position getHeadPosition();
 		Position getFrontPosition(); // Restituisce le coordinate davanti al corpo (stabilito in base alla direzione)
 		Position getBackPosition(); // Restituisce le coordinate dietro al corpo (stabilito in base alla direzione)
+		Position getBelowPosition();
 		void setPosition(Position position);
 		void setCanMove(bool can_move);
 		bool getCanMove();

@@ -10,15 +10,6 @@ Bullet::Bullet(Pixel texture, int damage, int range, Position position, bool dir
 	this->hostile = false;
 }
 
-Bullet::Bullet(Pixel textureLeft, Pixel textureRight, int damage, int range, Position position, bool direction) : Block(textureLeft, position) {
-	this->textureRight = textureRight;
-	this->damage = damage;
-	this->range = range;
-	this->direction = direction;
-	this->refresh = AnimationTimer(1500);
-	this->hostile = false;
-}
-
 Pixel Bullet::getTexture() {
 	if (direction == BULLET_LEFT) {
 		return getBody();

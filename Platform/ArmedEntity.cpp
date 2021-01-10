@@ -5,6 +5,7 @@ ArmedEntity::ArmedEntity(int health, Pixel head_left, Pixel head_right, Pixel bo
 	this->weapon = weapon;
 	is_attacking = false;
 	weapon_animation = AnimationTimer(WEAPON_DISPLAY_TIME);
+	mapEvents = AnimationTimer(10000);
 }
 
 Weapon ArmedEntity::getWeapon() {
@@ -13,6 +14,10 @@ Weapon ArmedEntity::getWeapon() {
 
 void ArmedEntity::setWeapon(Weapon weapon) {
 	this->weapon = weapon;
+}
+
+bool ArmedEntity::isAttacking() {
+	return is_attacking;
 }
 
 
@@ -129,4 +134,10 @@ void ArmedEntity::incCounters() {
 	weapon.incReloadDelay();
 	weapon.incShootDelay();
 	incWeaponDisplay();
+	mapEvents.incTimer();
+}
+
+
+bool ArmedEntity::canMapEvents() {
+	return mapEvents.limit();
 }

@@ -216,8 +216,9 @@ void Screen::write_bullet(Map *map, Player player, Bullet bullet) {
 	if (map->isBossFight()) {
 		boss_exists = map->getBoss()->existsAt(bullet.getPosition());
 	}
+	bool weapon_display = player.isAttacking() && player.getFrontPosition().equals(bullet.getPosition());
 
-	if (!enemylist.existsAt(bullet.getPosition()) && !player.existsAt(bullet.getPosition()) && !boss_exists && !bonuslist.pointAt(bullet.getPosition())) {
+	if (!enemylist.existsAt(bullet.getPosition()) && !player.existsAt(bullet.getPosition()) && !boss_exists && !bonuslist.pointAt(bullet.getPosition()) && !weapon_display) {
 		write_at(map, bullet.getTexture(), bullet.getPosition());
 	}
 }

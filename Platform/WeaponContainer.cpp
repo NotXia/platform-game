@@ -31,7 +31,7 @@ void WeaponContainer::initForPlayer() {
 		"Coltellino",
 		Pixel(' ', FG_BLACK, BACKGROUND_DEFAULT, false),
 		Pixel(' ', FG_BLACK, BACKGROUND_DEFAULT, false),
-		Bullet(Pixel(char(196), FG_BLACK, BACKGROUND_DEFAULT, false), 1, 2),
+		Bullet(Pixel(char(196), FG_BLACK, BACKGROUND_DEFAULT, false), 2, 0),
 		1,
 		0,
 		3500,
@@ -43,7 +43,7 @@ void WeaponContainer::initForPlayer() {
 		"Fionda",
 		Pixel('Y', FG_BLACK, BACKGROUND_DEFAULT, false),
 		Pixel('Y', FG_BLACK, BACKGROUND_DEFAULT, false),
-		Bullet(Pixel('.', 0, BACKGROUND_DEFAULT, false), 1, 5),
+		Bullet(Pixel('.', 0, BACKGROUND_DEFAULT, false), 1, 0),
 		1,
 		5000,
 		8000,
@@ -51,12 +51,11 @@ void WeaponContainer::initForPlayer() {
 		5
 	));
 
-	// TODO: la spada non lancia proiettili, ma una linea retta continua
 	insert_tier2(Weapon(
 		"Spada",
 		Pixel(' ', FG_BLACK, BACKGROUND_DEFAULT, false),
 		Pixel(' ', FG_BLACK, BACKGROUND_DEFAULT, false),
-		Bullet(Pixel(char(196), FG_BLACK, BACKGROUND_DEFAULT, false), 5, 3),
+		Bullet(Pixel(char(196), FG_BLACK, BACKGROUND_DEFAULT, false), 3, 0),
 		1,
 		0,
 		5500,
@@ -65,10 +64,22 @@ void WeaponContainer::initForPlayer() {
 	));
 
 	insert_tier2(Weapon(
+		"Ascia",
+		Pixel('q', FG_BLACK, BACKGROUND_DEFAULT, false),
+		Pixel('p', FG_BLACK, BACKGROUND_DEFAULT, false),
+		Bullet(Pixel(' ', FG_BLACK, BACKGROUND_DEFAULT, false), 4, 0),
+		1,
+		0,
+		8000,
+		WEAPON_MELEE,
+		2
+	));
+
+	insert_tier2(Weapon(
 		"Pistola",
 		Pixel(char(191), FG_BLACK, BACKGROUND_DEFAULT, false),
 		Pixel(char(218), FG_BLACK, BACKGROUND_DEFAULT, false),
-		Bullet(Pixel('o', FG_BLACK, BACKGROUND_DEFAULT, false), 2, 10),
+		Bullet(Pixel(char(250), FG_BLACK, BACKGROUND_DEFAULT, false), 2, 0),
 		10,
 		15000,
 		12000,
@@ -80,10 +91,10 @@ void WeaponContainer::initForPlayer() {
 		"Mitraglietta",
 		Pixel(char(191), FG_BLACK, BACKGROUND_DEFAULT, false),
 		Pixel(char(218), FG_BLACK, BACKGROUND_DEFAULT, false),
-		Bullet(Pixel('-', FG_BLACK, BACKGROUND_DEFAULT, false), 5, 15),
+		Bullet(Pixel('-', FG_BLACK, BACKGROUND_DEFAULT, false), 5, 0),
 		20,
 		12000,
-		5000,
+		3500,
 		WEAPON_RANGED,
 		15
 	));
@@ -92,10 +103,10 @@ void WeaponContainer::initForPlayer() {
 		"Fucile d'assalto",
 		Pixel(char(191), FG_BLACK, BACKGROUND_DEFAULT, false),
 		Pixel(char(218), FG_BLACK, BACKGROUND_DEFAULT, false),
-		Bullet(Pixel('-', FG_BLACK, BACKGROUND_DEFAULT, false), 8, 20),
+		Bullet(Pixel('-', FG_BLACK, BACKGROUND_DEFAULT, false), 8, 0),
 		35,
 		15000,
-		3500,
+		5000,
 		WEAPON_RANGED,
 		20
 	));
@@ -104,7 +115,7 @@ void WeaponContainer::initForPlayer() {
 		"Fucile di precisione",
 		Pixel(char(191), FG_BLACK, BACKGROUND_DEFAULT, false),
 		Pixel(char(218), FG_BLACK, BACKGROUND_DEFAULT, false),
-		Bullet(Pixel('-', FG_BLACK, BACKGROUND_DEFAULT, false), 10, GAME_WIDTH),
+		Bullet(Pixel('-', FG_BLACK, BACKGROUND_DEFAULT, false), 10, 0),
 		5,
 		30000,
 		70000,
@@ -112,20 +123,29 @@ void WeaponContainer::initForPlayer() {
 		GAME_WIDTH
 	));
 
-	// TODO: Armi intermedie
+	insert_tier3(Weapon(
+		"Fucile a pompa",
+		Pixel(char(191), FG_BLACK, BACKGROUND_DEFAULT, false),
+		Pixel(char(218), FG_BLACK, BACKGROUND_DEFAULT, false),
+		Bullet(Pixel('=', FG_BLACK, BACKGROUND_DEFAULT, false), 15, 0),
+		4,
+		25000,
+		20000,
+		WEAPON_RANGED,
+		5
+	));
 
 	insert_special(Weapon(
 		"Laser",
 		Pixel(char(191), FG_BLACK, BACKGROUND_DEFAULT, false),
 		Pixel(char(218), FG_BLACK, BACKGROUND_DEFAULT, false),
-		Bullet(Pixel(char(196), FG_DARKRED, BACKGROUND_DEFAULT, false), 200, GAME_WIDTH),
+		Bullet(Pixel(char(196), FG_DARKRED, BACKGROUND_DEFAULT, false), 200, 0),
 		1,
 		50000,
 		30000,
 		WEAPON_MELEE,
 		GAME_WIDTH
 	));
-
 }
 
 /*
@@ -136,7 +156,7 @@ void WeaponContainer::initForEnemy() {
 		"Coltellino",
 		Pixel('-', FG_BLACK, BACKGROUND_DEFAULT, false),
 		Pixel('-', FG_BLACK, BACKGROUND_DEFAULT, false),
-		Bullet(Pixel('-', BACKGROUND_DEFAULT, BACKGROUND_DEFAULT, false), 1, 2),
+		Bullet(Pixel('-', BACKGROUND_DEFAULT, BACKGROUND_DEFAULT, false), 1, 0),
 		1,
 		0,
 		3500,
@@ -148,7 +168,7 @@ void WeaponContainer::initForEnemy() {
 		"Fionda",
 		Pixel('Y', FG_BLACK, BACKGROUND_DEFAULT, false),
 		Pixel('Y', FG_BLACK, BACKGROUND_DEFAULT, false),
-		Bullet(Pixel('.', FG_BLACK, BACKGROUND_DEFAULT, false), 1, 5),
+		Bullet(Pixel('.', FG_BLACK, BACKGROUND_DEFAULT, false), 1, 0),
 		1,
 		5000,
 		8000,
@@ -160,7 +180,7 @@ void WeaponContainer::initForEnemy() {
 		"Spada",
 		Pixel(char(196), FG_BLACK, BACKGROUND_DEFAULT, false),
 		Pixel(char(196), FG_BLACK, BACKGROUND_DEFAULT, false),
-		Bullet(Pixel(char(196), BACKGROUND_DEFAULT, BACKGROUND_DEFAULT, false), 2, 3),
+		Bullet(Pixel(char(196), BACKGROUND_DEFAULT, BACKGROUND_DEFAULT, false), 2, 0),
 		1,
 		0,
 		5500,
@@ -169,10 +189,22 @@ void WeaponContainer::initForEnemy() {
 	));
 
 	insert_tier2(Weapon(
+		"Ascia",
+		Pixel('q', FG_BLACK, BACKGROUND_DEFAULT, false),
+		Pixel('p', FG_BLACK, BACKGROUND_DEFAULT, false),
+		Bullet(Pixel(' ', FG_BLACK, BACKGROUND_DEFAULT, false), 3, 0),
+		1,
+		0,
+		8000,
+		WEAPON_MELEE,
+		2
+	));
+
+	insert_tier2(Weapon(
 		"Pistola",
 		Pixel(char(191), FG_BLACK, BACKGROUND_DEFAULT, false),
 		Pixel(char(218), FG_BLACK, BACKGROUND_DEFAULT, false),
-		Bullet(Pixel('o', FG_BLACK, BACKGROUND_DEFAULT, false), 2, 10),
+		Bullet(Pixel('o', FG_BLACK, BACKGROUND_DEFAULT, false), 2, 0),
 		10,
 		15000,
 		12000,
@@ -184,7 +216,7 @@ void WeaponContainer::initForEnemy() {
 		"Mitraglietta",
 		Pixel(char(191), FG_BLACK, BACKGROUND_DEFAULT, false),
 		Pixel(char(218), FG_BLACK, BACKGROUND_DEFAULT, false),
-		Bullet(Pixel('-', BACKGROUND_DEFAULT, BACKGROUND_DEFAULT, false), 2, 15),
+		Bullet(Pixel('-', BACKGROUND_DEFAULT, BACKGROUND_DEFAULT, false), 2, 0),
 		20,
 		12000,
 		5000,
@@ -196,7 +228,7 @@ void WeaponContainer::initForEnemy() {
 		"Fucile d'assalto",
 		Pixel(char(191), FG_BLACK, BACKGROUND_DEFAULT, false),
 		Pixel(char(218), FG_BLACK, BACKGROUND_DEFAULT, false),
-		Bullet(Pixel('-', BACKGROUND_DEFAULT, BACKGROUND_DEFAULT, false), 3, 20),
+		Bullet(Pixel('-', BACKGROUND_DEFAULT, BACKGROUND_DEFAULT, false), 2, 0),
 		35,
 		15000,
 		3500,
@@ -208,12 +240,24 @@ void WeaponContainer::initForEnemy() {
 		"Fucile di precisione",
 		Pixel(char(191), FG_BLACK, BACKGROUND_DEFAULT, false),
 		Pixel(char(218), FG_BLACK, BACKGROUND_DEFAULT, false),
-		Bullet(Pixel('-', BACKGROUND_DEFAULT, BACKGROUND_DEFAULT, false), 5, GAME_WIDTH),
+		Bullet(Pixel('-', BACKGROUND_DEFAULT, BACKGROUND_DEFAULT, false), 3, 0),
 		5,
 		30000,
 		70000,
 		WEAPON_RANGED,
 		GAME_WIDTH
+	));
+
+	insert_tier3(Weapon(
+		"Fucile a pompa",
+		Pixel(char(191), FG_BLACK, BACKGROUND_DEFAULT, false),
+		Pixel(char(218), FG_BLACK, BACKGROUND_DEFAULT, false),
+		Bullet(Pixel('=', FG_BLACK, BACKGROUND_DEFAULT, false), 5, 0),
+		4,
+		25000,
+		20000,
+		WEAPON_RANGED,
+		5
 	));
 }
 

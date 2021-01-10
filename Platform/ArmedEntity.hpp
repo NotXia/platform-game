@@ -9,6 +9,7 @@ class ArmedEntity : public Entity {
 		Weapon weapon;
 		bool is_attacking;
 		AnimationTimer weapon_animation;
+		AnimationTimer mapEvents;
 
 		/*
 			Se is_attacking è true: incrementa weapon_loop_counter di 1.
@@ -21,6 +22,7 @@ class ArmedEntity : public Entity {
 
 		Weapon getWeapon();
 		void setWeapon(Weapon weapon);
+		bool isAttacking();
 
 
 		/****************************
@@ -78,5 +80,7 @@ class ArmedEntity : public Entity {
 			Incrementa i vari contatori
 		*/
 		void incCounters();
+
+		bool canMapEvents();
 };
 

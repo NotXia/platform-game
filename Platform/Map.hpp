@@ -8,6 +8,7 @@
 #include "BonusList.hpp"
 #include "NPCList.hpp"
 #include "Boss.hpp"
+#include "LavaList.hpp"
 
 class Map {
 	protected:
@@ -23,6 +24,7 @@ class Map {
 		BonusList bonusList;
 		NPCList npcList;
 		Boss *boss;
+		LavaList lavaList;
 
 
 		/*
@@ -53,19 +55,10 @@ class Map {
 		void generateTown();
 
 		/*
-			Crea un'arma per il giocatore e lo restituisce
+			Inserisce nella matrice terrain la lava.
+			Imposta lavaList.
 		*/
-		Weapon createPlayerWeapon();
-
-		/*
-			Crea un'arma per nemici e lo restituisce
-		*/
-		Weapon createEnemyWeapon();
-
-		/*
-			Crea un bonus e lo restituisce
-		*/
-		Bonus createBonus();
+		void generateLava();
 
 	public:
 		Map(Map *prev=NULL, int level_number=0);
@@ -83,10 +76,6 @@ class Map {
 		Boss* getBoss();
 		void setBoss(Boss *boss);
 
-		/*
-			Crea un nemico e lo restituisce
-		*/
-		Enemy createEnemy();
 
 		/*
 			Restituisce la difficoltà corrente, calcolata in base al numero di livelli superati
@@ -148,6 +137,12 @@ class Map {
 			Imposta la matrice terrain alla mappa basilare
 		*/
 		void endBossFight();
+
+		/*
+			Prende in input un oggetto Position.
+			Restituisce true se c'è della lava in quella posizione
+		*/
+		bool isLava(Position position);
 
 };
 

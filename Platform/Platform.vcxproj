@@ -151,6 +151,8 @@
     <ClCompile Include="EnemyList.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="BulletList.cpp" />
+    <ClCompile Include="EntityGenerator.cpp" />
+    <ClCompile Include="LavaList.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="NPC.cpp" />
@@ -176,6 +178,8 @@
     <ClInclude Include="EnemyList.hpp" />
     <ClInclude Include="Entity.hpp" />
     <ClInclude Include="BulletList.hpp" />
+    <ClInclude Include="EntityGenerator.h" />
+    <ClInclude Include="LavaList.hpp" />
     <ClInclude Include="Map.hpp" />
     <ClInclude Include="NPC.hpp" />
     <ClInclude Include="NPCList.hpp" />
@@ -190,9 +194,6 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="TODO.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

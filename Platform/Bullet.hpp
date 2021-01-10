@@ -19,7 +19,6 @@ class Bullet : public Block {
 
 	public:
 		Bullet(Pixel texture=Pixel(), int damage=1, int range=1, Position position=Position(), bool direction=BULLET_LEFT);
-		Bullet(Pixel textureLeft, Pixel textureRight, int damage, int range, Position position, bool direction);
 
 		Pixel getTexture();
 		int getDamage();

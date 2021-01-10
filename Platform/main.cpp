@@ -10,6 +10,7 @@
 #include "Bullet.hpp"
 #include "EnemyList.hpp"
 #include "WeaponContainer.hpp"
+#include "EntityGenerator.h"
 using namespace std;
 
 const char KEY_SPACEBAR = 32;
@@ -26,7 +27,7 @@ int main() {
         Pixel(char(17), PLAYER_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true),
         Pixel(char(16), PLAYER_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true),
         Pixel(char(219), PLAYER_BODY_COLOR_FG, BACKGROUND_DEFAULT, true), 
-        map->getLeftPosition(), weapon_container->getRandomTier3()
+        map->getLeftPosition(), weapon_container->getRandomTier1()
     );
     delete weapon_container;
 
@@ -144,6 +145,8 @@ int main() {
                             map->addBullet(bullet);
                             screen.write_bullet(map, player, bullet);
                         }
+
+                        screen.write_at(map, player.getWeapon().getTexture(player.getDirection()), player.getFrontPosition());
                     }
                     else {
                         if (player.canReload() && !player.getWeapon().hasAmmo()) {
@@ -316,6 +319,12 @@ int main() {
                 }
             }
             map->setBonusList(bonuslist);
+        }
+
+        /*** Gestione lava ***/
+        if (player.canMapEvents() && map->isLava(player.getBelowPosition())) {
+            player.take_damage(1);
+            screen.write_hp(player.getHealth());
         }
 
         player.incCounters();
@@ -566,6 +575,14 @@ int main() {
             /*** Gestione velocità d'attacco ***/
             enemy.hasShootDelayFinished();
 
+            /*** Gestione lava ***/
+            if (enemy.canMapEvents() && map->isLava(enemy.getBelowPosition())) {
+                enemy.take_damage(1);
+                if (enemy.isDead()) {
+                    screen.remove_entity(map, enemy);
+                }
+            }
+
             enemy.incCounters();
 
             enemylist.updateCurrent(enemy);
@@ -671,14 +688,14 @@ int main() {
                     if (boss->getType() == BOSS_TYPE1) {
                         EnemyList enemylist = map->getEnemyList();
 
-                        for (int i=0; i<boss->getNumEnemies(); i++) {
+                        for (int i=0; i<boss->getAbilityNum(); i++) {
                             int x = boss->getBodyPosition().getX() + i*3;
                             if (x > GAME_WIDTH) {
                                 x = boss->getBodyPosition().getX() - i*3;
                             }
                             int y = boss->getBodyPosition().getY() + 3;
 
-                            Enemy new_enemy = map->createEnemy();
+                            Enemy new_enemy = createEnemy(map->getDifficulty());
                             new_enemy.setMoney(0);
                             new_enemy.setPosition(Position(x, y));
                             enemylist.add(new_enemy);

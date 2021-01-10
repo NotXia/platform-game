@@ -10,18 +10,18 @@ class Boss : public Enemy {
 
 		int phase, max_phase;
 
-		int num_enemies, max_enemies;
+		int ability_num, ability_max;
 		AnimationTimer down_time;
 
 
 		void terrain_type1(Pixel terrain[GAME_WIDTH][GAME_HEIGHT]);
 	public:
-		Boss(int difficulty=1);
+		Boss(int health=0, int points=0, int money=0, Pixel head_left=Pixel(), Pixel head_right=Pixel(), Pixel body=Pixel(), Position position=Position(), Weapon weapon=Weapon(), int type=0, int max_phase=0, int ability_num=0, int ability_max=0, int down_time=0, int jump_force=0);
 
 		bool getType();
 		int getPhase();
-		int getNumEnemies();
-		void setNumEnemies(int num_enemies); // Imposta num_enemies, rispettando il limite imposta da max_enemies
+		int getAbilityNum();
+		void setAbilityNum(int num_enemies); // Imposta num_enemies, rispettando il limite imposta da max_enemies
 		Position getBody2Position();
 		Position getHeadPosition();
 

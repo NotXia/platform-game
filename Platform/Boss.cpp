@@ -2,36 +2,18 @@
 #include <cstdlib>
 #include "Map.hpp"
 
-Boss::Boss(int difficulty) {
-	// Enemy(int health=0, int points=0, int money=0, Pixel head_left=Pixel(), Pixel head_right=Pixel(), Pixel body=Pixel(), Position position=Position(), Weapon weapon=Weapon());
-	type = BOSS_TYPE1;
-	phase = 0;
+Boss::Boss(int health, int points, int money, Pixel head_left, Pixel head_right, Pixel body, Position position, Weapon weapon, int type, int max_phase, int ability_num, int ability_max, int down_time, int jump_force) :
+	Enemy(health, points, money, head_left, head_right, body, position, weapon) {
+	this->type = type;
+	this->phase = 0;
+	this->max_phase = max_phase;
+	this->ability_num = ability_num;
+	this->ability_max = ability_max;
+	this->down_time = AnimationTimer(down_time);
 
-	if (type == BOSS_TYPE1) {
-		/*
-			Fase 0: Evoca i nemici
-			Fase 1: Va avanti e indietro
-			Fase 2: Nemici sconfitti -> Inizio timer e cade
-			Fase 3: Caduto
-			Fase 4: Timer terminato -> Salta
-		*/
-		health = 100 + int(100*0.25)*(difficulty-1);
-		max_health = health;
-		points = BOSS_BASE_POINTS * difficulty;
-		money = BOSS_BASE_MONEY * difficulty;
-		head_left = Pixel('<', FG_DARKRED , BACKGROUND_DEFAULT, true);
-		head_right = Pixel('>', FG_DARKRED, BACKGROUND_DEFAULT, true);
-		body = Pixel(char(219), FG_DARKRED, BACKGROUND_DEFAULT, true);
-		position = Position(GAME_WIDTH-int(GAME_WIDTH*0.25), 1);
-		weapon = Weapon();
-		default_visualRange = GAME_WIDTH;
-		visualRange = GAME_WIDTH;
-		num_enemies = 1;
-		max_enemies = 6;
-		max_phase = 4;
-		down_time = AnimationTimer(8);
-		max_jump_height = GAME_HEIGHT;
-	}
+	default_visualRange = GAME_WIDTH;
+	visualRange = GAME_WIDTH;
+	max_jump_height = jump_force;
 }
 
 Position Boss::getBody2Position() {
@@ -50,14 +32,14 @@ bool Boss::getType() {
 	return type;
 }
 
-int Boss::getNumEnemies() {
-	return num_enemies;
+int Boss::getAbilityNum() {
+	return ability_num;
 }
-void Boss::setNumEnemies(int num_enemies) {
-	if (num_enemies > max_enemies) {
-		num_enemies = max_enemies;
+void Boss::setAbilityNum(int num_enemies) {
+	if (num_enemies > ability_max) {
+		num_enemies = ability_max;
 	}
-	this->num_enemies = num_enemies;
+	this->ability_num = num_enemies;
 }
 
 int Boss::getPhase() {
@@ -131,7 +113,7 @@ int Boss::getAction(Map *map, Player player) {
 			if (isOnTerrain()) {
 				action_code = ACTION_ATTACK;
 				nextPhase();
-				setNumEnemies(num_enemies+1);
+				setAbilityNum(ability_num+1);
 			}
 		}
 		else if (phase == 1) {

@@ -38,6 +38,9 @@
     <Filter Include="List\NPC">
       <UniqueIdentifier>{5370afad-98e7-4c0f-9a4c-4884e39d3fbd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="List\Lava">
+      <UniqueIdentifier>{7b6f75ff-306a-4122-86e2-bfe70bbc06e4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Entity.cpp">
@@ -66,9 +69,6 @@
     </ClCompile>
     <ClCompile Include="Block.cpp">
       <Filter>Entity</Filter>
-    </ClCompile>
-    <ClCompile Include="WeaponContainer.cpp">
-      <Filter>Weapon</Filter>
     </ClCompile>
     <ClCompile Include="TownGraphics.cpp">
       <Filter>Screen</Filter>
@@ -103,6 +103,15 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Bonus.cpp">
       <Filter>Entity\Friendly</Filter>
+    </ClCompile>
+    <ClCompile Include="WeaponContainer.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="EntityGenerator.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="LavaList.cpp">
+      <Filter>List\Lava</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -139,9 +148,6 @@
     <ClInclude Include="Block.hpp">
       <Filter>Entity</Filter>
     </ClInclude>
-    <ClInclude Include="WeaponContainer.hpp">
-      <Filter>Weapon</Filter>
-    </ClInclude>
     <ClInclude Include="TownGraphics.hpp">
       <Filter>Screen</Filter>
     </ClInclude>
@@ -175,13 +181,19 @@
     <ClInclude Include="Bonus.hpp">
       <Filter>Entity\Friendly</Filter>
     </ClInclude>
+    <ClInclude Include="WeaponContainer.hpp">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityGenerator.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="LavaList.hpp">
+      <Filter>List\Lava</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="TODO.cpp">
       <Filter>Resource Files</Filter>
     </Text>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
 </Project>

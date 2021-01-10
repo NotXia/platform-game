@@ -29,7 +29,7 @@ const int WEAPON_DISPLAY_TIME = 4000;
 
 const int ENEMY_RANGE = 18;
 
-const int DIFFICULTY_INCREASE_RATE = 2;
+const int DIFFICULTY_INCREASE_RATE = 4;
 
 const int ENEMY_BASE_POINTS = 10; 
 const int BONUS_BASE_POINTS = 10;

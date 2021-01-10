@@ -177,6 +177,14 @@ int Enemy::getAction(Map *map, Player player) {
 			}
 		}
 	}
+
+	if (action_code == ACTION_GO_RIGHT && map->isLava(Position(getBelowPosition().getX()+1, getBelowPosition().getY()))) {
+		action_code = ACTION_DO_NOTHING;
+	}
+	else if (action_code == ACTION_GO_LEFT && map->isLava(Position(getBelowPosition().getX()-1, getBelowPosition().getY()))) {
+		action_code = ACTION_DO_NOTHING;
+	}
+
 	return action_code;
 }
 

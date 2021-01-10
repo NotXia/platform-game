@@ -21,9 +21,11 @@
 	X Rework armi corpo a corpo
 	X LASER DELLA MORTE CYERTA
 	X Gestire il numero di nemici
-	- Altri boss
 	- Rework armi
 	- Lava
+	- Gestire IA nemici
+	- Gestire colore terreno
+	- Altri boss
 	- Rework range visione nemici
 	- Piattaforme che si muovono (?)
 	- Animazioni NPC 
