@@ -8,11 +8,11 @@
 #include "TownGraphics.hpp"
 #include "EntityGenerator.h"
 
-const Pixel PLATFORM_TEXTURE = Pixel(char(219), PLATFORM_COLOR_FG, PLATFORM_COLOR_BG, true);
-const Pixel TERRAIN_TEXTURE = Pixel(' ', TERRAIN_COLOR_FG, TERRAIN_COLOR_BG, true);
-const Pixel SKY_TEXTURE = Pixel(' ', 0, BACKGROUND_DEFAULT, false);
-const Pixel WALL_TEXTURE = Pixel(char(177), FG_DARKRED, BG_BLACK, true);
-const Pixel LAVA_TEXTURE = Pixel(char(176), FG_DARKYELLOW, BG_DARKRED, true);
+const Pixel PLATFORM_TEXTURE = Pixel(PLATFORM_SYMBOL, PLATFORM_COLOR_FG, PLATFORM_COLOR_BG, true);
+const Pixel TERRAIN_TEXTURE = Pixel(TERRAIN_SYMBOL, TERRAIN_COLOR_FG, TERRAIN_COLOR_BG, true);
+const Pixel SKY_TEXTURE = Pixel(SKY_SYMBOL, SKY_COLOR_FG, SKY_COLOR_BG, false);
+const Pixel WALL_TEXTURE = Pixel(WALL_SYMBOL, WALL_COLOR_FG, WALL_COLOR_BG, true);
+const Pixel LAVA_TEXTURE = Pixel(LAVA_SYMBOL, LAVA_COLOR_FG, LAVA_COLOR_BG, true);
 
 Map::Map(Map *prev, int level_number) {
 	next = NULL;

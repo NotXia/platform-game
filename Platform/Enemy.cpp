@@ -3,13 +3,21 @@
 #include "Map.hpp"
 #include "colors.h"
 
+const Pixel ANGRY_HEAD_LEFT_TEXTURE = Pixel(ENEMY_HEAD_LEFT, ANGRY_ENEMY_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true);
+const Pixel ANGRY_HEAD_RIGHT_TEXTURE = Pixel(ENEMY_HEAD_RIGHT, ANGRY_ENEMY_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true);
+const Pixel ANGRY_BODY_TEXTURE = Pixel(ENEMY_BODY, ANGRY_ENEMY_BODY_COLOR_FG, BACKGROUND_DEFAULT, true);
+
+const Pixel ENEMY_HEAD_LEFT_TEXTURE = Pixel(ENEMY_HEAD_LEFT, ENEMY_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true);
+const Pixel ENEMY_HEAD_RIGHT_TEXTURE = Pixel(ENEMY_HEAD_RIGHT, ENEMY_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true);
+const Pixel ENEMY_BODY_TEXTURE = Pixel(ENEMY_BODY, ENEMY_BODY_COLOR_FG, BACKGROUND_DEFAULT, true);
+
 Enemy::Enemy(int health, int points, int money, Pixel head_left, Pixel head_right, Pixel body, Position position, Weapon weapon) : ArmedEntity(health, head_left, head_right, body, position, weapon) {
 	this->points = points;
 	this->money = money;
 	lastPlayerPosition = NULL;
 	this->default_visualRange = ENEMY_RANGE;
 	this->visualRange = ENEMY_RANGE;
-	this->refresh = AnimationTimer(8000);
+	this->refresh = AnimationTimer(ENEMY_REFRESH_RATE);
 }
 
 int Enemy::getPoints() {
@@ -59,16 +67,16 @@ void Enemy::search4Player(Player player) {
 
 		visualRange = 2 * default_visualRange;
 
-		head_left = Pixel(head_left.getValue(), ANGRY_ENEMY_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true);
-		head_right = Pixel(head_right.getValue(), ANGRY_ENEMY_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true);
-		body = Pixel(body.getValue(), ANGRY_ENEMY_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true);
+		head_left = ANGRY_HEAD_LEFT_TEXTURE;
+		head_right = ANGRY_HEAD_RIGHT_TEXTURE;
+		body = ANGRY_BODY_TEXTURE;
 	}
 	else {
 		visualRange = default_visualRange;
 
-		head_left = Pixel(head_left.getValue(), ENEMY_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true);
-		head_right = Pixel(head_right.getValue(), ENEMY_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true);
-		body = Pixel(body.getValue(), ENEMY_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true);
+		head_left = ENEMY_HEAD_LEFT_TEXTURE;
+		head_right = ENEMY_HEAD_RIGHT_TEXTURE;
+		body = ENEMY_BODY_TEXTURE;
 	}
 }
 

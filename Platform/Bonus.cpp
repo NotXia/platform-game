@@ -7,7 +7,9 @@ Bonus::Bonus(Pixel body, Position position, int points, int money, int hp, Weapo
 	this->weapon = weapon;
 
 	if (money != 0 && hp != 0 && weapon != NULL) {
+		money = 1;
 		hp = 0;
+		weapon = NULL;
 	}
 }
 

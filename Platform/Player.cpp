@@ -4,6 +4,7 @@
 Player::Player(int health, Pixel head_left, Pixel head_right, Pixel body, Position position, Weapon weapon) : ArmedEntity(health, head_left, head_right, body, position, weapon) {
 	this->points = 0;
 	this->money = 0;
+	direction = DIRECTION_RIGHT;
 }
 
 int Player::getPoints() {

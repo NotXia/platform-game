@@ -5,7 +5,8 @@ ArmedEntity::ArmedEntity(int health, Pixel head_left, Pixel head_right, Pixel bo
 	this->weapon = weapon;
 	is_attacking = false;
 	weapon_animation = AnimationTimer(WEAPON_DISPLAY_TIME);
-	mapEvents = AnimationTimer(10000);
+	mapEventsTimer = AnimationTimer(MAP_EVENT_SPEED);
+	mapEvent = false;
 }
 
 Weapon ArmedEntity::getWeapon() {
@@ -126,6 +127,40 @@ bool ArmedEntity::hasReloadFinished() {
 **************************/
 
 
+/**************************************
+   INIZIO GESTIONE EVENTI AMBIENTALI
+**************************************/
+
+bool ArmedEntity::isMapEvent() {
+	return mapEvent;
+}
+
+/*
+	Restituisce true se è possibile "valutare" gli eventi ambientali. False altrimenti
+*/
+bool ArmedEntity::canMapEvents() {
+	return mapEventsTimer.limit();
+}
+
+/*
+	Imposta mapEvent a true
+*/
+void ArmedEntity::startMapEvent() {
+	mapEvent = true;
+	mapEventsTimer.reset();
+}
+
+/*
+	Imposta mapEvent a false
+*/
+void ArmedEntity::stopMapEvent() {
+	mapEvent = false;
+}
+
+/* FINE GESTIONE EVENTI AMBIENTALI
+***********************************/
+
+
 /*
 	Incrementa i vari contatori
 */
@@ -134,10 +169,5 @@ void ArmedEntity::incCounters() {
 	weapon.incReloadDelay();
 	weapon.incShootDelay();
 	incWeaponDisplay();
-	mapEvents.incTimer();
-}
-
-
-bool ArmedEntity::canMapEvents() {
-	return mapEvents.limit();
+	mapEventsTimer.incTimer();
 }

@@ -65,9 +65,9 @@ Enemy createEnemy(int difficulty) {
 
 	Enemy new_enemy = Enemy(
 		hp, points, money,
-		Pixel('<', ENEMY_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true),
-		Pixel('>', ENEMY_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true),
-		Pixel(char(219), ENEMY_BODY_COLOR_FG, BACKGROUND_DEFAULT, true), Position(), createEnemyWeapon(difficulty)
+		Pixel(ENEMY_HEAD_LEFT, ENEMY_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true),
+		Pixel(ENEMY_HEAD_RIGHT, ENEMY_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true),
+		Pixel(ENEMY_BODY, ENEMY_BODY_COLOR_FG, BACKGROUND_DEFAULT, true), Position(), createEnemyWeapon(difficulty)
 	);
 
 	return new_enemy;
@@ -83,11 +83,11 @@ Bonus createBonus(int difficulty) {
 	int points = BONUS_BASE_POINTS * difficulty;
 	if (type < 40) { // Bonus soldi
 		int money = rand() % difficulty + 1;
-		bonus = Bonus(Pixel(MONEY_SYMBOL, FG_DARKYELLOW, BACKGROUND_DEFAULT, false), Position(), points, money, 0, NULL);
+		bonus = Bonus(Pixel(MONEY_SYMBOL, MONEY_COLOR, BACKGROUND_DEFAULT, false), Position(), points, money, 0, NULL);
 	}
 	else if (type < 80) { // Bonus hp
 		int hp = floor((1/(log10(difficulty)+1)) * 5);
-		bonus = Bonus(Pixel(char(3), FG_DARKRED, BACKGROUND_DEFAULT, false), Position(), points, 0, hp, NULL);
+		bonus = Bonus(Pixel(HP_SYMBOL, FG_DARKRED, BACKGROUND_DEFAULT, false), Position(), points, 0, hp, NULL);
 	}
 	else { // Bonus arma
 		Weapon *weapon = new Weapon;

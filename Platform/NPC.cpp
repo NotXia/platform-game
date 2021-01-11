@@ -3,14 +3,15 @@
 #include <cstdlib>
 #include "WeaponContainer.hpp"
 
+const char NAMES[][STRING_LEN] = { "Alfredo", "Ilenia", "Federigo", "Antonia", "Damiano", "Serena" };
+const int NAMES_SIZE = 6;
+
 NPC::NPC(int health, Pixel head_left, Pixel head_right, Pixel body, Position position, bool type, int difficulty) : Entity(health, head_left, head_right, body, position) {
-	char names[][STRING_LEN] = { "Alfredo", "Ilenia", "Federigo", "Antonia", "Damiano", "Serena" };
-	int names_size = 6;
 	this->price_hp = 0;
 	this->curr_selected = 0;
 	this->weapon_number = 0;
 	
-	strncpy(this->name, names[rand()%names_size], STRING_LEN);
+	strncpy(this->name, NAMES[rand()%NAMES_SIZE], STRING_LEN);
 
 	this->type = type;
 	if (type == NPC_HOSPITAL) {

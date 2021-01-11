@@ -1,5 +1,5 @@
 #pragma once
-#include "colors.h"
+#include "settings.h"
 
 class Pixel {
 	protected:

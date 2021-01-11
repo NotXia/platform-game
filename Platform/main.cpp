@@ -24,10 +24,10 @@ int main() {
     WeaponContainer *weapon_container = new WeaponContainer();
     weapon_container->initForPlayer();
     Player player = Player(MAX_LIFE, 
-        Pixel(char(17), PLAYER_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true),
-        Pixel(char(16), PLAYER_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true),
-        Pixel(char(219), PLAYER_BODY_COLOR_FG, BACKGROUND_DEFAULT, true), 
-        map->getLeftPosition(), weapon_container->getRandomTier1()
+        Pixel(PLAYER_HEAD_LEFT, PLAYER_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true),
+        Pixel(PLAYER_HEAD_RIGHT, PLAYER_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true),
+        Pixel(PLAYER_BODY, PLAYER_BODY_COLOR_FG, BACKGROUND_DEFAULT, true),
+        map->getLeftPosition(), weapon_container->getRandomTier3()
     );
     delete weapon_container;
 
@@ -43,7 +43,6 @@ int main() {
     screen.write_weaponInfo(player.getWeapon());
     screen.write_money(player.getMoney());
     screen.write_hp(player.getHealth());
-
 
     while (!player.isDead()) {
     //while (true) {
@@ -322,9 +321,23 @@ int main() {
         }
 
         /*** Gestione lava ***/
-        if (player.canMapEvents() && map->isLava(player.getBelowPosition())) {
-            player.take_damage(1);
-            screen.write_hp(player.getHealth());
+        if (map->isLava(player.getBelowPosition())) {
+            if (player.isMapEvent()) {
+                if (player.canMapEvents()) {
+                    player.take_damage(1);
+                    screen.write_hp(player.getHealth());
+                }
+            }
+            else {
+                player.startMapEvent();
+                player.take_damage(1);
+                screen.write_hp(player.getHealth());
+            }
+        }
+        else {
+            if (player.isMapEvent()) {
+                player.stopMapEvent();
+            }
         }
 
         player.incCounters();
@@ -363,7 +376,7 @@ int main() {
                             if (hit_enemy.getMoney() > 0) {
                                 screen.resetTerrain(
                                     map,
-                                    map->addBonus(Bonus(Pixel(MONEY_SYMBOL, FG_DARKYELLOW, BACKGROUND_DEFAULT, false), hit_enemy.getBodyPosition(), 0, hit_enemy.getMoney(), 0))
+                                    map->addBonus(Bonus(Pixel(MONEY_SYMBOL, MONEY_COLOR, BACKGROUND_DEFAULT, false), hit_enemy.getBodyPosition(), 0, hit_enemy.getMoney(), 0))
                                 );
                             }
                         }
@@ -383,7 +396,7 @@ int main() {
 
                                 screen.resetTerrain(
                                     map,
-                                    map->addBonus(Bonus(Pixel(MONEY_SYMBOL, FG_DARKYELLOW, BACKGROUND_DEFAULT, false), boss->getBodyPosition(), 0, boss->getMoney(), 0))
+                                    map->addBonus(Bonus(Pixel(MONEY_SYMBOL, MONEY_COLOR, BACKGROUND_DEFAULT, false), boss->getBodyPosition(), 0, boss->getMoney(), 0))
                                 );
                                 delete boss;
                                 map->setBoss(NULL);
@@ -553,7 +566,7 @@ int main() {
                         if (enemy.getMoney() > 0) {
                             screen.resetTerrain(
                                 map, 
-                                map->addBonus(Bonus(Pixel(MONEY_SYMBOL, FG_DARKYELLOW, BACKGROUND_DEFAULT, false), enemy.getBodyPosition(), 0, enemy.getMoney(), 0))
+                                map->addBonus(Bonus(Pixel(MONEY_SYMBOL, MONEY_COLOR, BACKGROUND_DEFAULT, false), enemy.getBodyPosition(), 0, enemy.getMoney(), 0))
                             );
                         }
                     }
@@ -576,10 +589,24 @@ int main() {
             enemy.hasShootDelayFinished();
 
             /*** Gestione lava ***/
-            if (enemy.canMapEvents() && map->isLava(enemy.getBelowPosition())) {
-                enemy.take_damage(1);
+            if (map->isLava(enemy.getBelowPosition())) {
+                if (enemy.isMapEvent()) {
+                    if (enemy.canMapEvents()) {
+                        enemy.take_damage(1);
+                    }
+                }
+                else {
+                    enemy.startMapEvent();
+                    enemy.take_damage(1);
+                }
+
                 if (enemy.isDead()) {
                     screen.remove_entity(map, enemy);
+                }
+            }
+            else {
+                if (enemy.isMapEvent()) {
+                    enemy.stopMapEvent();
                 }
             }
 
@@ -759,7 +786,7 @@ int main() {
 
                         screen.resetTerrain(
                             map,
-                            map->addBonus(Bonus(Pixel(MONEY_SYMBOL, FG_DARKYELLOW, BACKGROUND_DEFAULT, false), boss->getBodyPosition(), 0, boss->getMoney(), 0))
+                            map->addBonus(Bonus(Pixel(MONEY_SYMBOL, MONEY_COLOR, BACKGROUND_DEFAULT, false), boss->getBodyPosition(), 0, boss->getMoney(), 0))
                         );
 
                         map->endBossFight();

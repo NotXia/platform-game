@@ -6,7 +6,7 @@ Bullet::Bullet(Pixel texture, int damage, int range, Position position, bool dir
 	this->damage = damage;
 	this->range = range;
 	this->direction = direction;
-	this->refresh = AnimationTimer(1500);
+	this->refresh = AnimationTimer(BULLET_SPEED);
 	this->hostile = false;
 }
 

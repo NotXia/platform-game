@@ -1,5 +1,5 @@
 #pragma once
-#include "Position.hpp";
+#include "Position.hpp"
 
 class LavaList {
 	protected:

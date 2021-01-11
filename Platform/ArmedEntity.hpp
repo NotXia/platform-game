@@ -9,7 +9,9 @@ class ArmedEntity : public Entity {
 		Weapon weapon;
 		bool is_attacking;
 		AnimationTimer weapon_animation;
-		AnimationTimer mapEvents;
+
+		AnimationTimer mapEventsTimer;
+		bool mapEvent;
 
 		/*
 			Se is_attacking è true: incrementa weapon_loop_counter di 1.
@@ -76,11 +78,35 @@ class ArmedEntity : public Entity {
 		**************************/
 
 
+		/**************************************
+		   INIZIO GESTIONE EVENTI AMBIENTALI
+		**************************************/
+
+		bool isMapEvent();
+
+		/*
+			Restituisce true se è possibile "valutare" gli eventi ambientali. False altrimenti
+		*/
+		bool canMapEvents();
+
+		/*
+			Imposta mapEvent a true
+		*/
+		void startMapEvent();
+		
+		/*
+			Imposta mapEvent a false
+		*/
+		void stopMapEvent();
+
+		/* FINE GESTIONE EVENTI AMBIENTALI
+		***********************************/
+
+
 		/*
 			Incrementa i vari contatori
 		*/
 		void incCounters();
 
-		bool canMapEvents();
 };
 

@@ -380,13 +380,13 @@ void Screen::write_textbox_npc_hp(NPC npc, int missing_hp) {
 	cout <<"villaggio, come posso aiutare?";
 	moveCursor(start_x, start_y+3);
 	cout <<"[E] Cura 1 (" <<npc.getPriceHP() <<" ";
-	setColor(FG_DARKYELLOW);
+	setColor(MONEY_COLOR | BG_BLACK);
 	cout <<MONEY_SYMBOL;
 	resetColor();
 	cout <<")";
 	moveCursor(start_x, start_y+4);
 	cout <<"[Q] Cura tutto (" <<npc.getPriceHP()*missing_hp <<" ";
-	setColor(FG_DARKYELLOW);
+	setColor(MONEY_COLOR | BG_BLACK);
 	cout <<MONEY_SYMBOL;
 	resetColor();
 	cout <<")";
@@ -424,7 +424,7 @@ void Screen::write_textbox_npc_weapon(NPC npc, Weapon player_weapon) {
 			 <<"(" <<weapon.fasterShootRate(player_weapon) <<") rateo attacco";
 		moveCursor(start_x, start_y+6);
 		cout <<"[E] Compra (" <<npc.getCurrWeaponPrice() <<" ";
-		setColor(FG_DARKYELLOW);
+		setColor(MONEY_COLOR | BG_BLACK);
 		cout <<MONEY_SYMBOL;
 		resetColor();
 		cout <<")  [o] Indietro  [p] Avanti";
@@ -477,7 +477,7 @@ void Screen::write_money(int money) {
 
 	moveCursor(hp_x, hp_y + 1);
 	cout <<"Soldi " <<money <<" ";
-	setColor(FG_DARKYELLOW | BG_BLACK);
+	setColor(MONEY_COLOR | BG_BLACK);
 	cout <<MONEY_SYMBOL;
 	resetColor();
 }
@@ -508,7 +508,7 @@ void Screen::write_hp(int hp) {
 		}
 
 		moveCursor(7, hp_y);
-		setColor(HP_COLOR);
+		setColor(HP_COLOR | BG_BLACK);
 		for (int i=0; i<hp; i++) {
 			cout <<HP_SYMBOL <<" ";
 		}
