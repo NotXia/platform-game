@@ -22,8 +22,8 @@
 	X LASER DELLA MORTE CYERTA
 	X Gestire il numero di nemici
 	- Rework armi
-	- Lava
-	- Gestire IA nemici
+	X Lava
+	X Gestire IA nemici
 	- Gestire colore terreno
 	- Altri boss
 	- Rework range visione nemici

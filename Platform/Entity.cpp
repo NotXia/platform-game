@@ -46,8 +46,22 @@ void Entity::setPosition(Position position) {
 	this->position = position;
 }
 
+// Restituisce le coordinate davanti alla testa (stabilito in base alla direzione)
+Position Entity::getHeadFrontPosition() {
+	Position front = getHeadPosition();
+
+	if (direction == DIRECTION_LEFT) {
+		front.setX(front.getX()-1);
+	}
+	else {
+		front.setX(front.getX()+1);
+	}
+
+	return front;
+}
+
 // Restituisce le coordinate davanti al corpo (stabilito in base alla direzione)
-Position Entity::getFrontPosition() {
+Position Entity::getBodyFrontPosition() {
 	Position front = position;
 
 	if (direction == DIRECTION_LEFT) {

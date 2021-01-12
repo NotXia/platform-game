@@ -27,7 +27,7 @@ int main() {
         Pixel(PLAYER_HEAD_LEFT, PLAYER_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true),
         Pixel(PLAYER_HEAD_RIGHT, PLAYER_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true),
         Pixel(PLAYER_BODY, PLAYER_BODY_COLOR_FG, BACKGROUND_DEFAULT, true),
-        map->getLeftPosition(), weapon_container->getRandomTier3()
+        map->getLeftPosition(), weapon_container->getRandomTier1()
     );
     delete weapon_container;
 
@@ -59,7 +59,7 @@ int main() {
             char ch = _getch();
             if (ch == 'a' || ch == 'A') {
                 hasMoved = true;
-                if (player.getCanMove() && (!map->isSolidAt(player.getFrontPosition()) || (player.getDirection() == DIRECTION_RIGHT))) {
+                if (player.getCanMove() && (!map->isSolidAt(player.getBodyFrontPosition()) && !map->isSolidAt(player.getHeadFrontPosition()) || (player.getDirection() == DIRECTION_RIGHT))) {
                     screen.remove_entity(map, player);
                     player.goLeft();
                     screen.write_entity(map, player);
@@ -77,7 +77,7 @@ int main() {
             }
             else if (ch == 'd' || ch == 'D') {
                 hasMoved = true;
-                if (player.getCanMove() && (!map->isSolidAt(player.getFrontPosition()) || (player.getDirection() == DIRECTION_LEFT))) {
+                if (player.getCanMove() && (!map->isSolidAt(player.getBodyFrontPosition()) && !map->isSolidAt(player.getHeadFrontPosition()) || (player.getDirection() == DIRECTION_LEFT))) {
                     screen.remove_entity(map, player);
                     player.goRight();
                     screen.write_entity(map, player);
@@ -145,7 +145,7 @@ int main() {
                             screen.write_bullet(map, player, bullet);
                         }
 
-                        screen.write_at(map, player.getWeapon().getTexture(player.getDirection()), player.getFrontPosition());
+                        screen.write_at(map, player.getWeapon().getTexture(player.getDirection()), player.getBodyFrontPosition());
                     }
                     else {
                         if (player.canReload() && !player.getWeapon().hasAmmo()) {
@@ -277,7 +277,7 @@ int main() {
 
         /*** Gestione animazione arma ***/
         if (player.endWeaponDisplay()) {
-            screen.resetTerrain(map, player.getFrontPosition());
+            screen.resetTerrain(map, player.getBodyFrontPosition());
             player.setCanMove(true);
         }
 
@@ -446,14 +446,16 @@ int main() {
                 int action = enemy.getAction(map, player);
 
                 if (action == ACTION_GO_RIGHT) {
-                    if (enemy.getCanMove() && (!map->isSolidAt(enemy.getFrontPosition()) && !player.existsAt(enemy.getFrontPosition()) || (enemy.getDirection() == DIRECTION_LEFT))) {
+                    if (enemy.getCanMove() && (!map->isSolidAt(enemy.getBodyFrontPosition()) && !player.existsAt(enemy.getBodyFrontPosition()) && 
+                        !map->isSolidAt(enemy.getHeadFrontPosition()) && !player.existsAt(enemy.getHeadFrontPosition()) || (enemy.getDirection() == DIRECTION_LEFT))) {
                         screen.remove_entity(map, enemy);
                         enemy.goRight();
                         screen.write_entity(map, enemy);
                     }
                 }
                 else if (action == ACTION_GO_LEFT) {
-                    if (enemy.getCanMove() && (!map->isSolidAt(enemy.getFrontPosition()) && !player.existsAt(enemy.getFrontPosition()) || (enemy.getDirection() == DIRECTION_RIGHT))) {
+                    if (enemy.getCanMove() && (!map->isSolidAt(enemy.getBodyFrontPosition()) && !player.existsAt(enemy.getBodyFrontPosition()) &&
+                        !map->isSolidAt(enemy.getHeadFrontPosition()) && !player.existsAt(enemy.getHeadFrontPosition()) || (enemy.getDirection() == DIRECTION_RIGHT))) {
                         screen.remove_entity(map, enemy);
                         enemy.goLeft();
                         screen.write_entity(map, enemy);
@@ -467,7 +469,9 @@ int main() {
                 else if (action == ACTION_FALL) {
                     if (map->isSolidAt(Position(enemy.getBodyPosition().getX(), enemy.getBodyPosition().getY()+1)) &&
                         !map->isSolidAt(Position(enemy.getBodyPosition().getX(), enemy.getBodyPosition().getY()+2)) &&
-                        !map->isSolidAt(Position(enemy.getBodyPosition().getX(), enemy.getBodyPosition().getY()+3))) {
+                        !map->isSolidAt(Position(enemy.getBodyPosition().getX(), enemy.getBodyPosition().getY()+3)) &&
+                        !player.existsAt(Position(enemy.getBodyPosition().getX(), enemy.getBodyPosition().getY()+2)) &&
+                        !player.existsAt(Position(enemy.getBodyPosition().getX(), enemy.getBodyPosition().getY()+3))) {
 
                         enemy.setOnTerrain(false);
                         screen.remove_entity(map, enemy);
@@ -578,7 +582,7 @@ int main() {
 
             /*** Gestione animazione arma ***/
             if (enemy.endWeaponDisplay()) {
-                screen.resetTerrain(map, enemy.getFrontPosition());
+                screen.resetTerrain(map, enemy.getBodyFrontPosition());
                 enemy.setCanMove(true);
             }
 
@@ -679,8 +683,8 @@ int main() {
                 int action = boss->getAction(map, player);
 
                 if (action == ACTION_GO_RIGHT) {
-                    if (boss->getCanMove() && (!map->isSolidAt(boss->getFrontPosition()) && 
-                        (!player.existsAt(boss->getFrontPosition()) && !player.existsAt(boss->getHeadPosition()) && !player.existsAt(boss->getBody2Position())) ||
+                    if (boss->getCanMove() && (!map->isSolidAt(boss->getBodyFrontPosition()) && 
+                        (!player.existsAt(boss->getBodyFrontPosition()) && !player.existsAt(boss->getHeadPosition()) && !player.existsAt(boss->getBody2Position())) ||
                         (boss->getDirection() == DIRECTION_LEFT))) {
                         screen.remove_boss(map, *boss);
                         boss->goRight();
@@ -688,8 +692,8 @@ int main() {
                     }
                 }
                 else if (action == ACTION_GO_LEFT) {
-                    if (boss->getCanMove() && (!map->isSolidAt(boss->getFrontPosition()) && 
-                        (!player.existsAt(boss->getFrontPosition()) && !player.existsAt(boss->getHeadPosition()) && !player.existsAt(boss->getBody2Position())) ||
+                    if (boss->getCanMove() && (!map->isSolidAt(boss->getBodyFrontPosition()) && 
+                        (!player.existsAt(boss->getBodyFrontPosition()) && !player.existsAt(boss->getHeadPosition()) && !player.existsAt(boss->getBody2Position())) ||
                         (boss->getDirection() == DIRECTION_RIGHT))) {
                         screen.remove_boss(map, *boss);
                         boss->goLeft();
@@ -804,7 +808,7 @@ int main() {
 
             /*** Gestione animazione arma ***/
             if (boss->endWeaponDisplay()) {
-                screen.resetTerrain(map, boss->getFrontPosition());
+                screen.resetTerrain(map, boss->getBodyFrontPosition());
                 boss->setCanMove(true);
             }
 

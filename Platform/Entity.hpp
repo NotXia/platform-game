@@ -43,7 +43,8 @@ class Entity : public Block {
 		Pixel getHead();
 		bool getDirection();
 		Position getHeadPosition();
-		Position getFrontPosition(); // Restituisce le coordinate davanti al corpo (stabilito in base alla direzione)
+		Position getBodyFrontPosition(); // Restituisce le coordinate davanti alla testa (stabilito in base alla direzione)
+		Position getHeadFrontPosition(); // Restituisce le coordinate davanti al corpo (stabilito in base alla direzione)
 		Position getBackPosition(); // Restituisce le coordinate dietro al corpo (stabilito in base alla direzione)
 		Position getBelowPosition();
 		void setPosition(Position position);

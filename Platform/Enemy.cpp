@@ -91,26 +91,35 @@ int Enemy::getAction(Map *map, Player player) {
 	
 
 	if (lastPlayerPosition != NULL) { // Il nemico ha visto il giocatore almeno una volta
+		if (lastPlayerPosition->getY() > this->position.getY() && !map->isLava(Position(getBelowPosition().getX(), getBelowPosition().getY()+3))) {
+			/*
+				Se il giocatore si trova più in basso del nemico e non c'è lava sotto:
+				- Scende dalla piattaforma su cui è attualmente
+			*/
+			action_code = ACTION_FALL;
+		}
 		if (player.getBodyPosition().equals(*lastPlayerPosition)) {
 			/*
 				Se l'ultima posizione nota è effettivamente il giocatore:
 				- Si avvicina entro il raggio d'azione dell'arma
 				- Attacca
 			*/
-			if (lastPlayerPosition->getX() > this->position.getX()+weapon_range) {
+			if (lastPlayerPosition->getX() > this->position.getX()+weapon_range-1 ||
+				lastPlayerPosition->getX() > this->position.getX() && map->isLava(Position(getBelowPosition().getX(), getBelowPosition().getY()+3))) {
 				action_code = ACTION_GO_RIGHT;
 			}
-			else if (lastPlayerPosition->getX() < this->position.getX()-weapon_range) {
+			else if (lastPlayerPosition->getX() < this->position.getX()-weapon_range+1 ||
+				lastPlayerPosition->getX() < this->position.getX() && map->isLava(Position(getBelowPosition().getX(), getBelowPosition().getY()+3))) {
 				action_code = ACTION_GO_LEFT;
 			}
-			else if (lastPlayerPosition->getX() > this->position.getX() && direction == DIRECTION_LEFT) {
-				action_code = ACTION_GO_RIGHT;
-			}
-			else  if (lastPlayerPosition->getX() < this->position.getX() && direction == DIRECTION_RIGHT) {
-				action_code = ACTION_GO_LEFT;
-			}
-			else {
-				action_code = ACTION_ATTACK;
+
+			if (lastPlayerPosition->getY() == this->position.getY()) {
+				if (lastPlayerPosition->getX() > this->position.getX() && lastPlayerPosition->getX() < this->position.getX()+weapon_range && direction == DIRECTION_RIGHT) {
+					action_code = ACTION_ATTACK;
+				}
+				else if (lastPlayerPosition->getX() < this->position.getX() && lastPlayerPosition->getX() > this->position.getX()-weapon_range && direction == DIRECTION_LEFT) {
+					action_code = ACTION_ATTACK;
+				}
 			}
 		}
 		else {
@@ -143,13 +152,12 @@ int Enemy::getAction(Map *map, Player player) {
 				action_code = ACTION_GO_LEFT;
 			}
 		}
-		else if (lastPlayerPosition->getY() > this->position.getY()) {
-			/*
-				Se il giocatore si trova più in basso del nemico:
-				- Annulla l'azione precedentemente calcolata
-				- Scende dalla piattaforma su cui è attualmente
-			*/
-			action_code = ACTION_FALL;
+
+		if (action_code == ACTION_GO_RIGHT && map->isLava(Position(getBelowPosition().getX()+1, getBelowPosition().getY()))) {
+			action_code = ACTION_JUMP;
+		}
+		else if (action_code == ACTION_GO_LEFT && map->isLava(Position(getBelowPosition().getX()-1, getBelowPosition().getY()))) {
+			action_code = ACTION_JUMP;
 		}
 	}
 	else { // Il nemico non ha mai visto il giocatore
@@ -184,14 +192,15 @@ int Enemy::getAction(Map *map, Player player) {
 				action_code = ACTION_DO_NOTHING;
 			}
 		}
+
+		if (action_code == ACTION_GO_RIGHT && map->isLava(Position(getBelowPosition().getX()+1, getBelowPosition().getY()))) {
+			action_code = ACTION_DO_NOTHING;
+		}
+		else if (action_code == ACTION_GO_LEFT && map->isLava(Position(getBelowPosition().getX()-1, getBelowPosition().getY()))) {
+			action_code = ACTION_DO_NOTHING;
+		}
 	}
 
-	if (action_code == ACTION_GO_RIGHT && map->isLava(Position(getBelowPosition().getX()+1, getBelowPosition().getY()))) {
-		action_code = ACTION_DO_NOTHING;
-	}
-	else if (action_code == ACTION_GO_LEFT && map->isLava(Position(getBelowPosition().getX()-1, getBelowPosition().getY()))) {
-		action_code = ACTION_DO_NOTHING;
-	}
 
 	return action_code;
 }

@@ -66,41 +66,6 @@ void Boss::nextPhase() {
 }
 
 /*
-	Prende in input una matrice di Pixel.
-	Inizializza la matrice con la mappa del boss.
-*/
-void Boss::initTerrain(Pixel terrain[GAME_WIDTH][GAME_HEIGHT]) {
-	if (type == BOSS_TYPE1) {
-		terrain_type1(terrain);
-	}
-}
-
-void Boss::terrain_type1(Pixel terrain[GAME_WIDTH][GAME_HEIGHT]) {
-	const Pixel PLATFORM_TEXTURE = Pixel(char(219), PLATFORM_COLOR_FG, BG_LIGHTGREY, true);
-	const Pixel TERRAIN_TEXTURE = Pixel(' ', 0, BG_GREY, true);
-	const Pixel SKY_TEXTURE = Pixel(' ', 0, BG_LIGHTGREY, false);
-
-	// Generazione "pavimento"
-	for (int i=0; i<TERRAIN_HEIGHT; i++) {
-		for (int j=0; j<GAME_WIDTH; j++) {
-			terrain[j][GAME_HEIGHT-1-i] = TERRAIN_TEXTURE;
-		}
-	}
-
-	// Generazione cielo
-	for (int i=TERRAIN_HEIGHT; i<GAME_HEIGHT; i++) {
-		for (int j=0; j<GAME_WIDTH; j++) {
-			terrain[j][GAME_HEIGHT-1-i] = SKY_TEXTURE;
-		}
-	}
-
-	// Generazione piattaforme
-	for (int i=0; i<GAME_WIDTH; i++) {
-		terrain[i][4] = PLATFORM_TEXTURE;
-	}
-}
-
-/*
 	Prende in input un oggetto Map e un oggetto Player.
 	Restituisce il codice dell'azione da eseguire
 */
@@ -117,7 +82,7 @@ int Boss::getAction(Map *map, Player player) {
 			}
 		}
 		else if (phase == 1) {
-			if (!map->isSolidAt(getFrontPosition())) {
+			if (!map->isSolidAt(getBodyFrontPosition())) {
 				if (direction == DIRECTION_LEFT) {
 					action_code = ACTION_GO_LEFT;
 				}
@@ -125,7 +90,7 @@ int Boss::getAction(Map *map, Player player) {
 					action_code = ACTION_GO_RIGHT;
 				}
 			}
-			else if (map->isSolidAt(getFrontPosition())) {
+			else if (map->isSolidAt(getBodyFrontPosition())) {
 				if (direction == DIRECTION_LEFT) {
 					action_code = ACTION_GO_RIGHT;
 				}

@@ -82,7 +82,7 @@ bool NPCList::inPlayerRange(Position position) {
 
 	while (iter != NULL && !found) {
 		if (iter->npc.getBodyPosition().equals(position) || iter->npc.getHeadPosition().equals(position) ||
-			iter->npc.getFrontPosition().equals(position) || iter->npc.getBackPosition().equals(position)) {
+			iter->npc.getBodyFrontPosition().equals(position) || iter->npc.getBackPosition().equals(position)) {
 			found = true;
 		}
 		else {

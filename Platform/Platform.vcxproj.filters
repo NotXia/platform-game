@@ -73,9 +73,6 @@
     <ClCompile Include="TownGraphics.cpp">
       <Filter>Screen</Filter>
     </ClCompile>
-    <ClCompile Include="AnimationTimer.cpp">
-      <Filter>Utilities</Filter>
-    </ClCompile>
     <ClCompile Include="Boss.cpp">
       <Filter>Entity\Hostile</Filter>
     </ClCompile>
@@ -112,6 +109,9 @@
     </ClCompile>
     <ClCompile Include="LavaList.cpp">
       <Filter>List\Lava</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationTimer.cpp">
+      <Filter>Screen</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -151,9 +151,6 @@
     <ClInclude Include="TownGraphics.hpp">
       <Filter>Screen</Filter>
     </ClInclude>
-    <ClInclude Include="AnimationTimer.hpp">
-      <Filter>Utilities</Filter>
-    </ClInclude>
     <ClInclude Include="Boss.hpp">
       <Filter>Entity\Hostile</Filter>
     </ClInclude>
@@ -189,6 +186,9 @@
     </ClInclude>
     <ClInclude Include="LavaList.hpp">
       <Filter>List\Lava</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationTimer.hpp">
+      <Filter>Screen</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

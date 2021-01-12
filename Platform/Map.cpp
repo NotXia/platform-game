@@ -9,7 +9,8 @@
 #include "EntityGenerator.h"
 
 const Pixel PLATFORM_TEXTURE = Pixel(PLATFORM_SYMBOL, PLATFORM_COLOR_FG, PLATFORM_COLOR_BG, true);
-const Pixel TERRAIN_TEXTURE = Pixel(TERRAIN_SYMBOL, TERRAIN_COLOR_FG, TERRAIN_COLOR_BG, true);
+const Pixel TERRAIN_GRASS_TEXTURE = Pixel(GRASS_SYMBOL, GRASS_COLOR_FG, GRASS_COLOR_BG, true);
+const Pixel TERRAIN_ROCK_TEXTURE = Pixel(ROCK_SYMBOL, ROCK_COLOR_FG, ROCK_COLOR_BG, true);
 const Pixel SKY_TEXTURE = Pixel(SKY_SYMBOL, SKY_COLOR_FG, SKY_COLOR_BG, false);
 const Pixel WALL_TEXTURE = Pixel(WALL_SYMBOL, WALL_COLOR_FG, WALL_COLOR_BG, true);
 const Pixel LAVA_TEXTURE = Pixel(LAVA_SYMBOL, LAVA_COLOR_FG, LAVA_COLOR_BG, true);
@@ -33,19 +34,32 @@ Map::Map(Map *prev, int level_number) {
 		delete boss;
 		boss = new Boss();
 		*boss = createBoss(getDifficulty());
-		boss->initTerrain(terrain);
+		if (boss->getType() == BOSS_TYPE1) {
+			generateMapBossType1();
+			left_position.setX(left_position.getX() + 1);
+		}
+		else if (boss->getType() == BOSS_TYPE2) {
+			generateMapBossType2();
+			left_position.setX(left_position.getX()+EMPTYZONE_LENGTH);
+		}
 		place_wall();
-		left_position.setX(left_position.getX() + 1);
 	}
 	else if (level_number == getDifficulty()*DIFFICULTY_INCREASE_RATE-2) {
 		// Villaggio
-		generateTerrain();
+		generateTerrainGrass();
 		generateTown();
 	}
 	else {
 		// Livello
-		generatePlatforms();
-		generateLava();
+		if (rand()%5 == 0) {
+			generateTerrainRock();
+			generatePlatforms();
+			generateLava();
+		}
+		else {
+			generateTerrainGrass();
+			generatePlatforms();
+		}
 		generateEnemies(ceil(1 + log2(getDifficulty())));
 		generateBonuses(rand() % 4 + 1);
 	}
@@ -61,11 +75,27 @@ int Map::getDifficulty() {
 /*
 	Inizializza la matrice terrain con gli elementi base della mappa
 */
-void Map::generateTerrain() {
+void Map::generateTerrainGrass() {
 	// Generazione "pavimento"
 	for (int i=0; i<TERRAIN_HEIGHT; i++) {
 		for (int j=0; j<GAME_WIDTH; j++) {
-			terrain[j][GAME_HEIGHT-1-i] = TERRAIN_TEXTURE;
+			terrain[j][GAME_HEIGHT-1-i] = TERRAIN_GRASS_TEXTURE;
+		}
+	}
+
+	// Generazione cielo
+	for (int i=TERRAIN_HEIGHT; i<GAME_HEIGHT; i++) {
+		for (int j=0; j<GAME_WIDTH; j++) {
+			terrain[j][GAME_HEIGHT-1-i] = SKY_TEXTURE;
+		}
+	}
+}
+
+void Map::generateTerrainRock() {
+	// Generazione "pavimento"
+	for (int i=0; i<TERRAIN_HEIGHT; i++) {
+		for (int j=0; j<GAME_WIDTH; j++) {
+			terrain[j][GAME_HEIGHT-1-i] = TERRAIN_ROCK_TEXTURE;
 		}
 	}
 
@@ -81,28 +111,15 @@ void Map::generateTerrain() {
 	Inizializza la matrice terrain con gli elementi base della mappa
 */
 void Map::generatePlatforms() {
-	// Generazione "pavimento"
-	for (int i=0; i<TERRAIN_HEIGHT; i++) {
-		for (int j=0; j<GAME_WIDTH; j++) {
-			terrain[j][GAME_HEIGHT-1-i] = TERRAIN_TEXTURE;
-		}
-	}
-
 	/* 
 		Generazione area di gioco
 		- L'area iniziale e finale rimangono libere da piattaforme
 		- L'area centrale prevede la generazione di piattaforme
 	*/
 	for (int height=GAME_HEIGHT-TERRAIN_HEIGHT-1; height>=0; height--) {
-		int width = 0;
-
-		// Area iniziale a sinistra (non genera piattaforme)
-		for (width; width<EMPTYZONE_LENGTH; width++) {
-			terrain[width][height] = SKY_TEXTURE;
-		}
 
 		// Area centrale con possibilità di generare piattaforme
-		for (width; width<GAME_WIDTH-EMPTYZONE_LENGTH; width++) {
+		for (int width=EMPTYZONE_LENGTH; width<GAME_WIDTH-EMPTYZONE_LENGTH; width++) {
 			bool generate_platform = (rand() % PLATFORM_CHANCE) == 0;
 
 			/* 
@@ -125,14 +142,6 @@ void Map::generatePlatforms() {
 					width--;
 				}
 			}
-			else {
-				terrain[width][height] = SKY_TEXTURE;
-			}
-		}
-		
-		// Area finale a destra (non genera piattaforme)
-		for (width; width<GAME_WIDTH; width++) {
-			terrain[width][height] = SKY_TEXTURE;
 		}
 	}
 }
@@ -333,7 +342,9 @@ Map* Map::gotoNext(Position enter_position) {
 	if (this->next == NULL) {
 		this->next = new Map(this, level_number+1);
 	}
-	this->next->left_position = Position(1, enter_position.getY());
+	if (!this->next->isBossFight()) {
+		this->next->left_position = Position(1, enter_position.getY());
+	}
 	return this->next;
 }
 
@@ -422,7 +433,7 @@ void Map::place_wall() {
 	Imposta la matrice terrain alla mappa basilare
 */
 void Map::endBossFight() {
-	generateTerrain();
+	generateTerrainGrass();
 }
 
 /*
@@ -431,4 +442,61 @@ void Map::endBossFight() {
 */
 bool Map::isLava(Position position) {
 	return lavaList.existsAt(position);
+}
+
+void Map::generateMapBossType1() {
+	const Pixel PLATFORM_TEXTURE = Pixel(char(219), PLATFORM_COLOR_FG, BG_LIGHTGREY, true);
+	const Pixel TERRAIN_TEXTURE = Pixel(' ', 0, BG_GREY, true);
+	const Pixel SKY_TEXTURE = Pixel(' ', 0, BG_LIGHTGREY, false);
+
+	// Generazione "pavimento"
+	for (int i=0; i<TERRAIN_HEIGHT; i++) {
+		for (int j=0; j<GAME_WIDTH; j++) {
+			terrain[j][GAME_HEIGHT-1-i] = TERRAIN_TEXTURE;
+		}
+	}
+
+	// Generazione cielo
+	for (int i=TERRAIN_HEIGHT; i<GAME_HEIGHT; i++) {
+		for (int j=0; j<GAME_WIDTH; j++) {
+			terrain[j][GAME_HEIGHT-1-i] = SKY_TEXTURE;
+		}
+	}
+
+	// Generazione piattaforme
+	for (int i=0; i<GAME_WIDTH; i++) {
+		terrain[i][4] = PLATFORM_TEXTURE;
+	}
+}
+
+void Map::generateMapBossType2() {
+	const Pixel PLATFORM_TEXTURE = Pixel(char(219), PLATFORM_COLOR_FG, BG_LIGHTGREY, true);
+	const Pixel TERRAIN_TEXTURE = Pixel(' ', 0, BG_GREY, true);
+	const Pixel SKY_TEXTURE = Pixel(' ', 0, BG_LIGHTGREY, false);
+
+	// Generazione cielo
+	for (int i=0; i<GAME_HEIGHT; i++) {
+		for (int j=0; j<GAME_WIDTH; j++) {
+			terrain[j][i] = SKY_TEXTURE;
+		}
+	}
+
+	// Generazione "pavimento"
+	for (int i=0; i<1; i++) {
+		for (int j=0; j<GAME_WIDTH; j++) {
+			terrain[j][GAME_HEIGHT-1-i] = LAVA_TEXTURE;
+			lavaList.insert(Position(j+1, GAME_HEIGHT-i));
+		}
+	}
+
+	// Generazione piattaforme
+	terrain[1][3] = PLATFORM_TEXTURE;
+	terrain[GAME_WIDTH-2][3] = PLATFORM_TEXTURE;
+
+	for (int i=0; i<3; i++) {
+		for (int j=EMPTYZONE_LENGTH; j<GAME_WIDTH-EMPTYZONE_LENGTH; j++) {
+			terrain[j][(GAME_HEIGHT-TERRAIN_HEIGHT)-TERRAIN_HEIGHT*i] = PLATFORM_TEXTURE;
+		}
+	}
+
 }

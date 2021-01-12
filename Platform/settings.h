@@ -35,7 +35,7 @@ const int ENEMY_RANGE = 18;
 const int ENEMY_BASE_POINTS = 10; 
 const int BONUS_BASE_POINTS = 10;
 
-const int DIFFICULTY_INCREASE_RATE = 4;
+const int DIFFICULTY_INCREASE_RATE = 2;
 
 const int BOSS_BASE_POINTS = 100;
 const int BOSS_BASE_MONEY = 10;
@@ -64,9 +64,13 @@ const char PLATFORM_SYMBOL = char(219);
 const int PLATFORM_COLOR_FG = FG_DARKYELLOW;
 const int PLATFORM_COLOR_BG = BACKGROUND_DEFAULT;
 
-const char TERRAIN_SYMBOL = ' ';
-const int TERRAIN_COLOR_FG = FG_DARKGREEN;
-const int TERRAIN_COLOR_BG = BG_DARKGREEN;
+const char GRASS_SYMBOL = char(177);
+const int GRASS_COLOR_FG = FG_GREEN;
+const int GRASS_COLOR_BG = BG_DARKGREEN;
+
+const char ROCK_SYMBOL = char(177);
+const int ROCK_COLOR_FG = FG_GREY;
+const int ROCK_COLOR_BG = BG_BLACK;
 
 const char SKY_SYMBOL = ' ';
 const int SKY_COLOR_FG = 0;

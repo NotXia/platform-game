@@ -60,7 +60,7 @@ Bullet ArmedEntity::attack() {
 		is_attacking = true;
 
 		Bullet out_bullet = weapon.getBullet();
-		out_bullet.setPosition(getFrontPosition());
+		out_bullet.setPosition(getBodyFrontPosition());
 		out_bullet.setDirection(this->direction);
 
 		return out_bullet;

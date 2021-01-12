@@ -30,7 +30,9 @@ class Map {
 		/*
 			Inizializza la matrice terrain con gli elementi base della mappa
 		*/
-		void generateTerrain();
+		void generateTerrainGrass();
+
+		void generateTerrainRock();
 
 		/*
 			Inizializza la matrice terrain con le piattaforme
@@ -59,6 +61,9 @@ class Map {
 			Imposta lavaList.
 		*/
 		void generateLava();
+
+		void generateMapBossType1();
+		void generateMapBossType2();
 
 	public:
 		Map(Map *prev=NULL, int level_number=0);

@@ -102,7 +102,7 @@ Bonus createBonus(int difficulty) {
 	Crea un boss e lo restituisce
 */
 Boss createBoss(int difficulty) {
-	int type = 0;
+	int type = 1;
 	Boss boss;
 
 	if (type == BOSS_TYPE1) {
@@ -114,7 +114,7 @@ Boss createBoss(int difficulty) {
 			Fase 4: Timer terminato -> Salta
 		*/
 		boss = Boss(
-			100 + int(100*0.25)*(difficulty-1),
+			10 + 5*(difficulty-1),
 			BOSS_BASE_POINTS * difficulty,
 			BOSS_BASE_MONEY * difficulty,
 			Pixel('<', FG_DARKRED, BACKGROUND_DEFAULT, true),
@@ -126,6 +126,31 @@ Boss createBoss(int difficulty) {
 			4,
 			1,
 			6,
+			8,
+			GAME_HEIGHT
+		);
+	}
+	else if (type == BOSS_TYPE2) {
+		/*
+			Fase 0: Spara sfere di fuoco
+			Fase 1: Sta fermo
+			Fase 2: Finito di sparare -> Inizio timer e cade
+			Fase 3: Caduto
+			Fase 4: Timer terminato -> Salta
+		*/
+		boss = Boss(
+			10 + 5*(difficulty-1),
+			BOSS_BASE_POINTS * difficulty,
+			BOSS_BASE_MONEY * difficulty,
+			Pixel('<', FG_DARKRED, BACKGROUND_DEFAULT, true),
+			Pixel('>', FG_DARKRED, BACKGROUND_DEFAULT, true),
+			Pixel(char(219), FG_DARKRED, BACKGROUND_DEFAULT, true),
+			Position(GAME_WIDTH-1, 1),
+			Weapon(),
+			type,
+			4,
+			5,
+			10,
 			8,
 			GAME_HEIGHT
 		);
