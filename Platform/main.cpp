@@ -64,7 +64,7 @@ int main() {
                     player.goLeft();
                     screen.write_entity(map, player);
 
-                    if (player.getBodyPosition().getX() <= 1) {
+                    if (player.getBodyPosition().getX() <= 0) {
                         if (!map->prevNull()) {
                             map = map->gotoPrevious(player.getBodyPosition());
                             screen.write_game_area(map);
@@ -82,7 +82,7 @@ int main() {
                     player.goRight();
                     screen.write_entity(map, player);
 
-                    if (player.getBodyPosition().getX() >= GAME_WIDTH) {
+                    if (player.getBodyPosition().getX() >= GAME_WIDTH-1) {
                         map = map->gotoNext(player.getBodyPosition());
                         screen.write_game_area(map);
                         player.setPosition(map->getLeftPosition());
@@ -117,7 +117,7 @@ int main() {
                             int range = player.getWeapon().getRange();
                             int i = 0;
                             if (player.getDirection() == DIRECTION_LEFT) {
-                                while (i < range && melee_bullet.getPosition().getX()-i >= 1) {
+                                while (i < range && melee_bullet.getPosition().getX()-i >= 0) {
                                     Bullet temp = melee_bullet;
                                     temp.setRange(1);
                                     temp.setPosition(Position(melee_bullet.getPosition().getX()-i, melee_bullet.getPosition().getY()));
@@ -127,7 +127,7 @@ int main() {
                                 }
                             }
                             else {
-                                while (i < range && melee_bullet.getPosition().getX()+i <= GAME_WIDTH) {
+                                while (i < range && melee_bullet.getPosition().getX()+i <= GAME_WIDTH-1) {
                                     Bullet temp = melee_bullet;
                                     temp.setRange(1);
                                     temp.setPosition(Position(melee_bullet.getPosition().getX()+i, melee_bullet.getPosition().getY()));
@@ -253,7 +253,7 @@ int main() {
         /*** Gestione salto ***/
         if (player.canJump()) { 
             // Interrompe il salto se raggiunge il soffitto o un doppio blocco solido
-            if (player.getHeadPosition().getY() <= 1 || 
+            if (player.getHeadPosition().getY() <= 0 || 
                 (map->isSolidAt(Position(player.getHeadPosition().getX(), player.getHeadPosition().getY()-1)) && 
                 map->isSolidAt(Position(player.getHeadPosition().getX(), player.getHeadPosition().getY()-2))) ) {
                 player.stopJump();
@@ -486,7 +486,7 @@ int main() {
                                 int range = enemy.getWeapon().getRange();
                                 int i = 0;
                                 if (enemy.getDirection() == DIRECTION_LEFT) {
-                                    while (i < range && melee_bullet.getPosition().getX()-i >= 1) {
+                                    while (i < range && melee_bullet.getPosition().getX()-i >= 0) {
                                         Bullet temp = melee_bullet;
                                         temp.setRange(1);
                                         temp.setPosition(Position(melee_bullet.getPosition().getX()-i, melee_bullet.getPosition().getY()));
@@ -496,7 +496,7 @@ int main() {
                                     }
                                 }
                                 else {
-                                    while (i < range && melee_bullet.getPosition().getX()+i <= GAME_WIDTH) {
+                                    while (i < range && melee_bullet.getPosition().getX()+i <= GAME_WIDTH-1) {
                                         Bullet temp = melee_bullet;
                                         temp.setRange(1);
                                         temp.setPosition(Position(melee_bullet.getPosition().getX()+i, melee_bullet.getPosition().getY()));
@@ -512,6 +512,8 @@ int main() {
                                 map->addBullet(bullet);
                                 screen.write_bullet(map, player, bullet);
                             }
+
+                            screen.write_at(map, enemy.getWeapon().getTexture(enemy.getDirection()), enemy.getBodyFrontPosition());
                         }
                         else {
                             if (enemy.canReload() && !enemy.getWeapon().hasAmmo()) {
@@ -530,7 +532,7 @@ int main() {
             /*** Gestione salto ***/
             if (enemy.canJump()) {
                 // Interrompe il salto se raggiunge il soffitto, un doppio blocco solido o il giocatore
-                if (enemy.getHeadPosition().getY() <= 1 || 
+                if (enemy.getHeadPosition().getY() <= 0 || 
                     (map->isSolidAt(Position(enemy.getHeadPosition().getX(), enemy.getHeadPosition().getY()-1)) && 
                     map->isSolidAt(Position(enemy.getHeadPosition().getX(), enemy.getHeadPosition().getY()-2))) || 
                     player.existsAt(Position(enemy.getHeadPosition().getX(), enemy.getHeadPosition().getY()-2))) {
@@ -749,7 +751,7 @@ int main() {
             /*** Gestione salto ***/
             if (boss->canJump()) {
                 // Interrompe il salto se raggiunge il soffitto, un doppio blocco solido o il giocatore
-                if (boss->getHeadPosition().getY() <= 1 ||
+                if (boss->getHeadPosition().getY() <= 0 ||
                     (map->isSolidAt(Position(boss->getHeadPosition().getX(), boss->getHeadPosition().getY()-1)) &&
                     map->isSolidAt(Position(boss->getHeadPosition().getX(), boss->getHeadPosition().getY()-2))) ||
                     player.existsAt(Position(boss->getHeadPosition().getX(), boss->getHeadPosition().getY()-2))

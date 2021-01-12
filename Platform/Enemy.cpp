@@ -114,10 +114,10 @@ int Enemy::getAction(Map *map, Player player) {
 			}
 
 			if (lastPlayerPosition->getY() == this->position.getY()) {
-				if (lastPlayerPosition->getX() > this->position.getX() && lastPlayerPosition->getX() < this->position.getX()+weapon_range && direction == DIRECTION_RIGHT) {
+				if (lastPlayerPosition->getX() > this->position.getX() && lastPlayerPosition->getX() < this->position.getX()+weapon_range+1 && direction == DIRECTION_RIGHT) {
 					action_code = ACTION_ATTACK;
 				}
-				else if (lastPlayerPosition->getX() < this->position.getX() && lastPlayerPosition->getX() > this->position.getX()-weapon_range && direction == DIRECTION_LEFT) {
+				else if (lastPlayerPosition->getX() < this->position.getX() && lastPlayerPosition->getX() > this->position.getX()-weapon_range-1 && direction == DIRECTION_LEFT) {
 					action_code = ACTION_ATTACK;
 				}
 			}

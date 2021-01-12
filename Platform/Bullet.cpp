@@ -59,7 +59,7 @@ bool Bullet::travel() {
 	if (canTravel()) {
 		range--;
 		if (direction == BULLET_LEFT) {
-			if (position.getX() == 1) {
+			if (position.getX() == 0) {
 				range = -1;
 			}
 			else {
@@ -67,7 +67,7 @@ bool Bullet::travel() {
 			}
 		}
 		else {
-			if (position.getX() == GAME_WIDTH) {
+			if (position.getX() == GAME_WIDTH-1) {
 				range = -1;
 			}
 			else {

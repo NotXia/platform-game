@@ -160,9 +160,9 @@ void Screen::write_game_area(Map *map) {
 	Stampa il terreno del gioco
 */
 void Screen::write_terrain(Map *map) {
-	for (int i=1; i<=GAME_HEIGHT; i++) {
-		moveCursor(1, i);
-		for (int j=1; j<=GAME_WIDTH; j++) {
+	for (int i=0; i<GAME_HEIGHT; i++) {
+		moveCursor(1, 1+i);
+		for (int j=0; j<GAME_WIDTH; j++) {
 			setColor(map->getTerrainAt(Position(j, i)).getColor());
 			cout <<map->getTerrainAt(Position(j, i)).getValue();
 		}
@@ -176,7 +176,7 @@ void Screen::write_terrain(Map *map) {
 	Cambia lo sfondo se necessario.
 */
 void Screen::write_at(Map *map, Pixel pixel, Position position) {
-	moveCursor(position.getX(), position.getY());
+	moveCursor(position.getX()+1, position.getY()+1);
 	pixel.setBackgroundColor(map->getTerrainAt(position).getBackgroundColor());
 	setColor(pixel.getColor());
 	cout <<pixel.getValue();

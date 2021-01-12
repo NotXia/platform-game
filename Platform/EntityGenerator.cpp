@@ -102,7 +102,7 @@ Bonus createBonus(int difficulty) {
 	Crea un boss e lo restituisce
 */
 Boss createBoss(int difficulty) {
-	int type = 1;
+	int type = 0;
 	Boss boss;
 
 	if (type == BOSS_TYPE1) {
@@ -120,7 +120,7 @@ Boss createBoss(int difficulty) {
 			Pixel('<', FG_DARKRED, BACKGROUND_DEFAULT, true),
 			Pixel('>', FG_DARKRED, BACKGROUND_DEFAULT, true),
 			Pixel(char(219), FG_DARKRED, BACKGROUND_DEFAULT, true),
-			Position(GAME_WIDTH-int(GAME_WIDTH*0.25), 1),
+			Position(GAME_WIDTH-int(GAME_WIDTH*0.25), 0),
 			Weapon(),
 			type,
 			4,
@@ -145,7 +145,7 @@ Boss createBoss(int difficulty) {
 			Pixel('<', FG_DARKRED, BACKGROUND_DEFAULT, true),
 			Pixel('>', FG_DARKRED, BACKGROUND_DEFAULT, true),
 			Pixel(char(219), FG_DARKRED, BACKGROUND_DEFAULT, true),
-			Position(GAME_WIDTH-1, 1),
+			Position(GAME_WIDTH-2, 0),
 			Weapon(),
 			type,
 			4,

@@ -35,7 +35,7 @@ const int ENEMY_RANGE = 18;
 const int ENEMY_BASE_POINTS = 10; 
 const int BONUS_BASE_POINTS = 10;
 
-const int DIFFICULTY_INCREASE_RATE = 2;
+const int DIFFICULTY_INCREASE_RATE = 5;
 
 const int BOSS_BASE_POINTS = 100;
 const int BOSS_BASE_MONEY = 10;

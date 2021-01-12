@@ -18,8 +18,8 @@ const Pixel LAVA_TEXTURE = Pixel(LAVA_SYMBOL, LAVA_COLOR_FG, LAVA_COLOR_BG, true
 Map::Map(Map *prev, int level_number) {
 	next = NULL;
 	this->prev = prev;
-	left_position = Position(1, GAME_HEIGHT-TERRAIN_HEIGHT);
-	right_position = Position(GAME_WIDTH, GAME_HEIGHT-TERRAIN_HEIGHT);
+	left_position = Position(0, GAME_HEIGHT-TERRAIN_HEIGHT-1);
+	right_position = Position(GAME_WIDTH-1, GAME_HEIGHT-TERRAIN_HEIGHT-1);
 
 	enemyList = EnemyList();
 	bonusList = BonusList();
@@ -166,12 +166,12 @@ void Map::generateEnemies(int max_enemies) {
 
 			j = GAME_WIDTH - (EMPTYZONE_LENGTH * 2);
 			while (j > (EMPTYZONE_LENGTH*2) && max_enemies > 0) {
-				if (terrain[j][i].isSolid() && !lavaList.existsAt(Position(j+1, i+1)) && !terrain[j][i-1].isSolid() && !terrain[j][i-2].isSolid()) {
+				if (terrain[j][i].isSolid() && !lavaList.existsAt(Position(j, i)) && !terrain[j][i-1].isSolid() && !terrain[j][i-2].isSolid()) {
 					generate = rand() % chance;
 
 					if (generate == 0 && max_enemies > 0) {
 						Enemy new_enemy = createEnemy(getDifficulty());
-						new_enemy.setPosition(Position(j+1, i));
+						new_enemy.setPosition(Position(j, i-1));
 						enemyList.add(new_enemy);
 						max_enemies--;
 						chance = base_chance;
@@ -210,12 +210,12 @@ void Map::generateBonuses(int max_bonus) {
 
 			j = GAME_WIDTH-(EMPTYZONE_LENGTH*2);
 			while  (j>(EMPTYZONE_LENGTH*2) && max_bonus > 0) {
-				if (terrain[j][i].isSolid() && !lavaList.existsAt(Position(j+1, i+1)) && !terrain[j][i-1].isSolid() && !terrain[j][i-2].isSolid()) {
+				if (terrain[j][i].isSolid() && !lavaList.existsAt(Position(j, i)) && !terrain[j][i-1].isSolid() && !terrain[j][i-2].isSolid()) {
 					generate = rand() % chance;
 
 					if (generate == 0 && max_bonus > 0) {
 						Bonus bonus = createBonus(getDifficulty());
-						bonus.setPosition(Position(j+1, i));
+						bonus.setPosition(Position(j, i-1));
 
 						bonusList.insert(bonus);
 						
@@ -244,12 +244,12 @@ void Map::generateTown() {
 
 	npcList.insert(NPC(1, Pixel('<', NPC_HEAD_COLOR_FG, BACKGROUND_DEFAULT, false), Pixel('<', NPC_HEAD_COLOR_FG, BACKGROUND_DEFAULT, false),
 				  Pixel(char(219), NPC_HEAD_COLOR_FG, BACKGROUND_DEFAULT, false),
-				  Position(rand() % (GAME_WIDTH-EMPTYZONE_LENGTH-EMPTYZONE_LENGTH) + EMPTYZONE_LENGTH , GAME_HEIGHT-TERRAIN_HEIGHT),
+				  Position(rand() % (GAME_WIDTH-EMPTYZONE_LENGTH-EMPTYZONE_LENGTH) + EMPTYZONE_LENGTH , GAME_HEIGHT-TERRAIN_HEIGHT-1),
 				  NPC_HOSPITAL, getDifficulty()
 	));
 	npcList.insert(NPC(1, Pixel('<', NPC_HEAD_COLOR_FG, BACKGROUND_DEFAULT, false), Pixel('<', NPC_HEAD_COLOR_FG, BACKGROUND_DEFAULT, false),
 				  Pixel(char(219), NPC_HEAD_COLOR_FG, BACKGROUND_DEFAULT, false),
-				  Position(rand() % (GAME_WIDTH-EMPTYZONE_LENGTH-EMPTYZONE_LENGTH) + EMPTYZONE_LENGTH, GAME_HEIGHT-TERRAIN_HEIGHT),
+				  Position(rand() % (GAME_WIDTH-EMPTYZONE_LENGTH-EMPTYZONE_LENGTH) + EMPTYZONE_LENGTH, GAME_HEIGHT-TERRAIN_HEIGHT-1),
 				  NPC_WEAPONSHOP, getDifficulty()
 	));
 }
@@ -266,7 +266,7 @@ void Map::generateLava() {
 			terrain[i+1][h].isSolid() && terrain[i+2][h].isSolid()) {
 			for (int j=0; j<TERRAIN_HEIGHT; j++) {
 				terrain[i][GAME_HEIGHT-j-1] = LAVA_TEXTURE;
-				lavaList.insert(Position(i+1, GAME_HEIGHT-j));
+				lavaList.insert(Position(i, GAME_HEIGHT-j-1));
 			}
 		}
 	}
@@ -330,7 +330,7 @@ bool Map::prevNull() {
 	Restituisce il puntatore al livello precedente, impostando right_position con il parametro in input.
 */
 Map* Map::gotoPrevious(Position exit_position) {
-	this->prev->right_position = Position(GAME_WIDTH, exit_position.getY());
+	this->prev->right_position = Position(GAME_WIDTH-1, exit_position.getY());
 	return this->prev;
 }
 
@@ -343,7 +343,7 @@ Map* Map::gotoNext(Position enter_position) {
 		this->next = new Map(this, level_number+1);
 	}
 	if (!this->next->isBossFight()) {
-		this->next->left_position = Position(1, enter_position.getY());
+		this->next->left_position = Position(0, enter_position.getY());
 	}
 	return this->next;
 }
@@ -358,7 +358,7 @@ bool Map::isSolidAt(Position position) {
 	if (enemyList.existsAt(position)) {
 		out = true;
 	}
-	else if(terrain[position.getX()-1][position.getY()-1].isSolid()) {
+	else if(terrain[position.getX()][position.getY()].isSolid()) {
 		out = true;
 	}
 	else if (isBossFight()) {
@@ -375,7 +375,7 @@ bool Map::isSolidAt(Position position) {
 */
 Pixel Map::getTerrainAt(Position position) {
 	Pixel out;
-	out = terrain[position.getX()-1][position.getY()-1];
+	out = terrain[position.getX()][position.getY()];
 	return out;
 }
 
@@ -394,14 +394,14 @@ void Map::addBullet(Bullet bullet) {
 Position Map::addBonus(Bonus bonus) {
 	Position spawn_position = bonus.getBodyPosition();
 
-	while (bonusList.pointAt(spawn_position) && spawn_position.getX() < GAME_WIDTH) {
+	while (bonusList.pointAt(spawn_position) && spawn_position.getX() < GAME_WIDTH-1) {
 		spawn_position.setX(spawn_position.getX()+1);
 	}
 
-	if (spawn_position.getX() >= GAME_WIDTH) {
+	if (spawn_position.getX() >= GAME_WIDTH-1) {
 		spawn_position = bonus.getBodyPosition();
 
-		while (bonusList.pointAt(spawn_position) && spawn_position.getX() > 1) {
+		while (bonusList.pointAt(spawn_position) && spawn_position.getX() > 0) {
 			spawn_position.setX(spawn_position.getX()-1);
 		}
 	}
@@ -485,7 +485,7 @@ void Map::generateMapBossType2() {
 	for (int i=0; i<1; i++) {
 		for (int j=0; j<GAME_WIDTH; j++) {
 			terrain[j][GAME_HEIGHT-1-i] = LAVA_TEXTURE;
-			lavaList.insert(Position(j+1, GAME_HEIGHT-i));
+			lavaList.insert(Position(j, GAME_HEIGHT-i-1));
 		}
 	}
 

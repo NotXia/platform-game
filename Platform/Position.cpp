@@ -10,11 +10,11 @@ Position::Position(int x, int y) {
 	Imposta x (rispettando i limiti)
 */
 void Position::setX(int x) {
-	if (x > GAME_WIDTH) {
-		x = GAME_WIDTH;
+	if (x > GAME_WIDTH-1) {
+		x = GAME_WIDTH-1;
 	}
-	if (x < 1) {
-		x = 1;
+	if (x < 0) {
+		x = 0;
 	}
 	this->x = x;
 }
@@ -23,11 +23,11 @@ void Position::setX(int x) {
 	Imposta y (rispettando i limiti)
 */
 void Position::setY(int y) {
-	if (y > GAME_HEIGHT) {
-		y = GAME_HEIGHT;
+	if (y > GAME_HEIGHT-1) {
+		y = GAME_HEIGHT-1;
 	}
-	if (y < 1) {
-		y = 1;
+	if (y < 0) {
+		y = 0;
 	} 
 	this->y = y;
 }
