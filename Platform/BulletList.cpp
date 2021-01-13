@@ -117,3 +117,20 @@ bool BulletList::pointAt(Position position1, Position position2, Position positi
 
 	return found;
 }
+
+/*
+	Restituisce il numero di nodi con campo hostile=true nella lista
+*/
+int BulletList::sizeHostile() {
+	int i=0;
+	FlyingBullet *iterator = list;
+
+	while (iterator != NULL) {
+		if (iterator->bullet.isHostile()) {
+			i++;
+		}
+		iterator = iterator->next;
+	}
+
+	return i;
+}

@@ -34,13 +34,17 @@ Map::Map(Map *prev, int level_number) {
 		delete boss;
 		boss = new Boss();
 		*boss = createBoss(getDifficulty());
-		if (boss->getType() == BOSS_TYPE1) {
+		if (boss->getType() == BOSS_SUMMONER) {
 			generateMapBossType1();
 			left_position.setX(left_position.getX() + 1);
 		}
-		else if (boss->getType() == BOSS_TYPE2) {
+		else if (boss->getType() == BOSS_MAGE) {
 			generateMapBossType2();
 			left_position.setX(left_position.getX()+EMPTYZONE_LENGTH);
+		}
+		else if (boss->getType() == BOSS_MELEE) {
+			generateMapBossType3();
+			left_position.setX(left_position.getX() + 1);
 		}
 		place_wall();
 	}
@@ -498,5 +502,28 @@ void Map::generateMapBossType2() {
 			terrain[j][(GAME_HEIGHT-TERRAIN_HEIGHT)-TERRAIN_HEIGHT*i] = PLATFORM_TEXTURE;
 		}
 	}
+}
 
+void Map::generateMapBossType3() {
+	const Pixel PLATFORM_TEXTURE = Pixel(char(219), PLATFORM_COLOR_FG, BG_LIGHTGREY, true);
+	const Pixel TERRAIN_TEXTURE = Pixel(' ', 0, BG_GREY, true);
+	const Pixel SKY_TEXTURE = Pixel(' ', 0, BG_LIGHTGREY, false);
+
+	// Generazione cielo
+	for (int i=0; i<GAME_HEIGHT; i++) {
+		for (int j=0; j<GAME_WIDTH; j++) {
+			terrain[j][i] = SKY_TEXTURE;
+		}
+	}
+
+	// Generazione "pavimento"
+	for (int i=0; i<TERRAIN_HEIGHT; i++) {
+		for (int j=0; j<GAME_WIDTH; j++) {
+			terrain[j][GAME_HEIGHT-1-i] = TERRAIN_TEXTURE;
+		}
+	}
+
+	// Generazione piattaforme
+	terrain[1][3] = PLATFORM_TEXTURE;
+	terrain[GAME_WIDTH-2][3] = PLATFORM_TEXTURE;
 }

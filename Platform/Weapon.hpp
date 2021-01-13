@@ -38,6 +38,7 @@ class Weapon {
 		bool isReloading();
 		bool getType();
 		int getRange();
+		void setAmmo(int ammo);
 
 		/*
 			Restituisce l'oggetto Bullet associato all'arma.

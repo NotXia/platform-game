@@ -102,10 +102,10 @@ Bonus createBonus(int difficulty) {
 	Crea un boss e lo restituisce
 */
 Boss createBoss(int difficulty) {
-	int type = 0;
+	int type = 1;
 	Boss boss;
 
-	if (type == BOSS_TYPE1) {
+	if (type == BOSS_SUMMONER) {
 		/*
 			Fase 0: Evoca i nemici
 			Fase 1: Va avanti e indietro
@@ -130,13 +130,13 @@ Boss createBoss(int difficulty) {
 			GAME_HEIGHT
 		);
 	}
-	else if (type == BOSS_TYPE2) {
+	else if (type == BOSS_MAGE) {
 		/*
 			Fase 0: Spara sfere di fuoco
 			Fase 1: Sta fermo
 			Fase 2: Finito di sparare -> Inizio timer e cade
 			Fase 3: Caduto
-			Fase 4: Timer terminato -> Salta
+			Fase 4: Timer terminato -> Si teletrasporta
 		*/
 		boss = Boss(
 			10 + 5*(difficulty-1),
@@ -146,13 +146,37 @@ Boss createBoss(int difficulty) {
 			Pixel('>', FG_DARKRED, BACKGROUND_DEFAULT, true),
 			Pixel(char(219), FG_DARKRED, BACKGROUND_DEFAULT, true),
 			Position(GAME_WIDTH-2, 0),
-			Weapon(),
+			Weapon("", Pixel(), Pixel(), Bullet(Pixel('o', FG_DARKRED, BACKGROUND_DEFAULT), difficulty, GAME_WIDTH), 5, 1, 2000, WEAPON_RANGED, GAME_WIDTH),
 			type,
 			4,
 			5,
 			10,
 			8,
 			GAME_HEIGHT
+		);
+	}
+	else if (type == BOSS_MELEE) {
+		/*
+			Fase 0: Corre + se tocca player, lo lancia
+			Fase 1: Finito di correre -> Inizio timer e stordito
+			Fase 2: stordito
+			Fase 3: Timer terminato -> Si gira
+		*/
+		boss = Boss(
+			10 + 5*(difficulty-1),
+			BOSS_BASE_POINTS * difficulty,
+			BOSS_BASE_MONEY * difficulty,
+			Pixel('<', FG_DARKRED, BACKGROUND_DEFAULT, true),
+			Pixel('>', FG_DARKRED, BACKGROUND_DEFAULT, true),
+			Pixel(char(219), FG_DARKRED, BACKGROUND_DEFAULT, true),
+			Position(GAME_WIDTH-2, TERRAIN_HEIGHT-2),
+			Weapon(),
+			type,
+			3,
+			1,
+			4,
+			30,
+			1
 		);
 	}
 

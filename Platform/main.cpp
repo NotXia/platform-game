@@ -27,7 +27,7 @@ int main() {
         Pixel(PLAYER_HEAD_LEFT, PLAYER_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true),
         Pixel(PLAYER_HEAD_RIGHT, PLAYER_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true),
         Pixel(PLAYER_BODY, PLAYER_BODY_COLOR_FG, BACKGROUND_DEFAULT, true),
-        map->getLeftPosition(), weapon_container->getRandomTier1()
+        map->getLeftPosition(), weapon_container->getRandomSpecial()
     );
     delete weapon_container;
 
@@ -36,7 +36,12 @@ int main() {
     bool hasMoved;
     bool showNPCs = true;
     bool print_boss_hp = true;
-    
+
+    EnemyList enemylist;
+    BulletList bulletlist;
+    BonusList bonuslist;
+    NPCList npclist;
+
     screen.init();
     screen.write_game_area(map);
     screen.write_entity(map, player);
@@ -176,7 +181,7 @@ int main() {
                     Weapon old = player.getWeapon();
                     player.setWeapon(curr_bonus->getWeapon());
 
-                    BonusList bonuslist = map->getBonusList();
+                    bonuslist = map->getBonusList();
                     bonuslist.pointAt(player.getBodyPosition());
                     *curr_bonus = bonuslist.getCurrent();
                     curr_bonus->setWeapon(old);
@@ -230,7 +235,7 @@ int main() {
                                 screen.write_weaponInfo(player.getWeapon());
 
                                 curr_npc->deleteCurrentWeapon();
-                                NPCList npclist = map->getNPCList();
+                                npclist = map->getNPCList();
                                 npclist.pointAt(curr_npc->getBodyPosition());
                                 npclist.setCurrent(*curr_npc);
                                 map->setNPCList(npclist);
@@ -291,9 +296,23 @@ int main() {
             screen.write_ammobox(player.getWeapon().getCurrAmmo());
         }
 
+        /*** Gestione collisione con proiettili ***/
+        bulletlist = map->getBulletList();
+        if (bulletlist.pointAt(player.getHeadPosition(), player.getBodyPosition())) {
+            Bullet hit_bullet = bulletlist.getCurrent();
+
+            if (hit_bullet.isHostile()) {
+                player.take_damage(hit_bullet.hit());
+                screen.write_hp(player.getHealth());
+
+                bulletlist.updateCurrent(hit_bullet);
+                map->setBulletList(bulletlist);
+            }
+        }
+
         /*** Gestione bonus ***/
         if (curr_bonus == NULL) {
-            BonusList bonuslist = map->getBonusList();
+            bonuslist = map->getBonusList();
             if (bonuslist.pointAt(player.getBodyPosition())) {
                 Bonus bonus = bonuslist.getCurrent();
             
@@ -346,14 +365,14 @@ int main() {
 
 
 
-    /* -----------------------------
-        INIZIO GESTIONE PROIETTILI   
-    ----------------------------- */
-        BulletList bulletlist = map->getBulletList();
+        /* -----------------------------
+            INIZIO GESTIONE PROIETTILI   
+        ----------------------------- */
+        bulletlist = map->getBulletList();
         bulletlist.initIter();
 
         while (!bulletlist.isNull()) {
-            EnemyList enemylist = map->getEnemyList();
+            enemylist = map->getEnemyList();
             Bullet bullet = bulletlist.getCurrent();
 
             if (bullet.canRefresh()) {
@@ -416,8 +435,14 @@ int main() {
                 if (!enemylist.existsAt(bullet.getPosition()) && !player.existsAt(bullet.getPosition()) && !boss_exists) {
                     screen.resetTerrain(map, bullet.getPosition());
                 }
+
                 if (bullet.travel()) {
-                    screen.write_bullet(map, player, bullet);
+                    if (map->getTerrainAt(bullet.getPosition()).isSolid()) {
+                        bullet.setRange(-1);
+                    }
+                    else {
+                        screen.write_bullet(map, player, bullet);
+                    }
                 }
             }
 
@@ -434,7 +459,7 @@ int main() {
         /* -------------------------
            INIZIO GESTIONE NEMICI   
         ------------------------- */
-        EnemyList enemylist = map->getEnemyList();
+        enemylist = map->getEnemyList();
         enemylist.initIter();
 
         while (!enemylist.isNull()) {
@@ -629,15 +654,14 @@ int main() {
         /* ----------------------
            INIZIO GESTIONE NPC   
         ---------------------- */
-
-        NPCList npcList = map->getNPCList();
+        npclist = map->getNPCList();
 
         // Visualizza gli NPC sulla mappa
         if (showNPCs) {
-            npcList.initIter();
-            while(!npcList.isNull()) {
-                screen.write_entity(map, npcList.getCurrent());
-                npcList.goNext();
+            npclist.initIter();
+            while(!npclist.isNull()) {
+                screen.write_entity(map, npclist.getCurrent());
+                npclist.goNext();
             }
 
             showNPCs = false;
@@ -645,8 +669,8 @@ int main() {
 
         // Gestisce l'interazione con gli NPC
         if (curr_npc == NULL) {
-            if (npcList.inPlayerRange(player.getBodyPosition())) {
-                NPC npc = npcList.getCurrent();
+            if (npclist.inPlayerRange(player.getBodyPosition())) {
+                NPC npc = npclist.getCurrent();
                 char name[STRING_LEN];
                 npc.getName(name);
 
@@ -662,17 +686,50 @@ int main() {
                 *curr_npc = npc;
             }
         }
-
         /* FINE GESTIONE NPC
         -------------------- */
+
+
+        /* --------------------------------
+           INIZIO GESTIONE GRAVITÀ BONUS
+        -------------------------------- */
+        bonuslist = map->getBonusList();
+        bonuslist.initIter();
+
+        while (!bonuslist.isNull()) {
+            Bonus bonus = bonuslist.getCurrent();
+
+            if (bonus.isOnTerrain() && !map->isSolidAt(bonus.getBelowPosition())) {
+                bonus.startFall();
+            }
+
+            if (!bonus.isOnTerrain() && bonus.canFall()) {
+                screen.write_at(map, map->getTerrainAt(bonus.getBodyPosition()), bonus.getBodyPosition());
+                bonus.fall();
+                screen.write_at(map, bonus.getBody(), bonus.getBodyPosition());
+            }
+
+            if (map->isSolidAt(bonus.getBelowPosition())) {
+                bonus.stopFall();
+            }
+
+            bonus.incCounters();
+
+            bonuslist.updateCurrent(bonus);
+            bonuslist.goNext();
+        }
+        map->setBonusList(bonuslist);
+        /* FINE GESTIONE GRAVITÀ BONUS
+        ----------------------------- */
+
 
 
         /* -----------------------
            INIZIO GESTIONE BOSS
         ----------------------- */
-
         if (map->isBossFight()) {
             Boss *boss = map->getBoss();
+
 
             if (print_boss_hp) {
                 screen.write_write_boss_hp(*boss);
@@ -681,6 +738,8 @@ int main() {
 
             if (boss->canRefresh()) {
                 boss->search4Player(player);
+
+                Boss old_boss = *boss;
 
                 int action = boss->getAction(map, player);
 
@@ -718,15 +777,15 @@ int main() {
                     }
                 }
                 else if (action == ACTION_ATTACK) {
-                    if (boss->getType() == BOSS_TYPE1) {
-                        EnemyList enemylist = map->getEnemyList();
+                    if (boss->getType() == BOSS_SUMMONER) {
+                        enemylist = map->getEnemyList();
 
                         for (int i=0; i<boss->getAbilityNum(); i++) {
                             int x = boss->getBodyPosition().getX() + i*3;
                             if (x > GAME_WIDTH) {
                                 x = boss->getBodyPosition().getX() - i*3;
                             }
-                            int y = boss->getBodyPosition().getY() + 3;
+                            int y = boss->getBodyPosition().getY()+3;
 
                             Enemy new_enemy = createEnemy(map->getDifficulty());
                             new_enemy.setMoney(0);
@@ -736,11 +795,32 @@ int main() {
 
                         map->setEnemyList(enemylist);
                     }
-                }
-            }
+                    else if (boss->getType() == BOSS_MAGE) {
+                        if (boss->canAttack()) {
+                            Bullet bullet = boss->attack();
+                            bullet.setPosition(Position(bullet.getPosition().getX(), player.getBodyPosition().getY()));
+                            map->addBullet(bullet);
+                            screen.write_bullet(map, player, bullet);
+                        }
+                    }
+                    else if (boss->getType() == BOSS_MELEE) {
+                        player.take_damage(boss->getAbilityNum());
+                        screen.write_hp(player.getHealth());
+                        screen.remove_entity(map, player);
 
-            if (map->getEnemyList().size() == 0 && boss->getPhase() == 1) {
-                boss->nextPhase();
+                        if (boss->getDirection() == DIRECTION_LEFT) {
+                            player.setPosition(Position(GAME_WIDTH-2, 0));
+                        }
+                        else {
+                            player.setPosition(Position(1, 0));
+                        }
+                        screen.write_entity(map, player);
+                    }
+                }
+
+                if (!old_boss.getBodyPosition().equals(boss->getBodyPosition())) {
+                    screen.remove_boss(map, old_boss);
+                }
             }
 
             /*** Controlla se il nemico si trova su un terreno solido ***/
@@ -754,8 +834,7 @@ int main() {
                 if (boss->getHeadPosition().getY() <= 0 ||
                     (map->isSolidAt(Position(boss->getHeadPosition().getX(), boss->getHeadPosition().getY()-1)) &&
                     map->isSolidAt(Position(boss->getHeadPosition().getX(), boss->getHeadPosition().getY()-2))) ||
-                    player.existsAt(Position(boss->getHeadPosition().getX(), boss->getHeadPosition().getY()-2))
-                    ) {
+                    player.existsAt(Position(boss->getHeadPosition().getX(), boss->getHeadPosition().getY()-2)) ) {
                     boss->stopJump();
                 }
                 else {
@@ -820,6 +899,7 @@ int main() {
             /*** Gestione velocità d'attacco ***/
             boss->hasShootDelayFinished();
 
+
             boss->incCounters();
             if (boss->isDead()) {
                 delete boss;
@@ -832,5 +912,7 @@ int main() {
 
         
         screen.incWeaponboxRotateCounter();
-    } // while (true)
+    } // while (!player.isDead())
+
+    screen.game_over(player.getPoints());
 }

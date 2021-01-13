@@ -2,8 +2,9 @@
 #include "Enemy.hpp"
 #include "Player.hpp"
 
-const int BOSS_TYPE1 = 0;
-const int BOSS_TYPE2 = 1;
+const int BOSS_SUMMONER = 0;
+const int BOSS_MAGE = 1;
+const int BOSS_MELEE = 2;
 
 class Boss : public Enemy {
 	protected:
@@ -15,11 +16,10 @@ class Boss : public Enemy {
 		AnimationTimer down_time;
 
 
-
 	public:
 		Boss(int health=0, int points=0, int money=0, Pixel head_left=Pixel(), Pixel head_right=Pixel(), Pixel body=Pixel(), Position position=Position(), Weapon weapon=Weapon(), int type=0, int max_phase=0, int ability_num=0, int ability_max=0, int down_time=0, int jump_force=0);
 
-		bool getType();
+		int getType();
 		int getPhase();
 		int getAbilityNum();
 		void setAbilityNum(int num_enemies); // Imposta num_enemies, rispettando il limite imposta da max_enemies

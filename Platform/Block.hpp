@@ -12,6 +12,7 @@ class Block {
 
 		Pixel getBody();
 		Position getBodyPosition();
+		Position getBelowPosition(); // Restituisce la posizione sotto position
 
 };
 

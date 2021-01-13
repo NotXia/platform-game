@@ -14,6 +14,10 @@ Boss::Boss(int health, int points, int money, Pixel head_left, Pixel head_right,
 	default_visualRange = GAME_WIDTH;
 	visualRange = GAME_WIDTH;
 	max_jump_height = jump_force;
+
+	if (type == BOSS_MELEE) {
+		refresh = AnimationTimer(1500);
+	}
 }
 
 Position Boss::getBody2Position() {
@@ -28,18 +32,18 @@ Position Boss::getHeadPosition() {
 	return out;
 }
 
-bool Boss::getType() {
+int Boss::getType() {
 	return type;
 }
 
 int Boss::getAbilityNum() {
 	return ability_num;
 }
-void Boss::setAbilityNum(int num_enemies) {
-	if (num_enemies > ability_max) {
-		num_enemies = ability_max;
+void Boss::setAbilityNum(int ability_num) {
+	if (ability_num > ability_max) {
+		ability_num = ability_max;
 	}
-	this->ability_num = num_enemies;
+	this->ability_num = ability_num;
 }
 
 int Boss::getPhase() {
@@ -73,16 +77,18 @@ int Boss::getAction(Map *map, Player player) {
 	int action_code = ACTION_DO_NOTHING;
 	int weapon_range = 0;
 
-	if (type == BOSS_TYPE1) {
-		if (phase == 0) {
-			if (isOnTerrain()) {
-				action_code = ACTION_ATTACK;
-				nextPhase();
-				setAbilityNum(ability_num+1);
-			}
+	/* Boss SUMMONER */
+	if (type == BOSS_SUMMONER) {
+		if (phase == 0) { // Fase 0: Evoca i nemici
+			action_code = ACTION_ATTACK;
+			setAbilityNum(ability_num+1);
+			nextPhase();
 		}
-		else if (phase == 1) {
-			if (!map->isSolidAt(getBodyFrontPosition())) {
+		else if (phase == 1) { // Fase 1: Va avanti e indietro
+			if (map->getEnemyList().size() == 0) {
+				nextPhase();
+			}
+			else if (!map->isSolidAt(getBodyFrontPosition())) {
 				if (direction == DIRECTION_LEFT) {
 					action_code = ACTION_GO_LEFT;
 				}
@@ -99,20 +105,109 @@ int Boss::getAction(Map *map, Player player) {
 				}
 			}
 		}
-		else if (phase == 2) {
+		else if (phase == 2) { // Fase 2: Nemici sconfitti -> Cade + inizio timer down_time
 			action_code = ACTION_FALL;
 			down_time.reset();
 			nextPhase();
 		}
-		else if (phase == 3) {
+		else if (phase == 3) { // Fase 3: Stordito
 			action_code = ACTION_DO_NOTHING;
 			down_time.incTimer();
 			if (down_time.limit()) {
 				nextPhase();
 			}
 		}
-		else if (phase == 4) {
+		else if (phase == 4) { // Fine stordimento -> Salta
 			action_code = ACTION_JUMP;
+			nextPhase();
+		}
+	}
+	/* Boss MAGE */
+	else if (type == BOSS_MAGE) {
+		if (phase == 0) { // Fase 0: Spara sfere di fuoco 
+			if (canReload() && !weapon.hasAmmo()) {
+				setAbilityNum(ability_num + 1);
+				weapon.setAmmo(ability_num);
+				reload();
+				nextPhase();
+			}
+			else {
+				action_code = ACTION_ATTACK;
+			}
+		}
+		else if (phase == 1) { // Fase 1: Sta fermo
+			action_code = ACTION_DO_NOTHING;
+			if (map->getBulletList().sizeHostile() == 0) {
+				nextPhase();
+			}
+		}
+		else if (phase == 2) { // Fase 2: Non ci sono più proiettili -> Va al centro della mappa + inizio timer down_time
+			action_code = ACTION_DO_NOTHING;
+			position = Position(GAME_WIDTH/2, 0);
+			down_time.reset();
+			nextPhase();
+		}
+		else if (phase == 3) { // Stordito
+			action_code = ACTION_DO_NOTHING;
+			down_time.incTimer();
+			if (down_time.limit()) {
+				nextPhase();
+			}
+		}
+		else if (phase == 4) { // Fase 4: Fine stordimento -> Si teletrasporta a DX o a SX
+			action_code = ACTION_DO_NOTHING;
+			int x_pos[] = { 1, GAME_WIDTH-2 };
+			int gen = rand() % 2;
+
+			if (gen == 0) {
+				goRight();
+			}
+			else {
+				goLeft();
+			}
+
+			setPosition(Position(x_pos[gen], 0));
+			nextPhase();
+		}
+	}
+	/* Boss MELEE */
+	else if (type == BOSS_MELEE) {
+		if (phase == 0) { // Fase 0: Corre + se tocca player, lo lancia
+			if (getBodyFrontPosition().equals(player.getBodyPosition())) {
+				action_code = ACTION_ATTACK;
+			}
+			else if (direction == DIRECTION_LEFT) {
+				action_code = ACTION_GO_LEFT;
+				if (getBodyFrontPosition().getX() == 1) {
+					nextPhase();
+				}
+			}
+			else {
+				action_code = ACTION_GO_RIGHT;
+				if (getBodyFrontPosition().getX() == GAME_WIDTH-2) {
+					nextPhase();
+				}
+			}
+		}
+		else if (phase == 1) { // Fase 1: Finito di correre -> Rimane fermo + inizio timer down_time
+			action_code = ACTION_DO_NOTHING;
+			down_time.reset();
+			nextPhase();
+		}
+		else if (phase == 2) { // Fase 2: Stordito
+			down_time.incTimer();
+			if (down_time.limit()) {
+				nextPhase();
+			}
+		}
+		else if (phase == 3) { // Fase 3: Fine stordimento -> Si gira
+			setAbilityNum(getAbilityNum()+1);
+			if (direction == DIRECTION_LEFT) {
+				goRight();
+			}
+			else {
+				goLeft();
+			}
 			nextPhase();
 		}
 	}

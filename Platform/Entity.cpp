@@ -88,13 +88,6 @@ Position Entity::getBackPosition() {
 	return back;
 }
 
-Position Entity::getBelowPosition() {
-	Position below = position;
-	below.setY(below.getY()+1);
-
-	return below;
-}
-
 void Entity::setCanMove(bool can_move) {
 	this->can_move = can_move;
 }

@@ -12,3 +12,11 @@ Pixel Block::getBody() {
 Position Block::getBodyPosition() {
 	return position;
 }
+
+// Restituisce la posizione sotto position
+Position Block::getBelowPosition() {
+	Position below = position;
+	below.setY(below.getY()+1);
+
+	return below;
+}

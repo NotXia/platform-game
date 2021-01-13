@@ -14,6 +14,9 @@ class Bonus : public Block {
 		int hp;
 		Weapon *weapon;
 
+		bool on_terrain;
+		AnimationTimer fall_animation;
+
 	public:
 		Bonus(Pixel body=Pixel(), Position position=Position(), int points=0, int money=1, int hp=0, Weapon *weapon=NULL);
 
@@ -31,4 +34,35 @@ class Bonus : public Block {
 			Restituisce il contenuto del bonus in base al tipo (vita o soldi).
 		*/
 		int getBonus();
+
+		/****************************
+			INIZIO GESTIONE CADUTA
+		****************************/
+
+		bool isOnTerrain();
+
+		/*
+			Inizializza i parametri per la caduta
+		*/
+		void startFall();
+
+		/*
+			Muove la posizione di un blocco in basso
+		*/
+		void fall();
+
+		/*
+			Imposta i parametri per interrompere la caduta
+		*/
+		void stopFall();
+
+		/*
+			Restituisce true se si può procedere nell'animazione della caduta. False altrimenti
+		*/
+		bool canFall();
+
+		/* FINE GESTIONE CADUTA
+		************************/
+
+		void incCounters();
 };

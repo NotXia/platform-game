@@ -64,7 +64,7 @@ class Map {
 
 		void generateMapBossType1();
 		void generateMapBossType2();
-
+		void generateMapBossType3();
 	public:
 		Map(Map *prev=NULL, int level_number=0);
 

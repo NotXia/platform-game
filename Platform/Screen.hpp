@@ -248,4 +248,10 @@ class Screen {
 
 		/* FINE GESTIONE DATI ARMA  
 		***************************/
+
+		/*
+			Prende in input i punti.
+			Gestisce la schermata di fine partita.
+		*/
+		void game_over(int points);
 };

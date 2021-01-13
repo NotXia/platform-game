@@ -6,6 +6,9 @@ Bonus::Bonus(Pixel body, Position position, int points, int money, int hp, Weapo
 	this->hp = hp;
 	this->weapon = weapon;
 
+	this->on_terrain = true;
+	this->fall_animation = AnimationTimer(FALL_SPEED);
+
 	if (money != 0 && hp != 0 && weapon != NULL) {
 		money = 1;
 		hp = 0;
@@ -61,4 +64,50 @@ int Bonus::getBonus() {
 	}
 
 	return out;
+}
+
+
+/****************************
+	INIZIO GESTIONE CADUTA
+****************************/
+
+bool Bonus::isOnTerrain() {
+	return on_terrain;
+}
+
+/*
+	Inizializza i parametri per la caduta
+*/
+void Bonus::startFall() {
+	on_terrain = false;
+	fall_animation.reset();
+}
+
+/*
+	Muove la posizione di un blocco in basso
+*/
+void Bonus::fall() {
+	this->position = Position(position.getX(), position.getY()+1);
+}
+
+/*
+	Imposta i parametri per interrompere la caduta
+*/
+void Bonus::stopFall() {
+	on_terrain = true;
+}
+
+/*
+	Restituisce true se si può procedere nell'animazione della caduta. False altrimenti
+*/
+bool Bonus::canFall() {
+	return fall_animation.limit();
+}
+
+/* FINE GESTIONE CADUTA
+************************/
+
+
+void Bonus::incCounters() {
+	fall_animation.incTimer();
 }

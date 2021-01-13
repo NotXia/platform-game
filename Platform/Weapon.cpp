@@ -71,6 +71,10 @@ int Weapon::getRange() {
 	return range;
 }
 
+void Weapon::setAmmo(int ammo) {
+	this->ammo = ammo;
+}
+
 /*
 	Restituisce true se curr_ammo è maggiore di 0, false altrimenti
 */

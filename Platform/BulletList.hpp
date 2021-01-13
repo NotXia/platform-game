@@ -56,6 +56,10 @@ class BulletList {
 		*/
 		bool pointAt(Position position1, Position position2, Position position3);
 
+		/*
+			Restituisce il numero di nodi con campo hostile=true nella lista
+		*/
+		int sizeHostile();
 };
 
 

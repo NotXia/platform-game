@@ -625,6 +625,26 @@ void Screen::rotate_weaponbox() {
 	}
 }
 
-
 /* FINE GESTIONE DATI ARMA
 ***************************/
+
+
+/*
+	Prende in input i punti.
+	Gestisce la schermata di fine partita.
+*/
+void Screen::game_over(int points) {
+	system("cls");
+	resetColor();
+	moveCursor(0, 0);
+	cout <<" _____           __  __ ______    ______      ________ _____" <<endl
+		 <<"/ ____|    /\\   |  \\/  |  ____|  / __ \\ \\    / /  ____|  __ \\" <<endl
+		 <<"| |  __   /  \\  | \\  / | |__    | |  | \\ \\  / /| |__  | |__) |" <<endl
+		 <<"| | |_ | / /\\ \\ | |\\/| |  __|   | |  | |\\ \\/ / |  __| |  _  /" <<endl
+		 <<"| |__| |/ ____ \\| |  | | |____  | |__| | \\  /  | |____| | \\ \\" <<endl
+		 <<"\\_____ /_/    \\_\\_|  |_|______|  \\____/   \\/   |______|_|  \\_\\" <<endl;
+
+	cout <<endl <<endl;
+
+	cout <<"Hai totalizzato " <<points <<" punti" <<endl;
+}
