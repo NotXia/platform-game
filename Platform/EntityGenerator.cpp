@@ -102,7 +102,7 @@ Bonus createBonus(int difficulty) {
 	Crea un boss e lo restituisce
 */
 Boss createBoss(int difficulty) {
-	int type = 1;
+	int type = rand() % 3;
 	Boss boss;
 
 	if (type == BOSS_SUMMONER) {

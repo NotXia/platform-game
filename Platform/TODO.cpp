@@ -1,6 +1,6 @@
 /*
 	TODO:
-	X S per scendere - DONE
+	X S per scendere
 	X Classe entità armata
 	X Umarells
 	X Attacco umarells
@@ -26,9 +26,12 @@
 	X Gestire gravità bonus
 	X Gestire collisione proiettili con un blocco solido
 	X Gestire collisione proiettili con il giocatore mentre si muove
+	X Altri boss
+	X Gestire colore terreno
+	- Inserire pausa tra attacchi dei boss
+	- Cambiare colore texture boss quando dormono
+	- Fix animazione arma
 	- Rework armi
-	- Gestire colore terreno
-	- Altri boss
 	- Rework range visione nemici
 	- Piattaforme che si muovono (?)
 	- Animazioni NPC 

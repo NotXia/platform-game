@@ -522,8 +522,4 @@ void Map::generateMapBossType3() {
 			terrain[j][GAME_HEIGHT-1-i] = TERRAIN_TEXTURE;
 		}
 	}
-
-	// Generazione piattaforme
-	terrain[1][3] = PLATFORM_TEXTURE;
-	terrain[GAME_WIDTH-2][3] = PLATFORM_TEXTURE;
 }

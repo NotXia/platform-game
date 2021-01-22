@@ -63,12 +63,12 @@ int main() {
         if (_kbhit()) {
             char ch = _getch();
             if (ch == 'a' || ch == 'A') {
-                hasMoved = true;
                 if (player.getCanMove() && (!map->isSolidAt(player.getBodyFrontPosition()) && !map->isSolidAt(player.getHeadFrontPosition()) || (player.getDirection() == DIRECTION_RIGHT))) {
                     screen.remove_entity(map, player);
                     player.goLeft();
                     screen.write_entity(map, player);
 
+                    hasMoved = true;
                     if (player.getBodyPosition().getX() <= 0) {
                         if (!map->prevNull()) {
                             map = map->gotoPrevious(player.getBodyPosition());
@@ -81,12 +81,12 @@ int main() {
                 }
             }
             else if (ch == 'd' || ch == 'D') {
-                hasMoved = true;
                 if (player.getCanMove() && (!map->isSolidAt(player.getBodyFrontPosition()) && !map->isSolidAt(player.getHeadFrontPosition()) || (player.getDirection() == DIRECTION_LEFT))) {
                     screen.remove_entity(map, player);
                     player.goRight();
                     screen.write_entity(map, player);
 
+                    hasMoved = true;
                     if (player.getBodyPosition().getX() >= GAME_WIDTH-1) {
                         map = map->gotoNext(player.getBodyPosition());
                         screen.write_game_area(map);
@@ -97,18 +97,18 @@ int main() {
                 }
             }
             else if (ch == 'w' || ch == 'W' ) {
-                hasMoved = true;
                 if (player.getCanMove() && player.isOnTerrain()) {
+                    hasMoved = true;
                     player.initJump();
                 }
             }
             else if (ch == 's' || ch == 'S') {
-                hasMoved = true;
                 if (player.getCanMove() &&
                      map->isSolidAt(Position(player.getBodyPosition().getX(), player.getBodyPosition().getY()+1)) &&
                     !map->isSolidAt(Position(player.getBodyPosition().getX(), player.getBodyPosition().getY()+2)) &&
                     !map->isSolidAt(Position(player.getBodyPosition().getX(), player.getBodyPosition().getY()+3)) ) {
 
+                    hasMoved = true;
                     player.setOnTerrain(false);
                     screen.remove_entity(map, player);
                     player.fall();
