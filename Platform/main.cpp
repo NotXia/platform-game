@@ -9,11 +9,23 @@
 #include "Weapon.hpp"
 #include "Bullet.hpp"
 #include "EnemyList.hpp"
-#include "WeaponContainer.hpp"
 #include "EntityGenerator.h"
 using namespace std;
 
 const char KEY_SPACEBAR = 32;
+
+void moveLeft(Map *map, Screen screen, Entity &entity);
+void moveRight(Map *map, Screen screen, Entity &entity);
+void jump(Map *map, Screen screen, Entity &entity);
+void fall(Map *map, Screen screen, Entity &entity);
+
+void take_damage(Screen screen, Player &player, int damage);
+void heal(Screen screen, Player &player, int heal);
+
+void spend_money(Screen screen, Player &player, int money);
+void get_money(Screen screen, Player &player, int money);
+
+void increase_points(Screen screen, Player &player, int points);
 
 int main() {
     srand(time(0));
@@ -21,15 +33,12 @@ int main() {
     Screen screen = Screen();
     Map *map = new Map();
 
-    WeaponContainer *weapon_container = new WeaponContainer();
-    weapon_container->initForPlayer();
     Player player = Player(MAX_LIFE, 
         Pixel(PLAYER_HEAD_LEFT, PLAYER_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true),
         Pixel(PLAYER_HEAD_RIGHT, PLAYER_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true),
         Pixel(PLAYER_BODY, PLAYER_BODY_COLOR_FG, BACKGROUND_DEFAULT, true),
-        map->getLeftPosition(), weapon_container->getRandomSpecial()
+        map->getLeftPosition(), getRandomSpecial()
     );
-    delete weapon_container;
 
     Bonus *curr_bonus = NULL;
     NPC *curr_npc = NULL;
@@ -64,9 +73,7 @@ int main() {
             char ch = _getch();
             if (ch == 'a' || ch == 'A') {
                 if (player.getCanMove() && (!map->isSolidAt(player.getBodyFrontPosition()) && !map->isSolidAt(player.getHeadFrontPosition()) || (player.getDirection() == DIRECTION_RIGHT))) {
-                    screen.remove_entity(map, player);
-                    player.goLeft();
-                    screen.write_entity(map, player);
+                    moveLeft(map, screen, player);
 
                     hasMoved = true;
                     if (player.getBodyPosition().getX() <= 0) {
@@ -82,9 +89,7 @@ int main() {
             }
             else if (ch == 'd' || ch == 'D') {
                 if (player.getCanMove() && (!map->isSolidAt(player.getBodyFrontPosition()) && !map->isSolidAt(player.getHeadFrontPosition()) || (player.getDirection() == DIRECTION_LEFT))) {
-                    screen.remove_entity(map, player);
-                    player.goRight();
-                    screen.write_entity(map, player);
+                    moveRight(map, screen, player);
 
                     hasMoved = true;
                     if (player.getBodyPosition().getX() >= GAME_WIDTH-1) {
@@ -110,8 +115,7 @@ int main() {
 
                     hasMoved = true;
                     player.setOnTerrain(false);
-                    screen.remove_entity(map, player);
-                    player.fall();
+                    fall(map, screen, player);
                 }
             }
             else if (ch == KEY_SPACEBAR) {
@@ -159,7 +163,7 @@ int main() {
                     }
                 }
                 if(player.getWeapon().hasAmmo())
-                screen.write_ammobox(player.getWeapon().getCurrAmmo());
+                    screen.write_ammobox(player.getWeapon().getCurrAmmo());
             }
             else if (ch == 'r' || ch == 'R') {
                 player.reload();
@@ -199,20 +203,16 @@ int main() {
                     if (ch == 'e' || ch == 'E') {
                         if (player.getHealth() != MAX_LIFE) {
                             if (player.getMoney() >= curr_npc->getPriceHP()) {
-                                player.decMoney(curr_npc->getPriceHP());
-                                screen.write_money(player.getMoney());
-                                player.heal(1);
-                                screen.write_hp(player.getHealth());
+                                spend_money(screen, player, curr_npc->getPriceHP());
+                                heal(screen, player, 1);
                                 screen.write_textbox_npc_hp(*curr_npc, player.getMissingHp());
                             }
                         }
                     }
                     else if (ch == 'q' || ch == 'Q') {
                         if (player.getMoney() >= curr_npc->getPriceHP()*(MAX_LIFE-player.getHealth())) {
-                            player.decMoney(curr_npc->getPriceHP() *(MAX_LIFE-player.getHealth()));
-                            player.heal(MAX_LIFE-player.getHealth());
-                            screen.write_hp(player.getHealth());
-                            screen.write_money(player.getMoney());
+                            spend_money(screen, player, curr_npc->getPriceHP() *(MAX_LIFE-player.getHealth()));
+                            heal(screen, player, MAX_LIFE-player.getHealth());
                             screen.write_textbox_npc_hp(*curr_npc, player.getMissingHp());
                         }
                     }
@@ -229,8 +229,7 @@ int main() {
                         }
                         else if (ch == 'e' || ch == 'E') {
                             if (player.getMoney() >= curr_npc->getCurrWeaponPrice()) {
-                                player.decMoney(curr_npc->getCurrWeaponPrice());
-                                screen.write_money(player.getMoney());
+                                spend_money(screen, player, curr_npc->getCurrWeaponPrice());
                                 player.setWeapon(curr_npc->getCurrWeapon());
                                 screen.write_weaponInfo(player.getWeapon());
 
@@ -264,16 +263,12 @@ int main() {
                 player.stopJump();
             }
             else {
-                screen.remove_entity(map, player);
-                player.jump();
-                screen.write_entity(map, player);
+                jump(map, screen, player);
             }
         }
         /*** Gestione caduta ***/
         else if (player.canFall()) {
-            screen.remove_entity(map, player);
-            player.fall();
-            screen.write_entity(map, player);
+            fall(map, screen, player);
         }
         /*** Gestione arrivo a terra ***/
         else if (map->isSolidAt(Position(player.getBodyPosition().getX(), player.getBodyPosition().getY()+1))) {
@@ -302,8 +297,7 @@ int main() {
             Bullet hit_bullet = bulletlist.getCurrent();
 
             if (hit_bullet.isHostile()) {
-                player.take_damage(hit_bullet.hit());
-                screen.write_hp(player.getHealth());
+                take_damage(screen, player, hit_bullet.hit());
 
                 bulletlist.updateCurrent(hit_bullet);
                 map->setBulletList(bulletlist);
@@ -316,17 +310,14 @@ int main() {
             if (bonuslist.pointAt(player.getBodyPosition())) {
                 Bonus bonus = bonuslist.getCurrent();
             
-                player.incPoints(bonus.getPoints());
-                screen.write_points(player.getPoints());
+                increase_points(screen, player, bonus.getPoints());
 
                 if (bonus.getType() == BONUS_TYPE_HP) {
-                    player.heal(bonus.getBonus());
-                    screen.write_hp(player.getHealth());
+                    heal(screen, player, bonus.getBonus());
                     bonuslist.deleteCurrent();
                 }
                 else if (bonus.getType() == BONUS_TYPE_MONEY) {
-                    player.incMoney(bonus.getBonus());
-                    screen.write_money(player.getMoney());
+                    get_money(screen, player, bonus.getBonus());
                     bonuslist.deleteCurrent();
                 }
                 else if (bonus.getType() == BONUS_TYPE_WEAPON) {
@@ -343,14 +334,12 @@ int main() {
         if (map->isLava(player.getBelowPosition())) {
             if (player.isMapEvent()) {
                 if (player.canMapEvents()) {
-                    player.take_damage(1);
-                    screen.write_hp(player.getHealth());
+                    take_damage(screen, player, LAVA_DAMAGE);
                 }
             }
             else {
                 player.startMapEvent();
-                player.take_damage(1);
-                screen.write_hp(player.getHealth());
+                take_damage(screen, player, LAVA_DAMAGE);
             }
         }
         else {
@@ -378,19 +367,17 @@ int main() {
             if (bullet.canRefresh()) {
                 if (bullet.isHostile()) {
                     if (player.existsAt(bullet.getPosition())) {
-                        player.take_damage(bullet.hit());
-                        screen.write_hp(player.getHealth());
+                        take_damage(screen, player, bullet.hit());
                     }
                 }
                 else {
                     if (enemylist.pointAt(bullet.getPosition())) {
                         Enemy hit_enemy = enemylist.getCurrent();
-                        hit_enemy.take_damage(bullet.hit());
 
+                        hit_enemy.take_damage(bullet.hit());
                         if (hit_enemy.isDead()) {
                             screen.remove_entity(map, hit_enemy);
-                            player.incPoints(hit_enemy.getPoints());
-                            screen.write_points(player.getPoints());
+                            increase_points(screen, player, hit_enemy.getPoints());
 
                             if (hit_enemy.getMoney() > 0) {
                                 screen.resetTerrain(
@@ -410,8 +397,7 @@ int main() {
 
                             if (boss->isDead()) {
                                 screen.remove_boss(map, *boss);
-                                player.incPoints(boss->getPoints());
-                                screen.write_points(player.getPoints());
+                                increase_points(screen, player, boss->getPoints());
 
                                 screen.resetTerrain(
                                     map,
@@ -473,17 +459,14 @@ int main() {
                 if (action == ACTION_GO_RIGHT) {
                     if (enemy.getCanMove() && (!map->isSolidAt(enemy.getBodyFrontPosition()) && !player.existsAt(enemy.getBodyFrontPosition()) && 
                         !map->isSolidAt(enemy.getHeadFrontPosition()) && !player.existsAt(enemy.getHeadFrontPosition()) || (enemy.getDirection() == DIRECTION_LEFT))) {
-                        screen.remove_entity(map, enemy);
-                        enemy.goRight();
-                        screen.write_entity(map, enemy);
+                        moveRight(map, screen, enemy);
                     }
                 }
                 else if (action == ACTION_GO_LEFT) {
                     if (enemy.getCanMove() && (!map->isSolidAt(enemy.getBodyFrontPosition()) && !player.existsAt(enemy.getBodyFrontPosition()) &&
                         !map->isSolidAt(enemy.getHeadFrontPosition()) && !player.existsAt(enemy.getHeadFrontPosition()) || (enemy.getDirection() == DIRECTION_RIGHT))) {
-                        screen.remove_entity(map, enemy);
-                        enemy.goLeft();
-                        screen.write_entity(map, enemy);
+                        moveLeft(map, screen, enemy);
+
                     }
                 }
                 else if (action == ACTION_JUMP) {
@@ -499,8 +482,7 @@ int main() {
                         !player.existsAt(Position(enemy.getBodyPosition().getX(), enemy.getBodyPosition().getY()+3))) {
 
                         enemy.setOnTerrain(false);
-                        screen.remove_entity(map, enemy);
-                        enemy.fall();
+                        fall(map, screen, enemy);
                     }
                 }
                 else if (action == ACTION_ATTACK) {
@@ -564,16 +546,12 @@ int main() {
                     enemy.stopJump();
                 }
                 else {
-                    screen.remove_entity(map, enemy);
-                    enemy.jump();
-                    screen.write_entity(map, enemy);
+                    jump(map, screen, enemy);
                 }
             }
             /*** Gestione caduta ***/
             else if (enemy.canFall()) {
-                screen.remove_entity(map, enemy);
-                enemy.fall();
-                screen.write_entity(map, enemy);
+                fall(map, screen, enemy);
             }
             /*** Gestione arrivo a terra ***/
             else if (map->isSolidAt(Position(enemy.getBodyPosition().getX(), enemy.getBodyPosition().getY()+1)) || 
@@ -591,8 +569,7 @@ int main() {
                     if (enemy.isDead()) {
                         screen.remove_entity(map, enemy);
 
-                        player.incPoints(enemy.getPoints());
-                        screen.write_points(player.getPoints());
+                        increase_points(screen, player, enemy.getPoints());
 
                         if (enemy.getMoney() > 0) {
                             screen.resetTerrain(
@@ -804,8 +781,7 @@ int main() {
                         }
                     }
                     else if (boss->getType() == BOSS_MELEE) {
-                        player.take_damage(boss->getAbilityNum());
-                        screen.write_hp(player.getHealth());
+                        take_damage(screen, player, boss->getAbilityNum());
                         screen.remove_entity(map, player);
 
                         if (boss->getDirection() == DIRECTION_LEFT) {
@@ -866,8 +842,7 @@ int main() {
                     if (boss->isDead()) {
                         screen.remove_boss(map, *boss);
 
-                        player.incPoints(boss->getPoints());
-                        screen.write_points(player.getPoints());
+                        increase_points(screen, player, boss->getPoints());
 
                         screen.resetTerrain(
                             map,
@@ -910,9 +885,57 @@ int main() {
             }
         }
 
-        
         screen.incWeaponboxRotateCounter();
     } // while (!player.isDead())
 
     screen.game_over(player.getPoints());
+}
+
+void moveLeft(Map *map, Screen screen, Entity &entity) {
+    screen.remove_entity(map, entity);
+    entity.goLeft();
+    screen.write_entity(map, entity);
+}
+
+void moveRight(Map *map, Screen screen, Entity &entity) {
+    screen.remove_entity(map, entity);
+    entity.goRight();
+    screen.write_entity(map, entity);
+}
+
+void jump(Map *map, Screen screen, Entity &entity) {
+    screen.remove_entity(map, entity);
+    entity.jump();
+    screen.write_entity(map, entity);
+}
+
+void fall(Map *map, Screen screen, Entity &entity) {
+    screen.remove_entity(map, entity);
+    entity.fall();
+    screen.write_entity(map, entity);
+}
+
+void take_damage(Screen screen, Player &player, int damage) {
+    player.take_damage(damage);
+    screen.write_hp(player.getHealth());
+}
+
+void heal(Screen screen, Player &player, int heal) {
+    player.heal(heal);
+    screen.write_hp(player.getHealth());
+}
+
+void spend_money(Screen screen, Player &player, int money) {
+    player.decMoney(money);
+    screen.write_money(player.getMoney());
+}
+
+void get_money(Screen screen, Player &player, int money) {
+    player.incMoney(money);
+    screen.write_money(player.getMoney());
+}
+
+void increase_points(Screen screen, Player &player, int points) {
+    player.incPoints(points);
+    screen.write_points(player.getPoints());
 }

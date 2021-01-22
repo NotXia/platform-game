@@ -28,3 +28,32 @@ Enemy createEnemy(int difficulty);
 	Crea un boss e lo restituisce
 */
 Boss createBoss(int difficulty);
+
+/*
+*/
+Weapon getRandomTier1Player();
+
+/*
+*/
+Weapon getRandomTier2Player();
+
+/*
+*/
+Weapon getRandomTier3Player();
+
+/*
+*/
+Weapon getRandomSpecial();
+
+/*
+*/
+Weapon getRandomTier1Enemy();
+
+/*
+*/
+Weapon getRandomTier2Enemy();
+
+/*
+*/
+Weapon getRandomTier3Enemy();
+

@@ -41,6 +41,7 @@ const int BOSS_BASE_POINTS = 100;
 const int BOSS_BASE_MONEY = 10;
 
 const int MAP_EVENT_SPEED = 10000;
+const int LAVA_DAMAGE = 1;
 
 
 /*************

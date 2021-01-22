@@ -161,9 +161,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Position.cpp" />
     <ClCompile Include="Screen.cpp" />
-    <ClCompile Include="TownGraphics.cpp" />
     <ClCompile Include="Weapon.cpp" />
-    <ClCompile Include="WeaponContainer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimationTimer.hpp" />
@@ -188,9 +186,7 @@
     <ClInclude Include="Position.hpp" />
     <ClInclude Include="Screen.hpp" />
     <ClInclude Include="settings.h" />
-    <ClInclude Include="TownGraphics.hpp" />
     <ClInclude Include="Weapon.hpp" />
-    <ClInclude Include="WeaponContainer.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="TODO.cpp" />

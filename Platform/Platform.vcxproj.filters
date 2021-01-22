@@ -70,9 +70,6 @@
     <ClCompile Include="Block.cpp">
       <Filter>Entity</Filter>
     </ClCompile>
-    <ClCompile Include="TownGraphics.cpp">
-      <Filter>Screen</Filter>
-    </ClCompile>
     <ClCompile Include="Boss.cpp">
       <Filter>Entity\Hostile</Filter>
     </ClCompile>
@@ -100,9 +97,6 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Bonus.cpp">
       <Filter>Entity\Friendly</Filter>
-    </ClCompile>
-    <ClCompile Include="WeaponContainer.cpp">
-      <Filter>Utilities</Filter>
     </ClCompile>
     <ClCompile Include="EntityGenerator.cpp">
       <Filter>Utilities</Filter>
@@ -148,9 +142,6 @@
     <ClInclude Include="Block.hpp">
       <Filter>Entity</Filter>
     </ClInclude>
-    <ClInclude Include="TownGraphics.hpp">
-      <Filter>Screen</Filter>
-    </ClInclude>
     <ClInclude Include="Boss.hpp">
       <Filter>Entity\Hostile</Filter>
     </ClInclude>
@@ -177,9 +168,6 @@
     </ClInclude>
     <ClInclude Include="Bonus.hpp">
       <Filter>Entity\Friendly</Filter>
-    </ClInclude>
-    <ClInclude Include="WeaponContainer.hpp">
-      <Filter>Utilities</Filter>
     </ClInclude>
     <ClInclude Include="EntityGenerator.h">
       <Filter>Utilities</Filter>

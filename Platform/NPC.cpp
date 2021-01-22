@@ -1,7 +1,7 @@
 #include "NPC.hpp"
 #include <cstring>
 #include <cstdlib>
-#include "WeaponContainer.hpp"
+#include "EntityGenerator.h"
 
 const char NAMES[][STRING_LEN] = { "Alfredo", "Ilenia", "Federigo", "Antonia", "Damiano", "Serena" };
 const int NAMES_SIZE = 6;
@@ -18,9 +18,6 @@ NPC::NPC(int health, Pixel head_left, Pixel head_right, Pixel body, Position pos
 		this->price_hp = difficulty;
 	}
 	else {
-		WeaponContainer *weaponcontainer = new WeaponContainer();
-		weaponcontainer->initForPlayer();
-
 		Weapon weapon;
 		int price;
 		int tier2_chance, tier3_chance, tierS_chance;
@@ -33,15 +30,15 @@ NPC::NPC(int health, Pixel head_left, Pixel head_right, Pixel body, Position pos
 
 			int generate = rand() % (tier2_chance+tier3_chance+tierS_chance);
 			if (generate < tier2_chance) {
-				weapon = weaponcontainer->getRandomTier2();
+				weapon = getRandomTier2Player();
 				price = 10 * difficulty;
 			}
 			else if (generate < tier2_chance+tier3_chance) {
-				weapon = weaponcontainer->getRandomTier3();
+				weapon = getRandomTier3Player();
 				price = 20 * difficulty;
 			}
 			else {
-				weapon = weaponcontainer->getRandomSpecial();
+				weapon = getRandomSpecial();
 				price = 50 * difficulty;
 			}
 
@@ -59,8 +56,6 @@ NPC::NPC(int health, Pixel head_left, Pixel head_right, Pixel body, Position pos
 				weapon_number++;
 			}
 		}
-
-		delete weaponcontainer;
 	}
 }
 
