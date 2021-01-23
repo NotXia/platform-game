@@ -42,7 +42,7 @@ class Enemy : public ArmedEntity {
 			Prende in input un oggetto Player
 			Aggiorna lastPlayerPosition se la posizione del player è nel campo visivo
 		*/
-		void search4Player(Player player);
+		void searchForPlayer(Player player);
 
 		/*
 			Prende in input un oggetto Map e Player

@@ -42,6 +42,7 @@ void ArmedEntity::incWeaponDisplay() {
 bool ArmedEntity::endWeaponDisplay() {
 	if (weapon_animation.limit() && is_attacking) {
 		is_attacking = false;
+		setCanMove(true);
 		return true;
 	}
 	else {
@@ -168,6 +169,7 @@ void ArmedEntity::incCounters() {
 	Entity::incCounters();
 	weapon.incReloadDelay();
 	weapon.incShootDelay();
-	incWeaponDisplay();
+	weapon_animation.incTimer();
+	//incWeaponDisplay();
 	mapEventsTimer.incTimer();
 }

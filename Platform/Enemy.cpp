@@ -50,7 +50,7 @@ void Enemy::incRefresh() {
 	Prende in input un oggetto Player
 	Aggiorna lastPlayerPosition se la posizione del player è nel campo visivo
 */
-void Enemy::search4Player(Player player) {
+void Enemy::searchForPlayer(Player player) {
 	Position player_pos = player.getBodyPosition();
 	bool foundInX = false, foundInY = false;
 
