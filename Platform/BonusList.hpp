@@ -32,12 +32,13 @@ class BonusList {
 
 		/*
 			Restituisce l'oggetto Bonus contenuto nel nodo attualmente puntato da iter.
+			Se iter è NULL, restituisce un oggetto di default.
 		*/
 		Bonus getCurrent();
 
 
 		/*
-			Elimina il nodo attualmente puntato da iter.
+			Elimina il nodo attualmente puntato da iter e muove iter al nodo successivo.
 		*/
 		void deleteCurrent();
 

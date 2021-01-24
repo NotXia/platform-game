@@ -1,14 +1,10 @@
-﻿#include <iostream>
-#include <conio.h>
+﻿#include <conio.h>
 #include <cstdlib>
 #include <ctime>
 #include "Screen.hpp"
 #include "Map.hpp"
 #include "Player.hpp"
-#include "colors.h"
-#include "Weapon.hpp"
-#include "Bullet.hpp"
-#include "EnemyList.hpp"
+#include "settings.h"
 #include "EntityGenerator.h"
 using namespace std;
 
@@ -588,7 +584,7 @@ int main() {
             Boss *boss = map->getBoss();
 
             if (print_boss_hp) {
-                screen.write_write_boss_hp(*boss);
+                screen.write_boss_hp(*boss);
                 print_boss_hp = false;
             }
 
@@ -717,7 +713,7 @@ int main() {
 
                 if (!hit_bullet.isHostile()) {
                     boss->take_damage(hit_bullet.hit());
-                    screen.write_write_boss_hp(*boss);
+                    screen.write_boss_hp(*boss);
                     if (boss->isDead()) {
                         screen.remove_boss(map, *boss);
 
@@ -731,7 +727,7 @@ int main() {
                         map->endBossFight();
                         screen.write_terrain(map);
                         screen.write_entity(map, player);
-                        screen.write_bonuses(map, map->getBonusList());
+                        screen.write_bonuses(map);
                         screen.clear_textbox();
                         print_boss_hp = true;
                     }

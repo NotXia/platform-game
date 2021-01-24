@@ -9,7 +9,7 @@ NPCList::NPCList() {
 
 /*
 	Prende in input un oggetto NPC.
-	Inserisce un nodo in testa a list con tale oggetto
+	Inserisce un nodo in testa a list con tale oggetto.
 */
 void NPCList::insert(NPC npc) {
 	NPCNode *new_node = new NPCNode;
@@ -19,7 +19,7 @@ void NPCList::insert(NPC npc) {
 }
 
 /*
-	Inizializza iter e prev per puntare alla testa di list
+	Inizializza iter e prev per puntare alla testa di list.
 */
 void NPCList::initIter() {
 	iter = list;
@@ -27,21 +27,26 @@ void NPCList::initIter() {
 }
 
 /*
-	Restituisce l'oggetto NPC contenuto nel nodo attualmente puntato da iter
+	Restituisce l'oggetto NPC contenuto nel nodo attualmente puntato da iter.
 */
 NPC NPCList::getCurrent() {
-	return iter->npc;
+	if (iter != NULL) {
+		return iter->npc;
+	}
+	else {
+		return NPC();
+	}
 }
 
 /*
-	Indica se iter è NULL
+	Indica se iter è NULL.
 */
 bool NPCList::isNull() {
 	return iter == NULL;
 }
 
 /*
-	Muove iter e prev al nodo successivo
+	Muove iter e prev al nodo successivo.
 */
 void NPCList::goNext() {
 	if (iter != NULL) {

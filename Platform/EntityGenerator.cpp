@@ -1,7 +1,8 @@
 #include "EntityGenerator.h"
 
 /*
-	Crea un'arma per il giocatore e lo restituisce
+	Crea un'arma per il giocatore e la restituisce.
+	Il tipo di arma dipende dalla difficoltà.
 */
 Weapon createPlayerWeapon(int difficulty) {
 	Weapon weapon;
@@ -25,7 +26,8 @@ Weapon createPlayerWeapon(int difficulty) {
 }
 
 /*
-	Crea un'arma per nemici e lo restituisce
+	Crea un'arma per nemici e la restituisce.
+	Il tipo di arma dipende dalla difficoltà.
 */
 Weapon createEnemyWeapon(int difficulty) {
 	Weapon weapon;
@@ -49,7 +51,7 @@ Weapon createEnemyWeapon(int difficulty) {
 }
 
 /*
-	Crea un nemico e lo restituisce
+	Crea un nemico e lo restituisce.
 */
 Enemy createEnemy(int difficulty) {
 	int hp = rand() % (difficulty*2 - difficulty + 1) + difficulty;
@@ -67,7 +69,7 @@ Enemy createEnemy(int difficulty) {
 }
 
 /*
-	Crea un bonus e lo restituisce
+	Crea un bonus e lo restituisce.
 */
 Bonus createBonus(int difficulty) {
 	int type = rand() % 100;
@@ -92,7 +94,7 @@ Bonus createBonus(int difficulty) {
 }
 
 /*
-	Crea un boss e lo restituisce
+	Crea un boss e lo restituisce.
 */
 Boss createBoss(int difficulty) {
 	int type = rand() % 3;
@@ -177,7 +179,7 @@ Boss createBoss(int difficulty) {
 }
 
 /*
-	Restituisce un oggetto Weapon casuale contenuto nell'array tier1
+	Crea un'arma casuale di tier 1 per il giocatore.
 */
 Weapon getRandomTier1Player() {
 	Weapon weapons[10];
@@ -185,8 +187,8 @@ Weapon getRandomTier1Player() {
 
 	weapons[size] = Weapon(
 		"Coltellino",
-		Pixel(' ', FG_BLACK, BACKGROUND_DEFAULT, false),
-		Pixel(' ', FG_BLACK, BACKGROUND_DEFAULT, false),
+		Pixel('-', FG_BLACK, BACKGROUND_DEFAULT, false),
+		Pixel('-', FG_BLACK, BACKGROUND_DEFAULT, false),
 		Bullet(Pixel(char(196), FG_BLACK, BACKGROUND_DEFAULT, false), 2, 0),
 		1,
 		0,
@@ -213,7 +215,7 @@ Weapon getRandomTier1Player() {
 }
 
 /*
-	Restituisce un oggetto Weapon casuale contenuto nell'array tier2
+	Crea un'arma casuale di tier 2 per il giocatore.
 */
 Weapon getRandomTier2Player() {
 	Weapon weapons[10];
@@ -221,8 +223,8 @@ Weapon getRandomTier2Player() {
 
 	weapons[size] = Weapon(
 		"Spada",
-		Pixel(' ', FG_BLACK, BACKGROUND_DEFAULT, false),
-		Pixel(' ', FG_BLACK, BACKGROUND_DEFAULT, false),
+		Pixel(char(196), FG_BLACK, BACKGROUND_DEFAULT, false),
+		Pixel(char(196), FG_BLACK, BACKGROUND_DEFAULT, false),
 		Bullet(Pixel(char(196), FG_BLACK, BACKGROUND_DEFAULT, false), 3, 0),
 		1,
 		0,
@@ -262,7 +264,7 @@ Weapon getRandomTier2Player() {
 }
 
 /*
-	Restituisce un oggetto Weapon casuale contenuto nell'array tier3
+	Crea un'arma casuale di tier 3 per il giocatore.
 */
 Weapon getRandomTier3Player() {
 	Weapon weapons[10];
@@ -324,7 +326,7 @@ Weapon getRandomTier3Player() {
 }
 
 /*
-	Restituisce un oggetto Weapon casuale contenuto nell'array special
+	Crea un'arma speciale casuale.
 */
 Weapon getRandomSpecial() {
 	Weapon weapons[10];
@@ -348,7 +350,7 @@ Weapon getRandomSpecial() {
 
 
 /*
-	Restituisce un oggetto Weapon casuale contenuto nell'array tier1
+	Crea un'arma casuale di tier 1 per il nemico.
 */
 Weapon getRandomTier1Enemy() {
 	Weapon weapons[10];
@@ -384,7 +386,7 @@ Weapon getRandomTier1Enemy() {
 }
 
 /*
-	Restituisce un oggetto Weapon casuale contenuto nell'array tier2
+	Crea un'arma casuale di tier 2 per il nemico.
 */
 Weapon getRandomTier2Enemy() {
 	Weapon weapons[10];
@@ -433,7 +435,7 @@ Weapon getRandomTier2Enemy() {
 }
 
 /*
-	Restituisce un oggetto Weapon casuale contenuto nell'array tier3
+	Crea un'arma casuale di tier 3 per il nemico.
 */
 Weapon getRandomTier3Enemy() {
 	Weapon weapons[10];

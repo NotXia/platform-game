@@ -7,7 +7,7 @@ Position::Position(int x, int y) {
 }
 
 /*
-	Imposta x (rispettando i limiti)
+	Imposta x (rispettando i limiti).
 */
 void Position::setX(int x) {
 	if (x > GAME_WIDTH-1) {
@@ -20,7 +20,7 @@ void Position::setX(int x) {
 }
 
 /*
-	Imposta y (rispettando i limiti)
+	Imposta y (rispettando i limiti).
 */
 void Position::setY(int y) {
 	if (y > GAME_HEIGHT-1) {
@@ -41,8 +41,8 @@ int Position::getY() {
 }
 
 /*
-	Prende in input un oggetto Position
-	Restituisce true se il parametro è uguale all'oggetto su cui è chiamato
+	Prende in input un oggetto Position.
+	Restituisce true se il parametro è uguale all'oggetto su cui è chiamato.
 */
 bool Position::equals(Position p) {
 	return this->x == p.x && this->y == p.y;

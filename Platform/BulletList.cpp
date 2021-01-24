@@ -9,7 +9,7 @@ BulletList::BulletList() {
 
 /*
 	Prende in input un oggetto di tipo Bullet.
-	Inserisce l'input in testa alla lista list
+	Inserisce l'input in testa alla lista list.
 */
 void BulletList::insert(Bullet bullet) {
 	FlyingBullet *new_node = new FlyingBullet;
@@ -19,7 +19,7 @@ void BulletList::insert(Bullet bullet) {
 }
 
 /*
-	Inizializza iter alla testa della lista e prev a NULL
+	Inizializza iter alla testa della lista e prev a NULL.
 */
 void BulletList::initIter() {
 	iter = list;
@@ -27,14 +27,14 @@ void BulletList::initIter() {
 }
 
 /*
-	Restituisce true se iter è NULL, false altrimenti
+	Restituisce true se iter è NULL, false altrimenti.
 */
 bool BulletList::isNull() {
 	return iter == NULL;
 }
 
 /*
-	Restituisce l'oggetto Bullet del nodo attualmente puntato da iter. Se è NULL, restituisce l'oggetto di default
+	Restituisce l'oggetto Bullet del nodo attualmente puntato da iter. Se è NULL, restituisce l'oggetto di default.
 */
 Bullet BulletList::getCurrent() {
 	if (iter != NULL) {
@@ -46,7 +46,8 @@ Bullet BulletList::getCurrent() {
 }
 
 /*
-	Aggiorna l'oggetto Bullet del nodo attualmente puntato da iter
+	Aggiorna l'oggetto Bullet del nodo attualmente puntato da iter.
+	Se il proiettile non può più viaggiare, cancella il nodo attualmente puntato da iter e muove iter al nodo successivo.
 */
 void BulletList::updateCurrent(Bullet bullet) {
 	if (iter != NULL) {
@@ -119,7 +120,7 @@ bool BulletList::pointAt(Position position1, Position position2, Position positi
 }
 
 /*
-	Restituisce il numero di nodi con campo hostile=true nella lista
+	Restituisce il numero di nodi con campo hostile=true nella lista.
 */
 int BulletList::sizeHostile() {
 	int i=0;

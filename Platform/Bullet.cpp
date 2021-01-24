@@ -2,7 +2,6 @@
 #include "settings.h"
 
 Bullet::Bullet(Pixel texture, int damage, int range, Position position, bool direction) : Block(texture, position) {
-	this->textureRight = texture;
 	this->damage = damage;
 	this->range = range;
 	this->direction = direction;
@@ -10,14 +9,6 @@ Bullet::Bullet(Pixel texture, int damage, int range, Position position, bool dir
 	this->hostile = false;
 }
 
-Pixel Bullet::getTexture() {
-	if (direction == BULLET_LEFT) {
-		return getBody();
-	}
-	else {
-		return textureRight;
-	}
-}
 int Bullet::getDamage() {
 	return damage;
 }
@@ -44,15 +35,16 @@ void Bullet::setDirection(bool direction) {
 }
 
 /*
-	Restituisce true se il range è maggiore di 0, false altrimenti
+	Restituisce true se il range è maggiore di 0, false altrimenti.
+	Indica se il proiettile può continuare ad avanzare.
 */
 bool Bullet::canTravel() {
 	return range > 0;
 }
 
 /*
-	Se range è maggiore di 0: decrementa range e muove la posizione di 1 (in base all direzione).
-	In caso la posizione dovesse superare i limiti, range viene impostato ad un valore nullo.
+	Se range è maggiore di 0: decrementa range e muove la posizione di 1 (in base alla direzione).
+	In caso la posizione dovesse superare i limiti della mappa, range viene impostato ad un valore nullo.
 	Restituisce true se il range è maggiore di 0, false altrimenti.
 */
 bool Bullet::travel() {
@@ -80,21 +72,21 @@ bool Bullet::travel() {
 }
 
 /*
-	Indica se è possibile aggiornare lo stato del Bullet
+	Indica se è possibile aggiornare lo stato del Bullet.
 */
 bool Bullet::canRefresh() {
 	return refresh.limit();
 }
 
 /*
-	Incrementa  currRefresh di 1. Se supera refreshTime, viene azzerato
+	Incrementa il timer refresh di 1.
 */
 void Bullet::incRefresh() {
 	refresh.incTimer();
 }
 
 /*
-	Imposta range ad un valore negativo e restituisce il danno del proiettile
+	Imposta range ad un valore negativo e restituisce il danno del proiettile.
 */
 int Bullet::hit() {
 	range = -1;
@@ -102,8 +94,8 @@ int Bullet::hit() {
 }
 
 /*
-	Prende in input un oggetto Bullet
-	Confronta l'oggetto corrente con il parametro e dice se sono uguali
+	Prende in input un oggetto Bullet.
+	Confronta l'oggetto corrente con il parametro e dice se sono uguali.
 */
 bool Bullet::equals(Bullet bullet) {
 	return this->damage == bullet.damage && this->range == bullet.range;

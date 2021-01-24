@@ -16,27 +16,27 @@ class NPCList {
 
 		/*
 			Prende in input un oggetto NPC.
-			Inserisce un nodo in testa a list con tale oggetto
+			Inserisce un nodo in testa a list con tale oggetto.
 		*/
 		void insert(NPC npc);
 
 		/*
-			Inizializza iter e prev per puntare alla testa di list
+			Inizializza iter e prev per puntare alla testa di list.
 		*/
 		void initIter();
 
 		/*
-			Restituisce l'oggetto NPC contenuto nel nodo attualmente puntato da iter
+			Restituisce l'oggetto NPC contenuto nel nodo attualmente puntato da iter.
 		*/
 		NPC getCurrent();
 
 		/*
-			Indica se iter è NULL
+			Indica se iter è NULL.
 		*/
 		bool isNull();
 
 		/*
-			Muove iter e prev al nodo successivo
+			Muove iter e prev al nodo successivo.
 		*/
 		void goNext();
 

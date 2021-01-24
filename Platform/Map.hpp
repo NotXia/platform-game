@@ -28,31 +28,34 @@ class Map {
 
 
 		/*
-			Inizializza la matrice terrain con gli elementi base della mappa
+			Inizializza la matrice terrain con gli elementi base di un livello erboso.
 		*/
 		void generateTerrainGrass();
 
+		/*
+			Inizializza la matrice terrain con gli elementi base di un livello roccioso.
+		*/
 		void generateTerrainRock();
 
 		/*
-			Inizializza la matrice terrain con le piattaforme
+			Inizializza la matrice terrain con le piattaforme.
 		*/
 		void generatePlatforms();
 
 		/*
-			Prende in input due interi, rispettivamente il numero massimo di nemici generabili e la difficoltà.
-			Genera e inizializza i nemici e li inserisce in enemyList
+			Prende in input un intero che rappresenta il numero massimo di nemici generabili.
+			Genera e inizializza i nemici e li inserisce in enemyList.
 		*/
 		void generateEnemies(int max_enemies);
 
 		/*
-			Prende in input due interi, rispettivamente il numero massimo di bonus generabili e la difficoltà.
-			Genera e inizializza i bonus e li inserisce in bonusList
+			Prende in input un intero che rappresenta il numero massimo di bonus generabili.
+			Genera e inizializza i bonus e li inserisce in bonusList.
 		*/
 		void generateBonuses(int max_bonus);
 
 		/*
-			Inizializza la matrice terrain con gli elementi di un villaggio
+			Inizializza la matrice terrain con gli elementi di un villaggio.
 		*/
 		void generateTown();
 
@@ -62,6 +65,9 @@ class Map {
 		*/
 		void generateLava();
 
+		/*
+			Imposta la matrice terrain per le boss fight
+		*/
 		void generateMapBossType1();
 		void generateMapBossType2();
 		void generateMapBossType3();
@@ -83,58 +89,60 @@ class Map {
 
 
 		/*
-			Restituisce la difficoltà corrente, calcolata in base al numero di livelli superati
+			Restituisce la difficoltà corrente, calcolata in base al numero di livelli superati.
 		*/
 		int getDifficulty();
 
 		/*
-			Restituisce true se *prev è NULL, false altrimenti
+			Restituisce true se *prev è NULL, false altrimenti.
 		*/
 		bool prevNull();
 
 		/*
-			Prende in input la posizione da cui il giocatore è uscito nel livello corrente.
+			Prende in input la posizione da cui il giocatore è uscito dal livello corrente.
 			Restituisce il puntatore al livello precedente, impostando right_position con il parametro in input.
 		*/
 		Map *gotoPrevious(Position exit_position);
 
 		/*
-			Prende in input la posizione da cui il giocatore è uscito nel livello corrente.
+			Prende in input la posizione da cui il giocatore è uscito dal livello corrente.
 			Restituisce il puntatore al livello successivo, impostando left_position con il parametro in input.
 		*/
-		Map *gotoNext(Position enter_position);
+		Map *gotoNext(Position exit_position);
 
 		/*
 			Prende in input una posizione.
-			Restituisce true se quella posizione è solida, false altrimenti
+			Restituisce true se quella posizione è solida, false altrimenti.
+			Valuta considerando il terreno, i nemici e il boss.
 		*/
 		bool isSolidAt(Position position);
 
 		/*
 			Prende in input una posizione.
-			Restituisce quella posizione della mappa, ignorando la lista di nemici
+			Restituisce quella posizione della mappa, ignorando la lista di nemici.
 		*/
 		Pixel getTerrainAt(Position position);
 
 		/*
 			Prende in input un oggetto Bullet.
-			Inserisce il parametro nella lista BulletList
+			Inserisce il parametro nella lista BulletList.
 		*/
 		void addBullet(Bullet bullet);
 
 		/*
 			Prende in input un oggetto Bonus.
-			Inserisce il parametro nella lista BonusList
+			Inserisce il parametro nella lista BonusList e restituisce la posizione in cui è stato inserito.
+			Se c'è già un bonus in tale posizione, il nuovo bonus viene spostato nella prima posizione disponibile nelle vicinanze.
 		*/
 		Position addBonus(Bonus bonus);
 
 		/*
-			Restituisce true boss non è NULL
+			Restituisce true boss non è NULL.
 		*/
 		bool isBossFight();
 
 		/*
-			Imposta la matrice terrain in modo da avere l'entrata e l'uscita del livello bloccati
+			Imposta la matrice terrain in modo da avere l'entrata e l'uscita del livello bloccati.
 		*/
 		void place_wall();
 

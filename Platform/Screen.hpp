@@ -27,30 +27,31 @@ class Screen {
 		int textBox_x, textBox_y, textBox_width;
 		int weaponbox_width, ammobox_width;
 
+		// Gestione rotazione nome arma
 		int start_index;
 		char weaponbox_text[STRING_LEN];
 		bool need_rotate;
 		AnimationTimer rotation;
 
 		/*
-			Prende in input un intero che rappresenta il colore 
-			Imposta il colore dei caratteri successivi in quello indicato come parametro
+			Prende in input un intero che rappresenta il colore.
+			Imposta il colore dei caratteri successivi in quello indicato come parametro.
 		*/
 		void setColor(int color);
 
 		/*
-			Imposta il colore dei caratteri successivi a quello di default della console
+			Imposta il colore dei caratteri successivi a quello di default della console.
 		*/
 		void resetColor();
 
 		/*
-			Prende in input due interi che rappresentano le coordinate
-			Muove il cursore a tali coordinate
+			Prende in input due interi che rappresentano le coordinate.
+			Muove il cursore a tali coordinate.
 		*/
 		void moveCursor(int x, int y);
 
 		/*
-			Modifica le variabili di sistema per nascondere il cursore
+			Modifica le variabili di sistema per nascondere il cursore.
 		*/
 		void hideCursor();
 
@@ -69,14 +70,14 @@ class Screen {
 		**********************************/
 
 		/*
-			Prende in input un oggetto Map
-			Stampa l'area di gioco
+			Prende in input un oggetto Map.
+			Stampa l'area di gioco.
 		*/
 		void write_game_area(Map *map);
 
 		/*
-			Prende in input un oggetto Map
-			Stampa il terreno del gioco
+			Prende in input un oggetto Map.
+			Stampa il terreno del gioco.
 		*/
 		void write_terrain(Map *map);
 
@@ -88,44 +89,44 @@ class Screen {
 		void write_at(Map *map, Pixel pixel, Position position);
 
 		/*
-			Prende in input un oggetto Map ed Entity
-			Inserisce l'entità nell'area di gioco
+			Prende in input un oggetto Map ed Entity.
+			Inserisce l'entità nell'area di gioco.
 		*/
 		void write_entity(Map *map, Entity entity);
 
 		/*
-			Prende in input un oggetto Map ed Entity
-			Rimuove l'entità dall'area di gioco
+			Prende in input un oggetto Map ed Entity.
+			Rimuove l'entità dall'area di gioco.
 		*/
 		void remove_entity(Map *map, Entity entity);
 
 		/*
-			Prende in input un oggetto Map, Player e Bullet 
-			Inserisce un proiettile nell'area di gioco, se non ci sono altre entità
+			Prende in input un oggetto Map, Player e Bullet.
+			Inserisce un proiettile nell'area di gioco, se non ci sono altre entità nella sua posizione.
 		*/
 		void write_bullet(Map *map, Player player, Bullet bullet);
 
 		/*
-			Prende in input una posizione e la mappa.
-			Imposta in posizione position il valore previsto dalla mappa.
+			Prende in input un oggetto Map e Position.
+			Imposta nella posizione indicata il valore previsto dalla mappa.
 		*/
 		void resetTerrain(Map *map, Position position);
 
 		/*
-			Prende in input un oggetto Map ed EnemyList.
-			Stampa sullo schermo tutti i nemici
+			Prende in input un oggetto Map.
+			Stampa sullo schermo tutti i nemici.
 		*/
-		void write_enemies(Map *map, EnemyList list);
+		void write_enemies(Map *map);
 
 		/*
-			Prende in input un oggetto Map e BonusList.
-			Stampa sullo schermo tutti i bonus
+			Prende in input un oggetto Map.
+			Stampa sullo schermo tutti i bonus.
 		*/
-		void write_bonuses(Map *map, BonusList list);
+		void write_bonuses(Map *map);
 
 		/*
-			Prende in input un oggetto Map e Boss
-			Inserisce il boss nell'area di gioco
+			Prende in input un oggetto Map.
+			Inserisce il boss nell'area di gioco.
 		*/
 		void write_boss(Map *map, Boss boss);
 
@@ -143,32 +144,33 @@ class Screen {
 		/*****************************
 		   INIZIO GESTIONE TEXT BOX   
 		*****************************/
+
 		/*
-			Rimuove tutto il testo nell'area di testo
+			Rimuove tutto il testo nell'area di testo.
 		*/
 		void clear_textbox();
 
 		/*
 			Prende in input una stringa.
-			Inserisce la stringa nell'area di testo.
+			Inserisce la stringa nell'area di testo (in basso a destra).
 		*/
 		void write_textbox(const char string[]);
 
 		/*
-			Prende in input un oggetto Weapon.
+			Prende in input due oggetti Weapon.
 			Inserisce nella textbox il testo previsto quando il giocatore si posiziona sopra un bonus di tipo arma.
 		*/
 		void write_textbox_weaponbonus(Weapon bonus_weapon, Weapon player_weapon);
 
 		/*
 			Prende in input un oggetto NPC e un intero.
-			Inserisce nella textbox il dialogo di un NPC medico
+			Inserisce nella textbox il dialogo di un NPC medico.
 		*/
 		void write_textbox_npc_hp(NPC npc, int missing_hp);
 
 		/*
-			Prende in input un oggetto NPC e un oggetto Weapon
-			Inserisce nella textbox il dialogo di un NPC mercante
+			Prende in input un oggetto NPC e un oggetto Weapon.
+			Inserisce nella textbox il dialogo di un NPC mercante.
 		*/
 		void write_textbox_npc_weapon(NPC npc, Weapon player_weapon);
 
@@ -176,7 +178,7 @@ class Screen {
 			Prende in input un oggetto Boss.
 			Visualizza nell'area di testo la sua barra della vita.
 		*/
-		void write_write_boss_hp(Boss boss);
+		void write_boss_hp(Boss boss);
 
 		/* FINE GESTIONE TEXT BOX  
 		**************************/
@@ -187,20 +189,20 @@ class Screen {
 		********************************/
 
 		/*
-			Prende in input un intero
-			Aggiorna la quantità di soldi visualizzata
+			Prende in input un intero.
+			Aggiorna la quantità di soldi visualizzata.
 		*/
 		void write_money(int money);
 
 		/*
-			Prende in input un intero
-			Aggiorna la quantità di punti visualizzata
+			Prende in input un intero.
+			Aggiorna la quantità di punti visualizzata.
 		*/
 		void write_points(int points);
 
 		/*
 			Prende in input un intero.
-			Aggiorna il numero di cuori visualizzato
+			Aggiorna il numero di cuori visualizzato.
 		*/
 		void write_hp(int hp);
 
@@ -214,29 +216,29 @@ class Screen {
 
 		/*
 			Prende in input un intero.
-			Aggiorna la quantità di munizioni visualizzata
+			Aggiorna la quantità di munizioni visualizzata.
 		*/
 		void write_ammobox(int ammo);
 
 		/*
-			Prende in input una stringa
-			Scrive il parametro nell'area del nome dell'arma. Se la stringa è troppo lunga, vengono inizializzati i parametri per la rotazione
+			Prende in input una stringa.
+			Scrive il parametro nell'area del nome dell'arma. Se la stringa è troppo lunga, vengono inizializzati i parametri per la rotazione.
 		*/
 		void write_weaponbox(char name[]);
 
 		/*
 			Prende in input un oggetto Weapon.
-			Scrive nell'area del nome dell'arma e il numero di munizioni le rispettive quantità
+			Scrive il nome dell'arma e il numero di munizioni.
 		*/
 		void write_weaponInfo(Weapon weapon);
 
 		/*
-			Incrementa di 1 rotation_counter
+			Incrementa di 1 rotation_counter.
 		*/
 		void incWeaponboxRotateCounter();
 
 		/*
-			Restituisce true se rotation_counter ha raggiunto WEAPONBOX_ROTATION_SPEED e need_rotate è true
+			Indica se è possibile avanzare con l'animazione della rotazione del nome dell'arma.
 		*/
 		bool canRotateWeaponbox();
 

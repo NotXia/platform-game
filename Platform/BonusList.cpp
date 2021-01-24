@@ -19,7 +19,7 @@ void BonusList::insert(Bonus bonus) {
 }
 
 /*
-	Inizializza iter alla testa della lista e prev a NULL
+	Inizializza iter alla testa della lista e prev a NULL.
 */
 void BonusList::initIter() {
 	iter = list;
@@ -34,14 +34,20 @@ bool BonusList::isNull() {
 }
 
 /*
-	Restituisce l'oggetto Bonus contenuto nel nodo attualmente puntato da iter
+	Restituisce l'oggetto Bonus contenuto nel nodo attualmente puntato da iter.
+	Se iter è NULL, restituisce un oggetto di default.
 */
 Bonus BonusList::getCurrent() {
-	return iter->bonus;
+	if (iter != NULL) {
+		return iter->bonus;
+	}
+	else {
+		return Bonus();
+	}
 }
 
 /*
-	Elimina il nodo attualmente puntato da iter
+	Elimina il nodo attualmente puntato da iter e muove iter al nodo successivo.
 */
 void BonusList::deleteCurrent() {
 	if (iter != NULL) {
@@ -62,7 +68,7 @@ void BonusList::deleteCurrent() {
 }
 
 /*
-	Muove iter e prev per puntare al nodo successivo
+	Muove iter e prev per puntare al nodo successivo.
 */
 void BonusList::goNext() {
 	if (iter != NULL) {

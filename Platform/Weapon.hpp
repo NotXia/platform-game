@@ -22,7 +22,7 @@ class Weapon {
 		AnimationTimer shoot_delay;
 
 		/*
-			Serve per le funzioni di confronto
+			Serve per le funzioni di confronto.
 			Prende in input un intero.
 			Restituisce un carattere in base al valore.
 		*/
@@ -31,7 +31,7 @@ class Weapon {
 	public:
 		Weapon(const char name[]="", Pixel left=Pixel(), Pixel right=Pixel(), Bullet bullet=Bullet(), int ammo=1, int reloadDelay=1000, int shootDelay=1000, bool type=WEAPON_RANGED, int range=1);
 
-		Pixel getTexture(bool direction);
+		Pixel getTexture(bool direction); // Restituisce la texture in base alla direzione.
 		void getName(char name[]);
 		int getCurrAmmo();
 		bool isShooting();
@@ -42,13 +42,13 @@ class Weapon {
 
 		/*
 			Restituisce l'oggetto Bullet associato all'arma.
-			Se si tratta di un'arma a distanza, viene impostato la distanza di percorrenza del proiettile uguale a range
-			Se si tratta di un'arma corpo a corpo, viene impostato la distanza di percorrenza del proiettile a 1
+			Se si tratta di un'arma a distanza, viene impostata la distanza di percorrenza del proiettile uguale a range.
+			Se si tratta di un'arma corpo a corpo, viene impostata la distanza di percorrenza del proiettile a 1.
 		*/
 		Bullet getBullet();
 
 		/*
-			Restituisce true se curr_ammo è maggiore di 0, false altrimenti
+			Restituisce true se curr_ammo è maggiore di 0, false altrimenti.
 		*/
 		bool hasAmmo();
 
@@ -58,22 +58,22 @@ class Weapon {
 		*****************************/
 
 		/*
-			Inizializza i parametri per visualizzare il tempo di ricarica
+			Inizializza i parametri per gestire il tempo di ricarica.
 		*/
 		void startReloadDelay();
 
 		/*
-			Incrementa di 1 curr_reloadDelay
+			Incrementa reload_delay di 1.
 		*/
 		void incReloadDelay();
 
 		/*
-			Restituisce true se curr_reloadDelay ha raggiunto reloadDelay
+			Restituisce true se la ricarica è terminata.
 		*/
 		bool canEndReloadDelay();
 
 		/*
-			Imposta curr_ammo ad ammo e reloading a false
+			Imposta curr_ammo ad ammo e reloading a false.
 		*/
 		void endReload();
 
@@ -86,22 +86,22 @@ class Weapon {
 		**************************/
 
 		/*
-			Inizializza i parametri per visualizzare l'attesa tra un colpo e l'altro
+			Inizializza i parametri per gestire l'attesa tra un colpo e l'altro.
 		*/
 		void startShootDelay();
 
 		/*
-			Incrementa di 1 curr_shootDelay
+			Incrementa shoot_delay di 1.
 		*/
 		void incShootDelay();
 
 		/*
-			Restituisce true se curr_shootDelay ha raggiunto shootDelay
+			Restituisce true se è finita l'attesa.
 		*/
 		bool canEndShootDelay();
 
 		/*
-			Imposta shooting a false
+			Imposta shooting a false.
 		*/
 		void endShoot();
 
@@ -120,24 +120,24 @@ class Weapon {
 			'-' se il campo confrontato di questo oggetto è minore di quello del parametro
 		*/
 
-		// Confronto danni
+		// Confronto danni.
 		char higherDamage(Weapon weapon);
 
-		// Confronto capienza caricatore
+		// Confronto capienza caricatore.
 		char higherAmmo(Weapon weapon);
 
-		// Contronto distanza di sparo
+		// Contronto distanza di sparo.
 		char higherRange(Weapon weapon);
 
-		// Confronto velocità ricarica
+		// Confronto velocità ricarica.
 		char fasterReload(Weapon weapon);
 
-		// Confronto velocità sparo
+		// Confronto velocità sparo.
 		char fasterShootRate(Weapon weapon);
 
 		/*
-			Prende in input un oggetto Weapon
-			Confronta l'oggetto corrente con il parametro e dice se sono uguali
+			Prende in input un oggetto Weapon.
+			Confronta l'oggetto corrente con il parametro e dice se sono uguali.
 		*/
 		bool equals(Weapon weapon);
 

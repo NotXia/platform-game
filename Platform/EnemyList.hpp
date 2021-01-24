@@ -16,29 +16,29 @@ class EnemyList {
 		EnemyList();
 
 		/*
-			Inizializza iter alla testa della lista e prev a NULL
+			Inizializza iter alla testa della lista e prev a NULL.
 		*/
 		void initIter();
 
 		/*
 			Restituisce l'oggetto Enemy del nodo attualmente puntato da iter
-			Se iter è NULL, restituisce un oggetto di default
+			Se iter è NULL, restituisce un oggetto di default.
 		*/
 		Enemy getCurrent();
 
 		/*
-			Prende in input un oggetto Enemy
-			Aggiunge un nuovo nodo in testa a list
+			Prende in input un oggetto Enemy.
+			Aggiunge un nuovo nodo in testa a list.
 		*/
 		void add(Enemy enemy);
 
 		/*
-			Restituisce true se iter è NULL, false altrimenti
+			Restituisce true se iter è NULL, false altrimenti.
 		*/
 		bool isNull();
 
 		/*
-			Sposta prev al nodo attualmente puntato da iter
+			Sposta prev al nodo attualmente puntato da iter.
 			Sposta iter al nodo successivo.
 		*/
 		void goNext();
@@ -47,19 +47,20 @@ class EnemyList {
 			Prende in input una posizione.
 			Indica se in quella posizione c'è un nemico.
 			Iter punterà a quel nodo, se esiste.
-			Previ punterà al nodo precedente, se esiste.
+			Prev punterà al nodo precedente, se esiste.
 		*/
 		bool pointAt(Position position);
 
 		/*
 			Prende in input una posizione.
 			Indica se in quella posizione c'è un nemico.
-			Non modifica iter e prev
+			Non modifica iter e prev.
 		*/
 		bool existsAt(Position position);
 
 		/*
-			Aggiorna l'oggetto Enemy del nodo attualmente puntato da iter
+			Aggiorna l'oggetto Enemy del nodo attualmente puntato da iter.
+			Se il nemico è morto, cancella il nodo attualmente puntato da iter e muove iter al nodo successivo.
 		*/
 		void updateCurrent(Enemy enemy);
 

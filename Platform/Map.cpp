@@ -73,13 +73,6 @@ Map::Map(Map *prev, int level_number) {
 }
 
 /*
-	Restituisce la difficoltà corrente, calcolata in base al numero di livelli superati
-*/
-int Map::getDifficulty() {
-	return int(level_number/DIFFICULTY_INCREASE_RATE)+1;
-}
-
-/*
 	Inizializza la matrice terrain con gli elementi base della mappa
 */
 void Map::generateTerrainGrass() {
@@ -98,6 +91,9 @@ void Map::generateTerrainGrass() {
 	}
 }
 
+/*
+	Inizializza la matrice terrain con gli elementi base di un livello roccioso.
+*/
 void Map::generateTerrainRock() {
 	// Generazione "pavimento"
 	for (int i=0; i<TERRAIN_HEIGHT; i++) {
@@ -115,17 +111,16 @@ void Map::generateTerrainRock() {
 }
 
 /*
-	Inizializza la matrice terrain con gli elementi base della mappa
+	Inizializza la matrice terrain con le piattaforme.
 */
 void Map::generatePlatforms() {
 	/* 
-		Generazione area di gioco
-		- L'area iniziale e finale rimangono libere da piattaforme
+		Generazione area di gioco:
+		- L'area iniziale e finale del livello rimangono libere da piattaforme
 		- L'area centrale prevede la generazione di piattaforme
 	*/
-	for (int height=GAME_HEIGHT-TERRAIN_HEIGHT-1; height>=0; height--) {
+	for (int height=GAME_HEIGHT-TERRAIN_HEIGHT-1; height>=3; height--) {
 
-		// Area centrale con possibilità di generare piattaforme
 		for (int width=EMPTYZONE_LENGTH; width<GAME_WIDTH-EMPTYZONE_LENGTH; width++) {
 			bool generate_platform = (rand() % PLATFORM_CHANCE) == 0;
 
@@ -133,20 +128,16 @@ void Map::generatePlatforms() {
 				La piattaforma viene generata se:
 				- La variabile generate_platform è true
 				- La distanza dal soffitto è di almeno 3 blocchi
-				- I due blocchi immediatamento sotto non sono solidi, mentre il terzo lo è (permette al giocatore di raggiungerlo)
+				- I due blocchi immediatamente sotto non sono solidi, mentre il terzo lo è (permette al giocatore di raggiungerlo)
 			*/
-			if (generate_platform && height >= 3 && (!terrain[width][height+1].isSolid() && !terrain[width][height+2].isSolid() && terrain[width][height+3].isSolid())) {
+			if (generate_platform && (!terrain[width][height+1].isSolid() && !terrain[width][height+2].isSolid() && terrain[width][height+3].isSolid())) {
 				int platform_size = rand() % (PLATFORM_MAX_LENGTH-PLATFORM_MIN_LENGTH+1) + PLATFORM_MIN_LENGTH;
 
-				if (platform_size > GAME_WIDTH-width-EMPTYZONE_LENGTH) { // Se la dimensione della piattaforma supera l'area "neutrale" a destra, annulla la generazione
-					terrain[width][height] = SKY_TEXTURE;
-				}
-				else {
+				if (platform_size <= GAME_WIDTH-width-EMPTYZONE_LENGTH) { // Se la dimensione della piattaforma supera l'area "neutrale" a destra, annulla la generazione
 					for (int k=0; k<platform_size; k++) {
 						terrain[width][height] = PLATFORM_TEXTURE;
 						width++;
 					}
-					width--;
 				}
 			}
 		}
@@ -154,8 +145,8 @@ void Map::generatePlatforms() {
 }
 
 /*
-	Prende in input due interi, rispettivamente il numero massimo di nemici generabili e la difficoltà.
-	Genera e inizializza i nemici e li inserisce in enemyList
+	Prende in input un intero che rappresenta il numero massimo di nemici generabili.
+	Genera e inizializza i nemici e li inserisce in enemyList.
 */
 void Map::generateEnemies(int max_enemies) {
 	if (max_enemies != 0) {
@@ -198,8 +189,8 @@ void Map::generateEnemies(int max_enemies) {
 }
 
 /*
-	Prende in input due interi, rispettivamente il numero massimo di bonus generabili e la difficoltà.
-	Genera e inizializza i bonus e li inserisce in bonusList
+	Prende in input un intero che rappresenta il numero massimo di bonus generabili.
+	Genera e inizializza i bonus e li inserisce in bonusList.
 */
 void Map::generateBonuses(int max_bonus) {
 	if (max_bonus != 0) {
@@ -244,13 +235,12 @@ void Map::generateBonuses(int max_bonus) {
 }
 
 /*
-	Inizializza la matrice terrain con gli elementi di un villaggio
+	Inizializza la matrice terrain con gli elementi di un villaggio.
 */
 void Map::generateTown() {
 	int start_x = EMPTYZONE_LENGTH;
 	int end_x = GAME_WIDTH-EMPTYZONE_LENGTH;
 	int start_y = GAME_HEIGHT-TERRAIN_HEIGHT-1;
-
 
 	while (end_x-start_x > 10) {
 		int left_size = rand() % 4 + 1;
@@ -352,6 +342,8 @@ void Map::generateTown() {
 */
 void Map::generateLava() {
 	int h = GAME_HEIGHT - TERRAIN_HEIGHT - 3;
+
+	// La lava viene generata sotto le piattaforme all'altezza del giocatore, lasciando lo spazio per evitarle attraversando sulla piattaforma.
 	for (int i=2; i<GAME_WIDTH-2; i++) {
 		if (terrain[i][h].isSolid() && 
 			terrain[i-1][h].isSolid() && terrain[i-2][h].isSolid() && 
@@ -411,14 +403,21 @@ void Map::setBoss(Boss *boss) {
 }
 
 /*
-	Restituisce true se *prev è NULL, false altrimenti
+	Restituisce la difficoltà corrente, calcolata in base al numero di livelli superati.
+*/
+int Map::getDifficulty() {
+	return int(level_number/DIFFICULTY_INCREASE_RATE)+1;
+}
+
+/*
+	Restituisce true se *prev è NULL, false altrimenti.
 */
 bool Map::prevNull() {
 	return (prev == NULL);
 }
 
 /*
-	Prende in input la posizione da cui il giocatore è uscito nel livello corrente.
+	Prende in input la posizione da cui il giocatore è uscito dal livello corrente.
 	Restituisce il puntatore al livello precedente, impostando right_position con il parametro in input.
 */
 Map* Map::gotoPrevious(Position exit_position) {
@@ -427,22 +426,23 @@ Map* Map::gotoPrevious(Position exit_position) {
 }
 
 /*
-	Prende in input la posizione da cui il giocatore è uscito nel livello corrente.
+	Prende in input la posizione da cui il giocatore è uscito dal livello corrente.
 	Restituisce il puntatore al livello successivo, impostando left_position con il parametro in input.
 */
-Map* Map::gotoNext(Position enter_position) {
+Map* Map::gotoNext(Position exit_position) {
 	if (this->next == NULL) {
 		this->next = new Map(this, level_number+1);
 	}
 	if (!this->next->isBossFight()) {
-		this->next->left_position = Position(0, enter_position.getY());
+		this->next->left_position = Position(0, exit_position.getY());
 	}
 	return this->next;
 }
 
 /*
 	Prende in input una posizione.
-	Restituisce true se quella posizione è solida, false altrimenti
+	Restituisce true se quella posizione è solida, false altrimenti.
+	Valuta considerando il terreno, i nemici e il boss.
 */
 bool Map::isSolidAt(Position position) {
 	bool out = false;
@@ -463,7 +463,7 @@ bool Map::isSolidAt(Position position) {
 
 /*
 	Prende in input una posizione.
-	Restituisce quella posizione della mappa, ignorando la lista di nemici
+	Restituisce quella posizione della mappa, ignorando la lista di nemici.
 */
 Pixel Map::getTerrainAt(Position position) {
 	Pixel out;
@@ -473,7 +473,7 @@ Pixel Map::getTerrainAt(Position position) {
 
 /*
 	Prende in input un oggetto Bullet.
-	Inserisce il parametro nella lista BulletList
+	Inserisce il parametro nella lista BulletList.
 */
 void Map::addBullet(Bullet bullet) {
 	bulletList.insert(bullet);
@@ -481,7 +481,8 @@ void Map::addBullet(Bullet bullet) {
 
 /*
 	Prende in input un oggetto Bonus.
-	Inserisce il parametro nella lista BonusList
+	Inserisce il parametro nella lista BonusList e restituisce la posizione in cui è stato inserito.
+	Se c'è già un bonus in tale posizione, il nuovo bonus viene spostato nella prima posizione disponibile nelle vicinanze.
 */
 Position Map::addBonus(Bonus bonus) {
 	Position spawn_position = bonus.getBodyPosition();
@@ -505,14 +506,14 @@ Position Map::addBonus(Bonus bonus) {
 }
 
 /*
-	Restituisce true boss non è NULL
+	Restituisce true boss non è NULL.
 */
 bool Map::isBossFight() {
 	return boss != NULL;
 }
 
 /*
-	Imposta la matrice terrain in modo da avere l'entrata e l'uscita del livello bloccati
+	Imposta la matrice terrain in modo da avere l'entrata e l'uscita del livello bloccati.
 */
 void Map::place_wall() {
 	for (int i=0; i<GAME_HEIGHT; i++) {
@@ -525,7 +526,7 @@ void Map::place_wall() {
 	Imposta la matrice terrain alla mappa basilare
 */
 void Map::endBossFight() {
-	generateTerrainGrass();
+	generateTerrainRock();
 }
 
 /*
@@ -536,6 +537,9 @@ bool Map::isLava(Position position) {
 	return lavaList.existsAt(position);
 }
 
+/*
+	Imposta la matrice terrain per le boss fight
+*/
 void Map::generateMapBossType1() {
 	const Pixel PLATFORM_TEXTURE = Pixel(char(219), PLATFORM_COLOR_FG, BG_LIGHTGREY, true);
 	const Pixel TERRAIN_TEXTURE = Pixel(' ', 0, BG_GREY, true);

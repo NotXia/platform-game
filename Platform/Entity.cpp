@@ -21,7 +21,6 @@ int Entity::getHealth() {
 	return health;
 }
 
-
 Pixel Entity::getHead() {
 	if (direction == DIRECTION_LEFT) {
 		return head_left;
@@ -30,7 +29,6 @@ Pixel Entity::getHead() {
 		return head_right;
 	}
 }
-
 
 bool Entity::getDirection() {
 	return direction;
@@ -105,22 +103,22 @@ void Entity::setOnTerrain(bool on_terrain) {
 }
 
 /*
-	Prende in input un intero
-	Decrementa health di quel valore
+	Prende in input un intero.
+	Decrementa health di quel valore.
 */
 void Entity::take_damage(int damage) {
 	health -= damage;
 }
 
 /*
-	Restituisce true se la vita è minore o uguale a zero, false altrimenti
+	Restituisce true se la vita è minore o uguale a zero, false altrimenti.
 */
 bool Entity::isDead() {
 	return (health <= 0);
 }
 
 /*
-	Se il valore di attuale direction è DIRECTION_LEFT, aggiorna position decrementando di 1 la posizione sull'asse X
+	Se il valore di attuale direction è DIRECTION_LEFT, aggiorna position decrementando di 1 la posizione sull'asse X.
 	Aggiorna direction a DIRECTION_LEFT.
 */
 void Entity::goLeft() {
@@ -131,7 +129,7 @@ void Entity::goLeft() {
 }
 
 /*
-	Se il valore di attuale direction è DIRECTION_RIGHT, aggiorna position incrementando di 1 la posizione sull'asse X
+	Se il valore di attuale direction è DIRECTION_RIGHT, aggiorna position incrementando di 1 la posizione sull'asse X.
 	Aggiorna direction a DIRECTION_RIGHT.
 */
 void Entity::goRight() {
@@ -142,14 +140,14 @@ void Entity::goRight() {
 }
 
 /*
-	Restituisce la quantità di vita mancante rispetto al massimo
+	Restituisce la quantità di vita mancante rispetto al massimo.
 */
 int Entity::getMissingHp() {
 	return max_health - health;
 }
 
 /*
-	Restituisce la quantità di vita sottoforma di percentuale
+	Restituisce la quantità di vita sottoforma di percentuale.
 */
 int Entity::percHealth() {
 	return (100 * health) / max_health;
@@ -157,7 +155,7 @@ int Entity::percHealth() {
 
 /*
 	Prende in input un oggetto Position.
-	Restituisce true se la posizione presa in input coincide con una parte dell'entità
+	Restituisce true se la posizione presa in input coincide con una parte dell'entità.
 */
 bool Entity::existsAt(Position position) {
 	return getBodyPosition().equals(position) || getHeadPosition().equals(position);
@@ -173,7 +171,7 @@ bool Entity::isJumping() {
 }
 
 /*
-	Inizializza i parametri per il salto dell'entità
+	Inizializza i parametri per il salto dell'entità.
 */
 void Entity::initJump() {
 	is_jumping = true;
@@ -197,7 +195,7 @@ void Entity::jump() {
 }
 
 /*
-	Imposta i parametri di salto dell'entità in modo da interromperlo
+	Imposta i parametri di salto dell'entità in modo da interromperlo.
 */
 void Entity::stopJump() {
 	jump_status = 0;
@@ -205,17 +203,7 @@ void Entity::stopJump() {
 }
 
 /*
-	Se is_jumping è true: incrementa jump_loop_counter di 1.
-	Se supera il limite impostato, viene resettato.
-*/
-void Entity::incJumpLoopCounter() {
-	if (is_jumping) {
-		jump_animation.incTimer();
-	}
-}
-
-/*
-	Restituisce true quando è possibile avanzare nell'animazione del salto
+	Restituisce true quando è possibile avanzare nell'animazione del salto.
 */
 bool Entity::canJump() {
 	return (jump_animation.limit() && is_jumping);
@@ -230,16 +218,6 @@ bool Entity::canJump() {
 ***************************/
 
 /*
-	Se on_terrain è false: incrementa fall_loop_counter di 1.
-	Se supera il limite impostato, viene resettato.
-*/
-void Entity::incFallLoopCounter() {
-	if (!on_terrain) {
-		fall_animation.incTimer();
-	}
-}
-
-/*
 	Aggiorna position incrementando di 1 la posizione sull'asse Y.
 */
 void Entity::fall() {
@@ -247,7 +225,7 @@ void Entity::fall() {
 }
 
 /*
-	Restituisce true quando è possibile avanzare nell'animazione della caduta
+	Restituisce true quando è possibile avanzare nell'animazione della caduta.
 */
 bool Entity::canFall() {
 	return (fall_animation.limit() && !on_terrain && !is_jumping);
@@ -258,10 +236,14 @@ bool Entity::canFall() {
 
 
 /*
-	Incrementa i vari contatori
+	Incrementa i vari contatori.
 */
 void Entity::incCounters() {
-	incFallLoopCounter();
-	incJumpLoopCounter();
+	if (!on_terrain) {
+		fall_animation.incTimer();
+	}
+	if (is_jumping) {
+		jump_animation.incTimer();
+	}
 }
 

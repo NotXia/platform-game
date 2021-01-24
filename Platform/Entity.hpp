@@ -24,18 +24,6 @@ class Entity : public Block {
 		AnimationTimer fall_animation;
 
 
-		/*
-			Se is_jumping è true: incrementa jump_loop_counter di 1.
-			Se supera il limite impostato, viene resettato.
-		*/
-		void incJumpLoopCounter();
-
-		/*
-			Se on_terrain è false: incrementa fall_loop_counter di 1.
-			Se supera il limite impostato, viene resettato.
-		*/
-		void incFallLoopCounter();
-
 	public:
 		Entity(int health=0, Pixel head_left=Pixel(), Pixel head_right=Pixel(), Pixel body=Pixel(), Position position=Position());
 
@@ -54,41 +42,41 @@ class Entity : public Block {
 
 
 		/*
-			Prende in input un intero
-			Decrementa health di quel valore
+			Prende in input un intero.
+			Decrementa health di quel valore.
 		*/
 		void take_damage(int damage);
 
 		/*
-			Restituisce true se la vita è minore o uguale a zero, false altrimenti
+			Restituisce true se la vita è minore o uguale a zero, false altrimenti.
 		*/
 		bool isDead();
 
 		/*
-			Se il valore di attuale direction è DIRECTION_LEFT, aggiorna position decrementando di 1 la posizione sull'asse X
+			Se il valore di attuale direction è DIRECTION_LEFT, aggiorna position decrementando di 1 la posizione sull'asse X.
 			Aggiorna direction a DIRECTION_LEFT.
 		*/
 		void goLeft();
 
 		/*
-			Se il valore di attuale direction è DIRECTION_RIGHT, aggiorna position incrementando di 1 la posizione sull'asse X
+			Se il valore di attuale direction è DIRECTION_RIGHT, aggiorna position incrementando di 1 la posizione sull'asse X.
 			Aggiorna direction a DIRECTION_RIGHT.
 		*/
 		void goRight();
 
 		/*
-			Restituisce la quantità di vita mancante rispetto al massimo
+			Restituisce la quantità di vita mancante rispetto al massimo.
 		*/
 		int getMissingHp();
 
 		/*
-			Restituisce la quantità di vita sottoforma di percentuale
+			Restituisce la quantità di vita sottoforma di percentuale.
 		*/
 		int percHealth();
 
 		/*
 			Prende in input un oggetto Position.
-			Restituisce true se la posizione presa in input coincide con una parte dell'entità
+			Restituisce true se la posizione presa in input coincide con una parte dell'entità.
 		*/
 		bool existsAt(Position position);
 
@@ -100,7 +88,7 @@ class Entity : public Block {
 		bool isJumping();
 
 		/*
-			Inizializza i parametri per il salto dell'entità
+			Inizializza i parametri per il salto dell'entità.
 		*/
 		void initJump();
 
@@ -111,12 +99,12 @@ class Entity : public Block {
 		void jump();
 
 		/*
-			Imposta i parametri di salto dell'entità in modo da interromperlo
+			Imposta i parametri di salto dell'entità in modo da interromperlo.
 		*/
 		void stopJump();
 
 		/*
-			Restituisce true quando è possibile avanzare nell'animazione del salto
+			Restituisce true quando è possibile avanzare nell'animazione del salto.
 		*/
 		bool canJump();
 
@@ -134,7 +122,7 @@ class Entity : public Block {
 		void fall();
 
 		/*
-			Restituisce true quando è possibile avanzare nell'animazione della caduta
+			Restituisce true quando è possibile avanzare nell'animazione della caduta.
 		*/
 		bool canFall();
 
@@ -143,7 +131,7 @@ class Entity : public Block {
 
 
 		/*
-			Incrementa i vari contatori
+			Incrementa i vari contatori.
 		*/
 		void incCounters();
 

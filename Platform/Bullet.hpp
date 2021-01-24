@@ -9,7 +9,6 @@ const bool BULLET_RIGHT = true;
 
 class Bullet : public Block {
 	protected:
-		Pixel textureRight;
 		int damage;
 		int range;
 		bool hostile;
@@ -20,7 +19,6 @@ class Bullet : public Block {
 	public:
 		Bullet(Pixel texture=Pixel(), int damage=1, int range=1, Position position=Position(), bool direction=BULLET_LEFT);
 
-		Pixel getTexture();
 		int getDamage();
 		int getRange();
 		void setRange(int range);
@@ -31,35 +29,36 @@ class Bullet : public Block {
 		void setDirection(bool direction);
 
 		/*
-			Restituisce true se il range è maggiore di 0, false altrimenti
+			Restituisce true se il range è maggiore di 0, false altrimenti.
+			Indica se il proiettile può continuare ad avanzare.
 		*/
 		bool canTravel();
 
 		/*
-			Se range è maggiore di 0: decrementa range e muove la posizione di 1 (in base all direzione).
-			In caso la posizione dovesse superare i limiti, range viene impostato ad un valore nullo.
+			Se range è maggiore di 0: decrementa range e muove la posizione di 1 (in base alla direzione).
+			In caso la posizione dovesse superare i limiti della mappa, range viene impostato ad un valore nullo.
 			Restituisce true se il range è maggiore di 0, false altrimenti.
 		*/
 		bool travel();
 
 		/*
-			Indica se è possibile aggiornare lo stato del Bullet
+			Indica se è possibile aggiornare lo stato del Bullet.
 		*/
 		bool canRefresh();
 
 		/*
-			Incrementa  currRefresh di 1. Se supera refreshTime, viene azzerato
+			Incrementa il timer refresh di 1.
 		*/
 		void incRefresh();
 
 		/*
-			Imposta range ad un valore negativo e restituisce il danno del proiettile
+			Imposta range ad un valore negativo e restituisce il danno del proiettile.
 		*/
 		int hit();
 
 		/*
-			Prende in input un oggetto Bullet
-			Confronta l'oggetto corrente con il parametro e dice se sono uguali
+			Prende in input un oggetto Bullet.
+			Confronta l'oggetto corrente con il parametro e dice se sono uguali.
 		*/
 		bool equals(Bullet bullet);
 

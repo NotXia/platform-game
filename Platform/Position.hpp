@@ -8,12 +8,12 @@ class Position {
 		Position(int x=0, int y=0);
 
 		/*
-			Imposta x (rispettando i limiti)
+			Imposta x (rispettando i limiti).
 		*/
 		void setX(int x);
 
 		/*
-			Imposta y (rispettando i limiti)
+			Imposta y (rispettando i limiti).
 		*/
 		void setY(int y);
 
@@ -21,8 +21,8 @@ class Position {
 		int getY();
 
 		/*
-			Prende in input un oggetto Position
-			Restituisce true se il parametro è uguale all'oggetto su cui è chiamato
+			Prende in input un oggetto Position.
+			Restituisce true se il parametro è uguale all'oggetto su cui è chiamato.
 		*/
 		bool equals(Position p);
 };

@@ -7,7 +7,7 @@ EnemyList::EnemyList() {
 }
 
 /*
-	Inizializza iter alla testa della lista e prev a NULL
+	Inizializza iter alla testa della lista e prev a NULL.
 */
 void EnemyList::initIter() {
 	iter = list;
@@ -16,7 +16,7 @@ void EnemyList::initIter() {
 
 /*
 	Restituisce l'oggetto Enemy del nodo attualmente puntato da iter
-	Se iter è NULL, restituisce un oggetto di default
+	Se iter è NULL, restituisce un oggetto di default.
 */
 Enemy EnemyList::getCurrent() {
 	if (iter != NULL) {
@@ -28,7 +28,8 @@ Enemy EnemyList::getCurrent() {
 }
 
 /*
-	Aggiunge un nuovo nodo in testa a list
+	Prende in input un oggetto Enemy.
+	Aggiunge un nuovo nodo in testa a list.
 */
 void EnemyList::add(Enemy enemy) {
 	EnemyNode *new_node = new EnemyNode;
@@ -38,14 +39,14 @@ void EnemyList::add(Enemy enemy) {
 }
 
 /*
-	Restituisce true se iter è NULL, false altrimenti
+	Restituisce true se iter è NULL, false altrimenti.
 */
 bool EnemyList::isNull() {
 	return (iter == NULL);
 }
 
 /*
-	Sposta prev al nodo attualmente puntato da iter
+	Sposta prev al nodo attualmente puntato da iter.
 	Sposta iter al nodo successivo.
 */
 void EnemyList::goNext() {
@@ -57,7 +58,7 @@ void EnemyList::goNext() {
 	Prende in input una posizione.
 	Indica se in quella posizione c'è un nemico.
 	Iter punterà a quel nodo, se esiste.
-	Previ punterà al nodo precedente, se esiste.
+	Prev punterà al nodo precedente, se esiste.
 */
 bool EnemyList::pointAt(Position position) {
 	initIter();
@@ -79,7 +80,7 @@ bool EnemyList::pointAt(Position position) {
 /*
 	Prende in input una posizione.
 	Indica se in quella posizione c'è un nemico.
-	Non modifica iter e prev
+	Non modifica iter e prev.
 */
 bool EnemyList::existsAt(Position position) {
 	EnemyNode *iterator = list;
@@ -98,7 +99,8 @@ bool EnemyList::existsAt(Position position) {
 }
 
 /*
-	Aggiorna l'oggetto Enemy del nodo attualmente puntato da iter
+	Aggiorna l'oggetto Enemy del nodo attualmente puntato da iter.
+	Se il nemico è morto, cancella il nodo attualmente puntato da iter e muove iter al nodo successivo.
 */
 void EnemyList::updateCurrent(Enemy enemy) {
 	if (iter != NULL) {

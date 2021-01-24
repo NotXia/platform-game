@@ -25,23 +25,23 @@ Screen::Screen() {
 }
 
 /*
-	Prende in input un intero che rappresenta il colore
-	Imposta il colore dei caratteri successivi in quello indicato come parametro
+	Prende in input un intero che rappresenta il colore.
+	Imposta il colore dei caratteri successivi in quello indicato come parametro.
 */
 void Screen::setColor(int color) {
 	SetConsoleTextAttribute(console, color);
 }
 
 /*
-	Imposta il colore dei caratteri successivi a quello di default della console
+	Imposta il colore dei caratteri successivi a quello di default della console.
 */
 void Screen::resetColor() {
 	SetConsoleTextAttribute(console, CONSOLE_DEFAULT);
 }
 
 /*
-	Prende in input due interi che rappresentano le coordinate
-	Muove il cursore a tali coordinate
+	Prende in input due interi che rappresentano le coordinate.
+	Muove il cursore a tali coordinate.
 */
 void Screen::moveCursor(int x, int y) {
 	COORD coord;
@@ -51,7 +51,7 @@ void Screen::moveCursor(int x, int y) {
 }
 
 /*
-	Modifica le variabili di sistema per nascondere il cursore
+	Modifica le variabili di sistema per nascondere il cursore.
 */
 void Screen::hideCursor() {
 	CONSOLE_CURSOR_INFO cursorInfo;
@@ -96,7 +96,7 @@ void Screen::init() {
 	write_points(0);
 
 
-	// Area selettore arma
+	// Area textbox arma
 	moveCursor(weapon_x, weapon_y);
 	cout <<char(218); // ┌
 	for (int i=0; i<WEAPON_WIDTH; i++) {
@@ -117,7 +117,7 @@ void Screen::init() {
 	cout <<char(217); // ┘
 
 
-	// Text box
+	// Textbox dialogo
 	moveCursor(textBox_x, textBox_y);
 	cout <<char(218); // ┌
 	for (int i=0; i<textBox_width; i++) {
@@ -146,18 +146,18 @@ void Screen::init() {
 **********************************/
 
 /*
-	Prende in input un oggetto Map
-	Stampa l'area di gioco
+	Prende in input un oggetto Map.
+	Stampa l'area di gioco.
 */
 void Screen::write_game_area(Map *map) {
 	write_terrain(map);
-	write_enemies(map, map->getEnemyList());
-	write_bonuses(map, map->getBonusList());
+	write_enemies(map);
+	write_bonuses(map);
 }
 
 /*
-	Prende in input un oggetto Map
-	Stampa il terreno del gioco
+	Prende in input un oggetto Map.
+	Stampa il terreno del gioco.
 */
 void Screen::write_terrain(Map *map) {
 	for (int i=0; i<GAME_HEIGHT; i++) {
@@ -185,8 +185,8 @@ void Screen::write_at(Map *map, Pixel pixel, Position position) {
 }
 
 /*
-	Prende in input un oggetto Map ed Entity
-	Inserisce l'entità nell'area di gioco
+	Prende in input un oggetto Map ed Entity.
+	Inserisce l'entità nell'area di gioco.
 */
 void Screen::write_entity(Map *map, Entity entity) {
 	// Corpo
@@ -197,8 +197,8 @@ void Screen::write_entity(Map *map, Entity entity) {
 }
 
 /*
-	Prende in input un oggetto Map ed Entity
-	Rimuove l'entità dall'area di gioco
+	Prende in input un oggetto Map ed Entity.
+	Rimuove l'entità dall'area di gioco.
 */
 void Screen::remove_entity(Map *map, Entity entity) {
 	resetTerrain(map, entity.getBodyPosition());
@@ -206,8 +206,8 @@ void Screen::remove_entity(Map *map, Entity entity) {
 }
 
 /*
-	Prende in input un oggetto Map, Player e Bullet
-	Inserisce un proiettile nell'area di gioco, se non ci sono altre entità
+	Prende in input un oggetto Map, Player e Bullet.
+	Inserisce un proiettile nell'area di gioco, se non ci sono altre entità nella sua posizione.
 */
 void Screen::write_bullet(Map *map, Player player, Bullet bullet) {
 	EnemyList enemylist = map->getEnemyList();
@@ -219,13 +219,13 @@ void Screen::write_bullet(Map *map, Player player, Bullet bullet) {
 	bool weapon_display = player.isAttacking() && player.getBodyFrontPosition().equals(bullet.getPosition());
 
 	if (!enemylist.existsAt(bullet.getPosition()) && !player.existsAt(bullet.getPosition()) && !boss_exists && !bonuslist.pointAt(bullet.getPosition()) && !weapon_display) {
-		write_at(map, bullet.getTexture(), bullet.getPosition());
+		write_at(map, bullet.getBody(), bullet.getPosition());
 	}
 }
 
 /*
-	Prende in input una posizione e la mappa.
-	Imposta in posizione position il valore previsto dalla mappa.
+	Prende in input un oggetto Map e Position.
+	Imposta nella posizione indicata il valore previsto dalla mappa.
 */
 void Screen::resetTerrain(Map *map, Position position) {
 	BonusList bonuslist = map->getBonusList();
@@ -246,7 +246,8 @@ void Screen::resetTerrain(Map *map, Position position) {
 	Prende in input un oggetto Map ed EnemyList.
 	Stampa sullo schermo tutti i nemici
 */
-void Screen::write_enemies(Map *map, EnemyList list) {
+void Screen::write_enemies(Map *map) {
+	EnemyList list = map->getEnemyList();
 	list.initIter();
 
 	while (!list.isNull()) {
@@ -260,7 +261,8 @@ void Screen::write_enemies(Map *map, EnemyList list) {
 	Prende in input un oggetto Map e BonusList.
 	Stampa sullo schermo tutti i bonus
 */
-void Screen::write_bonuses(Map *map, BonusList list) {
+void Screen::write_bonuses(Map *map) {
+	BonusList list = map->getBonusList();
 	list.initIter();
 
 	while (!list.isNull()) {
@@ -303,7 +305,7 @@ void Screen::remove_boss(Map *map, Boss boss) {
 *****************************/
 
 /*
-	Rimuove tutto il testo nell'area di testo
+	Rimuove tutto il testo nell'area di testo.
 */
 void Screen::clear_textbox() {
 	int start_x = textBox_x+1;
@@ -334,7 +336,7 @@ void Screen::write_textbox(const char string[]) {
 }
 
 /*
-	Prende in input un oggetto Weapon.
+	Prende in input due oggetti Weapon.
 	Inserisce nella textbox il testo previsto quando il giocatore si posiziona sopra un bonus di tipo arma.
 */
 void Screen::write_textbox_weaponbonus(Weapon bonus_weapon, Weapon player_weapon) {
@@ -356,14 +358,14 @@ void Screen::write_textbox_weaponbonus(Weapon bonus_weapon, Weapon player_weapon
 		 <<"(" <<bonus_weapon.higherRange(player_weapon) <<") range";
 	moveCursor(start_x, start_y+3);
 	cout <<"(" <<bonus_weapon.fasterReload(player_weapon) <<") velocita' ricarica | " 
-		 <<"(" <<bonus_weapon.fasterShootRate(player_weapon) <<") rateo attacco";
+		 <<"(" <<bonus_weapon.fasterShootRate(player_weapon) <<") cad. di fuoco";
 	moveCursor(start_x, start_y+5);
 	cout <<"[E] Prendi";
 }
 
 /*
 	Prende in input un oggetto NPC e un intero.
-	Inserisce nella textbox il dialogo di un NPC medico
+	Inserisce nella textbox il dialogo di un NPC medico.
 */
 void Screen::write_textbox_npc_hp(NPC npc, int missing_hp) {
 	char name[STRING_LEN];
@@ -393,8 +395,8 @@ void Screen::write_textbox_npc_hp(NPC npc, int missing_hp) {
 }
 
 /*
-	Prende in input un oggetto NPC e un oggetto Weapon
-	Inserisce nella textbox il dialogo di un NPC mercante
+	Prende in input un oggetto NPC e un oggetto Weapon.
+	Inserisce nella textbox il dialogo di un NPC mercante.
 */
 void Screen::write_textbox_npc_weapon(NPC npc, Weapon player_weapon) {
 	char name[STRING_LEN];
@@ -441,7 +443,7 @@ void Screen::write_textbox_npc_weapon(NPC npc, Weapon player_weapon) {
 	Prende in input un oggetto Boss.
 	Visualizza nell'area di testo la sua barra della vita.
 */
-void Screen::write_write_boss_hp(Boss boss) {
+void Screen::write_boss_hp(Boss boss) {
 	int health_len = ((textBox_width * boss.percHealth()) / 100);
 
 	if (health_len > 0) {
@@ -468,8 +470,8 @@ void Screen::write_write_boss_hp(Boss boss) {
 ********************************/
 
 /*
-	Prende in input un intero
-	Aggiorna la quantità di soldi visualizzata
+	Prende in input un intero.
+	Aggiorna la quantità di soldi visualizzata.
 */
 void Screen::write_money(int money) {
 	moveCursor(hp_x, hp_y + 1);
@@ -483,8 +485,8 @@ void Screen::write_money(int money) {
 }
 
 /*
-	Prende in input un intero
-	Aggiorna la quantità di punti visualizzata
+	Prende in input un intero.
+	Aggiorna la quantità di punti visualizzata.
 */
 void Screen::write_points(int points) {
 	moveCursor(hp_x, hp_y+2);
@@ -495,7 +497,7 @@ void Screen::write_points(int points) {
 
 /*
 	Prende in input un intero.
-	Aggiorna il numero di cuori visualizzato
+	Aggiorna il numero di cuori visualizzato.
 */
 void Screen::write_hp(int hp) {
 	if (hp >= 0) {
@@ -528,9 +530,32 @@ void Screen::write_hp(int hp) {
 /******************************
    INIZIO GESTIONE DATI ARMA
 ******************************/
+
 /*
-	Prende in input una stringa
-	Scrive il parametro nell'area del nome dell'arma. Se la stringa è troppo lunga, vengono inizializzati i parametri per la rotazione
+	Prende in input un intero.
+	Aggiorna la quantità di munizioni visualizzata.
+*/
+void Screen::write_ammobox(int ammo) {
+	moveCursor(weapon_x+WEAPON_WIDTH-ammobox_width, weapon_y+1);
+	cout <<"|  ";
+	moveCursor(weapon_x+WEAPON_WIDTH-ammobox_width, weapon_y+1);
+
+	if (ammo < 0) {
+		cout <<"| R";
+	}
+	else {
+		if (ammo > 9) {
+			cout <<"|" <<ammo;
+		}
+		else {
+			cout <<"| " <<ammo;
+		}
+	}
+}
+
+/*
+	Prende in input una stringa.
+	Scrive il parametro nell'area del nome dell'arma. Se la stringa è troppo lunga, vengono inizializzati i parametri per la rotazione.
 */
 void Screen::write_weaponbox(char name[]) {
 	moveCursor(weapon_x+1, weapon_y+1);
@@ -556,30 +581,8 @@ void Screen::write_weaponbox(char name[]) {
 }
 
 /*
-	Prende in input un intero.
-	Aggiorna la quantità di munizioni visualizzata
-*/
-void Screen::write_ammobox(int ammo) {
-	moveCursor(weapon_x+WEAPON_WIDTH-ammobox_width, weapon_y+1);
-	cout <<"|  ";
-	moveCursor(weapon_x+WEAPON_WIDTH-ammobox_width, weapon_y+1);
-
-	if (ammo < 0) {
-		cout <<"| R";
-	}
-	else {
-		if (ammo > 9) {
-			cout <<"|" <<ammo;
-		}
-		else {
-			cout <<"| " <<ammo;
-		}
-	}
-}
-
-/*
 	Prende in input un oggetto Weapon.
-	Scrive nell'area del nome dell'arma e il numero di munizioni le rispettive quantità
+	Scrive il nome dell'arma e il numero di munizioni.
 */
 void Screen::write_weaponInfo(Weapon weapon) {
 	char weapon_name[STRING_LEN];
@@ -589,7 +592,7 @@ void Screen::write_weaponInfo(Weapon weapon) {
 }
 
 /*
-	Incrementa di 1 rotation_counter
+	Incrementa di 1 rotation_counter.
 */
 void Screen::incWeaponboxRotateCounter() {
 	if (need_rotate) {
@@ -598,7 +601,7 @@ void Screen::incWeaponboxRotateCounter() {
 }
 
 /*
-	Restituisce true se rotation_counter ha raggiunto WEAPONBOX_ROTATION_SPEED e need_rotate è true
+	Indica se è possibile avanzare con l'animazione della rotazione del nome dell'arma.
 */
 bool Screen::canRotateWeaponbox() {
 	return rotation.limit() && need_rotate;
