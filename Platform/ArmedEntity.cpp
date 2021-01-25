@@ -27,31 +27,7 @@ bool ArmedEntity::isAttacking() {
 ****************************/
 
 /*
-	Se is_attacking è true: incrementa weapon_loop_counter di 1.
-	Se supera il limite, viene azzerato.
-*/
-void ArmedEntity::incWeaponDisplay() {
-	if (is_attacking) {
-		weapon_animation.incTimer();
-	}
-}
-
-/*
-	Indica se terminare la visualizzazione dell'arma quando il giocatore attacca
-*/
-bool ArmedEntity::endWeaponDisplay() {
-	if (weapon_animation.limit() && is_attacking) {
-		is_attacking = false;
-		setCanMove(true);
-		return true;
-	}
-	else {
-		return false;
-	}
-}
-
-/*
-	Imposta i vari parametri per l'attacco e restituisce un oggetto Bullet identico al Bullet associato all'oggetto weapon
+	Imposta i vari parametri per l'attacco e restituisce un oggetto Bullet identico al Bullet associato all'oggetto weapon.
 */
 Bullet ArmedEntity::attack() {
 	if (weapon.hasAmmo()) {
@@ -73,14 +49,28 @@ Bullet ArmedEntity::attack() {
 }
 
 /*
-	Restituisce true se ci sono le condizioni per attaccare
+	Restituisce true se ci sono le condizioni per attaccare.
 */
 bool ArmedEntity::canAttack() {
 	return weapon.hasAmmo() && !weapon.isReloading() && !weapon.isShooting() && !is_attacking;
 }
 
 /*
-	Se il delay per lo sparo è terminato, permette di sparare nuovamente
+	Indica se terminare la visualizzazione dell'arma quando l'entità attacca.
+*/
+bool ArmedEntity::endWeaponDisplay() {
+	if (weapon_animation.limit() && is_attacking) {
+		is_attacking = false;
+		setCanMove(true);
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+/*
+	Se il delay per lo sparo è terminato, permette di sparare nuovamente.
 */
 bool ArmedEntity::hasShootDelayFinished() {
 	if (weapon.canEndShootDelay()) {
@@ -100,21 +90,21 @@ bool ArmedEntity::hasShootDelayFinished() {
 *****************************/
 
 /*
-	Avvia la ricarica dell'arma
+	Avvia la ricarica dell'arma.
 */
 void ArmedEntity::reload() {
 	weapon.startReloadDelay();
 }
 
 /*
-	Restituisce true se ci sono le condizioni per ricaricare
+	Restituisce true se ci sono le condizioni per ricaricare.
 */
 bool ArmedEntity::canReload() {
 	return !weapon.isReloading() && !weapon.isShooting() && !is_attacking;
 }
 
 /*
-	Se il delay per la ricarica è terminato, ricarica l'arma
+	Se il delay per la ricarica è terminato, ricarica l'arma.
 */
 bool ArmedEntity::hasReloadFinished() {
 	if (weapon.canEndReloadDelay()) {
@@ -137,14 +127,14 @@ bool ArmedEntity::isMapEvent() {
 }
 
 /*
-	Restituisce true se è possibile "valutare" gli eventi ambientali. False altrimenti
+	Restituisce true se è possibile "valutare" gli eventi ambientali. False altrimenti.
 */
 bool ArmedEntity::canMapEvents() {
 	return mapEventsTimer.limit();
 }
 
 /*
-	Imposta mapEvent a true
+	Imposta i parametri per gestire gli eventi ambientali.
 */
 void ArmedEntity::startMapEvent() {
 	mapEvent = true;
@@ -152,7 +142,7 @@ void ArmedEntity::startMapEvent() {
 }
 
 /*
-	Imposta mapEvent a false
+	Imposta mapEvent a false.
 */
 void ArmedEntity::stopMapEvent() {
 	mapEvent = false;
@@ -170,6 +160,5 @@ void ArmedEntity::incCounters() {
 	weapon.incReloadDelay();
 	weapon.incShootDelay();
 	weapon_animation.incTimer();
-	//incWeaponDisplay();
 	mapEventsTimer.incTimer();
 }

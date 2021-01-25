@@ -33,22 +33,15 @@ void Enemy::setMoney(int money) {
 }
 
 /*
-	Indica se è possibile eseguire la prossima azione (currRefresh ha raggiunto refreshTime)
+	Indica se è possibile eseguire la prossima azione.
 */
 bool Enemy::canRefresh() {
 	return refresh.limit();
 }
 
 /*
-	Incrementa currRefresh di 1. Se supera refreshTime, viene azzerato
-*/
-void Enemy::incRefresh() {
-	refresh.incTimer();
-}
-
-/*
-	Prende in input un oggetto Player
-	Aggiorna lastPlayerPosition se la posizione del player è nel campo visivo
+	Prende in input un oggetto Player.
+	Aggiorna lastPlayerPosition se la posizione del player è nel campo visivo.
 */
 void Enemy::searchForPlayer(Player player) {
 	Position player_pos = player.getBodyPosition();
@@ -81,14 +74,12 @@ void Enemy::searchForPlayer(Player player) {
 }
 
 /*
-	Prende in input un oggetto Map e Player
-	Restituisce l'azione da eseguire
+	Prende in input un oggetto Map e Player.
+	Restituisce l'azione da eseguire.
 */
 int Enemy::getAction(Map *map, Player player) {
 	int action_code = ACTION_DO_NOTHING;
-	int weapon_range;
-	weapon_range = weapon.getRange();
-	
+	int weapon_range = weapon.getRange();
 
 	if (lastPlayerPosition != NULL) { // Il nemico ha visto il giocatore almeno una volta
 		if (lastPlayerPosition->getY() > this->position.getY() && !map->isLava(Position(getBelowPosition().getX(), getBelowPosition().getY()+3))) {
@@ -100,7 +91,7 @@ int Enemy::getAction(Map *map, Player player) {
 		}
 		if (player.getBodyPosition().equals(*lastPlayerPosition)) {
 			/*
-				Se l'ultima posizione nota è effettivamente il giocatore:
+				Se l'ultima posizione nota è effettivamente quella del giocatore:
 				- Si avvicina entro il raggio d'azione dell'arma
 				- Attacca
 			*/
@@ -140,7 +131,7 @@ int Enemy::getAction(Map *map, Player player) {
 				Se il giocatore si trova più in alto del nemico:
 				- Annulla l'azione precedentemente calcolata
 				- Salta se sopra c'è una piattaforma
-				- Si avvicina al nemico rispetto all'asse X se non può saltare
+				- Si avvicina al giocatore rispetto all'asse X se non può saltare
 			*/
 			if (map->isSolidAt(Position(this->position.getX(), this->position.getY()-2))) {
 				action_code = ACTION_JUMP;
@@ -153,6 +144,7 @@ int Enemy::getAction(Map *map, Player player) {
 			}
 		}
 
+		/* Se il movimento dovesse portare il nemico sulla lava, salta */
 		if (action_code == ACTION_GO_RIGHT && map->isLava(Position(getBelowPosition().getX()+1, getBelowPosition().getY()))) {
 			action_code = ACTION_JUMP;
 		}
@@ -193,6 +185,7 @@ int Enemy::getAction(Map *map, Player player) {
 			}
 		}
 
+		/* Se il movimento dovesse portare il nemico sulla lava, non fa nulla */
 		if (action_code == ACTION_GO_RIGHT && map->isLava(Position(getBelowPosition().getX()+1, getBelowPosition().getY()))) {
 			action_code = ACTION_DO_NOTHING;
 		}
@@ -200,7 +193,6 @@ int Enemy::getAction(Map *map, Player player) {
 			action_code = ACTION_DO_NOTHING;
 		}
 	}
-
 
 	return action_code;
 }
@@ -216,9 +208,9 @@ Bullet Enemy::attack() {
 }
 
 /*
-	Incrementa i vari contatori
+	Incrementa i vari contatori.
 */
 void Enemy::incCounters() {
 	ArmedEntity::incCounters();
-	incRefresh();
+	refresh.incTimer();
 }

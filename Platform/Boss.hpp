@@ -15,9 +15,11 @@ class Boss : public Enemy {
 		int ability_num, ability_max;
 		AnimationTimer down_time;
 
+		AnimationTimer pause_time;
+
 
 	public:
-		Boss(int health=0, int points=0, int money=0, Pixel head_left=Pixel(), Pixel head_right=Pixel(), Pixel body=Pixel(), Position position=Position(), Weapon weapon=Weapon(), int type=0, int max_phase=0, int ability_num=0, int ability_max=0, int down_time=0, int jump_force=0);
+		Boss(int health=0, int points=0, int money=0, Pixel head_left=Pixel(), Pixel head_right=Pixel(), Pixel body=Pixel(), Position position=Position(), Weapon weapon=Weapon(), int type=0, int ability_num=0, int ability_max=0);
 
 		int getType();
 		int getPhase();
@@ -27,16 +29,16 @@ class Boss : public Enemy {
 		Position getHeadPosition();
 
 		/*
+			Prende in input un oggetto Position.
+			Restituisce true se il boss è presente in quella posizione.
+		*/
+		bool existsAt(Position position);
+
+		/*
 			Incrementa phase di 1.
 			Se supera max_phase, azzera phase.
 		*/
 		void nextPhase();
-
-		/*
-			Prende in input un oggetto Position.
-			Restituisce true se il boss è presente in quella posizione
-		*/
-		bool existsAt(Position position);
 
 		/*
 			Prende in input un oggetto Map e un oggetto Player.
@@ -44,9 +46,6 @@ class Boss : public Enemy {
 		*/
 		int getAction(Map *map, Player player);
 
-		/*
-			Incrementa i vari contatori per le animazioni
-		*/
 		void incCounters();
 };
 

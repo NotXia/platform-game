@@ -37,21 +37,22 @@ class NPC : public Entity {
 		int getCurrSelected();
 		/*
 			Prende in input un intero.
-			Imposta curr_selected a quel valore. Se supera i limiti, viene corretto il valore
+			Imposta curr_selected a quel valore. Se supera i limiti, viene corretto il valore.
 		*/
 		void setCurrSelected(int curr_selected);
 		/*
-			Restituisce il campo weapon della locazione di shop indicata da curr_selected
+			Restituisce il campo weapon della locazione di shop indicata da curr_selected.
 		*/
 		Weapon getCurrWeapon();
 		/*
-			Restituisce il campo price della locazione di shop indicata da curr_selected
+			Restituisce il campo price della locazione di shop indicata da curr_selected.
 		*/
 		int getCurrWeaponPrice();
 		/*
-			Elimina la locazione di shop indicata da curr_selected
+			Elimina la locazione di shop indicata da curr_selected.
 		*/
 		void deleteCurrentWeapon();
+
 
 		/************
 			Medico

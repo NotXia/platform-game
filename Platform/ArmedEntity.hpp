@@ -2,7 +2,7 @@
 #include "Entity.hpp"
 #include "Weapon.hpp"
 #include <iostream>
-class Bullet;
+#include "Bullet.hpp"
 
 class ArmedEntity : public Entity {
 	protected:
@@ -10,14 +10,8 @@ class ArmedEntity : public Entity {
 		bool is_attacking;
 		AnimationTimer weapon_animation;
 
-		AnimationTimer mapEventsTimer;
 		bool mapEvent;
-
-		/*
-			Se is_attacking è true: incrementa weapon_loop_counter di 1.
-			Se supera il limite, viene azzerato.
-		*/
-		void incWeaponDisplay();
+		AnimationTimer mapEventsTimer;
 
 	public:
 		ArmedEntity(int health=0, Pixel head_left=Pixel(), Pixel head_right=Pixel(), Pixel body=Pixel(), Position position=Position(), Weapon weapon=Weapon());
@@ -32,22 +26,22 @@ class ArmedEntity : public Entity {
 		****************************/
 
 		/*
-			Imposta i vari parametri per l'attacco e restituisce un oggetto Bullet identico al Bullet associato all'oggetto weapon
+			Imposta i vari parametri per l'attacco e restituisce un oggetto Bullet identico al Bullet associato all'oggetto weapon.
 		*/
 		Bullet attack();
 
 		/*
-			Restituisce true se ci sono le condizioni per attaccare
+			Restituisce true se ci sono le condizioni per attaccare.
 		*/
 		bool canAttack();
 
 		/*
-			Indica se terminare la visualizzazione dell'arma quando il giocatore attacca
+			Indica se terminare la visualizzazione dell'arma quando l'entità attacca.
 		*/
 		bool endWeaponDisplay();
 
 		/*
-			Se il delay per lo sparo è terminato, permette di sparare nuovamente
+			Se il delay per lo sparo è terminato, permette di sparare nuovamente.
 		*/
 		bool hasShootDelayFinished();
 
@@ -60,17 +54,17 @@ class ArmedEntity : public Entity {
 		*****************************/
 
 		/*
-			Avvia la ricarica dell'arma
+			Avvia la ricarica dell'arma.
 		*/
 		void reload();
 		
 		/*
-			Restituisce true se ci sono le condizioni per ricaricare
+			Restituisce true se ci sono le condizioni per ricaricare.
 		*/
 		bool canReload();
 
 		/*
-			Se il delay per la ricarica è terminato, ricarica l'arma
+			Se il delay per la ricarica è terminato, ricarica l'arma.
 		*/
 		bool hasReloadFinished();
 
@@ -85,17 +79,17 @@ class ArmedEntity : public Entity {
 		bool isMapEvent();
 
 		/*
-			Restituisce true se è possibile "valutare" gli eventi ambientali. False altrimenti
+			Restituisce true se è possibile "valutare" gli eventi ambientali. False altrimenti.
 		*/
 		bool canMapEvents();
 
 		/*
-			Imposta mapEvent a true
+			Imposta i parametri per gestire gli eventi ambientali.
 		*/
 		void startMapEvent();
 		
 		/*
-			Imposta mapEvent a false
+			Imposta mapEvent a false.
 		*/
 		void stopMapEvent();
 

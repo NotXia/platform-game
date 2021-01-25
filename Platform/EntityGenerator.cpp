@@ -118,11 +118,8 @@ Boss createBoss(int difficulty) {
 			Position(GAME_WIDTH-int(GAME_WIDTH*0.25), 0),
 			Weapon(),
 			type,
-			4,
 			1,
-			6,
-			8,
-			GAME_HEIGHT
+			6
 		);
 	}
 	else if (type == BOSS_MAGE) {
@@ -141,13 +138,10 @@ Boss createBoss(int difficulty) {
 			Pixel('>', FG_DARKRED, BACKGROUND_DEFAULT, true),
 			Pixel(char(219), FG_DARKRED, BACKGROUND_DEFAULT, true),
 			Position(GAME_WIDTH-2, 0),
-			Weapon("", Pixel(), Pixel(), Bullet(Pixel('o', FG_DARKRED, BACKGROUND_DEFAULT), difficulty, GAME_WIDTH), 5, 1, 2000, WEAPON_RANGED, GAME_WIDTH),
+			Weapon("Scettro", Pixel(), Pixel(), Bullet(Pixel('o', FG_DARKRED, BACKGROUND_DEFAULT), difficulty, GAME_WIDTH), 5, 1, 12000, WEAPON_RANGED, GAME_WIDTH),
 			type,
-			4,
 			5,
-			10,
-			8,
-			GAME_HEIGHT
+			10
 		);
 	}
 	else if (type == BOSS_MELEE) {
@@ -167,11 +161,8 @@ Boss createBoss(int difficulty) {
 			Position(GAME_WIDTH-2, TERRAIN_HEIGHT-2),
 			Weapon(),
 			type,
-			3,
 			1,
-			4,
-			30,
-			1
+			4
 		);
 	}
 

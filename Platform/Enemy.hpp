@@ -21,11 +21,6 @@ class Enemy : public ArmedEntity {
 
 		AnimationTimer refresh;
 
-		/*
-			Incrementa currRefresh di 1. Se supera refreshTime, viene azzerato
-		*/
-		void incRefresh();
-
 	public:
 		Enemy(int health=0, int points=0, int money=0, Pixel head_left=Pixel(), Pixel head_right=Pixel(), Pixel body=Pixel(), Position position=Position(), Weapon weapon=Weapon());
 
@@ -34,19 +29,19 @@ class Enemy : public ArmedEntity {
 		void setMoney(int money);
 
 		/*
-			Indica se è possibile eseguire la prossima azione (currRefresh ha raggiunto refreshTime)
+			Indica se è possibile eseguire la prossima azione.
 		*/
 		bool canRefresh();
 
 		/*
-			Prende in input un oggetto Player
-			Aggiorna lastPlayerPosition se la posizione del player è nel campo visivo
+			Prende in input un oggetto Player.
+			Aggiorna lastPlayerPosition se la posizione del player è nel campo visivo.
 		*/
 		void searchForPlayer(Player player);
 
 		/*
-			Prende in input un oggetto Map e Player
-			Restituisce l'azione da eseguire
+			Prende in input un oggetto Map e Player.
+			Restituisce l'azione da eseguire.
 		*/
 		int getAction(Map *map, Player player);
 
@@ -57,7 +52,7 @@ class Enemy : public ArmedEntity {
 		Bullet attack();
 
 		/*
-			Incrementa i vari contatori
+			Incrementa i vari contatori.
 		*/
 		void incCounters();
 

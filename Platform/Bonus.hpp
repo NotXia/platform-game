@@ -26,7 +26,7 @@ class Bonus : public Block {
 		void setWeapon(Weapon weapon);
 
 		/*
-			Restituisce il tipo del bonus in base ai campi impostati
+			Restituisce il tipo del bonus in base ai campi impostati.
 		*/
 		int getType();
 
@@ -42,22 +42,22 @@ class Bonus : public Block {
 		bool isOnTerrain();
 
 		/*
-			Inizializza i parametri per la caduta
+			Inizializza i parametri per la caduta.
 		*/
 		void startFall();
 
 		/*
-			Muove la posizione di un blocco in basso
+			Muove la posizione di un blocco in basso.
 		*/
 		void fall();
 
 		/*
-			Imposta i parametri per interrompere la caduta
+			Imposta i parametri per interrompere la caduta.
 		*/
 		void stopFall();
 
 		/*
-			Restituisce true se si può procedere nell'animazione della caduta. False altrimenti
+			Restituisce true se si può procedere nell'animazione della caduta. False altrimenti.
 		*/
 		bool canFall();
 

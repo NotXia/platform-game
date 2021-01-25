@@ -2,22 +2,29 @@
 #include <cstdlib>
 #include "Map.hpp"
 
-Boss::Boss(int health, int points, int money, Pixel head_left, Pixel head_right, Pixel body, Position position, Weapon weapon, int type, int max_phase, int ability_num, int ability_max, int down_time, int jump_force) :
+const Pixel STUNNED_BOSS_HEAD_LEFT_TEXTURE = Pixel('?', STUNNED_BOSS_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true);
+const Pixel STUNNED_BOSS_HEAD_RIGHT_TEXTURE = Pixel('?', STUNNED_BOSS_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true);
+const Pixel STUNNED_BOSS_BODY_TEXTURE = Pixel(ENEMY_BODY, STUNNED_BOSS_BODY_COLOR_FG, BACKGROUND_DEFAULT, true);
+
+const Pixel BOSS_HEAD_LEFT_TEXTURE = Pixel(ENEMY_HEAD_LEFT, ANGRY_ENEMY_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true);
+const Pixel BOSS_HEAD_RIGHT_TEXTURE = Pixel(ENEMY_HEAD_RIGHT, ANGRY_ENEMY_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true);
+const Pixel BOSS_BODY_TEXTURE = Pixel(ENEMY_BODY, ANGRY_ENEMY_BODY_COLOR_FG, BACKGROUND_DEFAULT, true);
+
+Boss::Boss(int health, int points, int money, Pixel head_left, Pixel head_right, Pixel body, Position position, Weapon weapon, int type, int ability_num, int ability_max) :
 	Enemy(health, points, money, head_left, head_right, body, position, weapon) {
 	this->type = type;
 	this->phase = 0;
-	this->max_phase = max_phase;
+	this->max_phase = 5;
 	this->ability_num = ability_num;
 	this->ability_max = ability_max;
-	this->down_time = AnimationTimer(down_time);
+	this->down_time = AnimationTimer(45);
+	this->pause_time = AnimationTimer(20);
+	this->refresh = AnimationTimer(1500);
 
 	default_visualRange = GAME_WIDTH;
 	visualRange = GAME_WIDTH;
-	max_jump_height = jump_force;
+	max_jump_height = GAME_HEIGHT;
 
-	if (type == BOSS_MELEE) {
-		refresh = AnimationTimer(1500);
-	}
 }
 
 Position Boss::getBody2Position() {
@@ -79,12 +86,18 @@ int Boss::getAction(Map *map, Player player) {
 
 	/* Boss SUMMONER */
 	if (type == BOSS_SUMMONER) {
-		if (phase == 0) { // Fase 0: Evoca i nemici
+		if (phase == 0) {					// Fase 0: Pausa
+			if (pause_time.limit()) {
+				nextPhase();
+			}
+			pause_time.incTimer();
+		}
+		else if (phase == 1) {				// Fase 1: Attacco: evoca dei nemici
 			action_code = ACTION_ATTACK;
 			setAbilityNum(ability_num+1);
 			nextPhase();
 		}
-		else if (phase == 1) { // Fase 1: Va avanti e indietro
+		else if (phase == 2) {				// Fase 2: Va avanti e indietro
 			if (map->getEnemyList().size() == 0) {
 				nextPhase();
 			}
@@ -105,26 +118,39 @@ int Boss::getAction(Map *map, Player player) {
 				}
 			}
 		}
-		else if (phase == 2) { // Fase 2: Nemici sconfitti -> Cade + inizio timer down_time
+		else if (phase == 3) {				// Fase 3: Nemici sconfitti -> Cade + inizio timer down_time
 			action_code = ACTION_FALL;
 			down_time.reset();
 			nextPhase();
+			this->body = STUNNED_BOSS_BODY_TEXTURE;
+			this->head_left = STUNNED_BOSS_HEAD_LEFT_TEXTURE;
+			this->head_right = STUNNED_BOSS_HEAD_RIGHT_TEXTURE;
 		}
-		else if (phase == 3) { // Fase 3: Stordito
+		else if (phase == 4) {				// Fase 4: Stordito
 			action_code = ACTION_DO_NOTHING;
 			down_time.incTimer();
 			if (down_time.limit()) {
+				this->body = BOSS_BODY_TEXTURE;
+				this->head_left = BOSS_HEAD_LEFT_TEXTURE;
+				this->head_right = BOSS_HEAD_RIGHT_TEXTURE;
 				nextPhase();
 			}
 		}
-		else if (phase == 4) { // Fine stordimento -> Salta
+		else if (phase == 5) {				// Fase 5: Fine stordimento -> Salta
 			action_code = ACTION_JUMP;
+			pause_time.reset();
 			nextPhase();
 		}
 	}
 	/* Boss MAGE */
 	else if (type == BOSS_MAGE) {
-		if (phase == 0) { // Fase 0: Spara sfere di fuoco 
+		if (phase == 0) {					// Fase 0: Pausa
+			if (pause_time.limit()) {
+				nextPhase();
+			}
+			pause_time.incTimer();
+		}
+		else if (phase == 1) {				// Fase 1: Attacco: Spara sfere di fuoco 
 			if (canReload() && !weapon.hasAmmo()) {
 				setAbilityNum(ability_num + 1);
 				weapon.setAmmo(ability_num);
@@ -135,26 +161,32 @@ int Boss::getAction(Map *map, Player player) {
 				action_code = ACTION_ATTACK;
 			}
 		}
-		else if (phase == 1) { // Fase 1: Sta fermo
+		else if (phase == 2) {				// Fase 2: Sta fermo
 			action_code = ACTION_DO_NOTHING;
 			if (map->getBulletList().sizeHostile() == 0) {
 				nextPhase();
 			}
 		}
-		else if (phase == 2) { // Fase 2: Non ci sono più proiettili -> Va al centro della mappa + inizio timer down_time
+		else if (phase == 3) {				// Fase 3: Non ci sono più proiettili -> Va al centro della mappa + inizio timer down_time
 			action_code = ACTION_DO_NOTHING;
 			position = Position(GAME_WIDTH/2, 0);
 			down_time.reset();
 			nextPhase();
+			this->body = STUNNED_BOSS_BODY_TEXTURE;
+			this->head_left = STUNNED_BOSS_HEAD_LEFT_TEXTURE;
+			this->head_right = STUNNED_BOSS_HEAD_RIGHT_TEXTURE;
 		}
-		else if (phase == 3) { // Stordito
+		else if (phase == 4) {				// Fase 4: Stordito
 			action_code = ACTION_DO_NOTHING;
 			down_time.incTimer();
 			if (down_time.limit()) {
 				nextPhase();
+				this->body = BOSS_BODY_TEXTURE;
+				this->head_left = BOSS_HEAD_LEFT_TEXTURE;
+				this->head_right = BOSS_HEAD_RIGHT_TEXTURE;
 			}
 		}
-		else if (phase == 4) { // Fase 4: Fine stordimento -> Si teletrasporta a DX o a SX
+		else if (phase == 5) {				// Fase 5: Fine stordimento -> Si teletrasporta a DX o a SX
 			action_code = ACTION_DO_NOTHING;
 			int x_pos[] = { 1, GAME_WIDTH-2 };
 			int gen = rand() % 2;
@@ -167,12 +199,19 @@ int Boss::getAction(Map *map, Player player) {
 			}
 
 			setPosition(Position(x_pos[gen], 0));
+			pause_time.reset();
 			nextPhase();
 		}
 	}
 	/* Boss MELEE */
 	else if (type == BOSS_MELEE) {
-		if (phase == 0) { // Fase 0: Corre + se tocca player, lo lancia
+		if (phase == 0) {					// fase 0: Pausa
+			if (pause_time.limit()) {
+				nextPhase();
+			}
+			pause_time.incTimer();
+		}
+		else if (phase == 1) {				// Fase 1: Corre + se tocca player, lo lancia
 			if (getBodyFrontPosition().equals(player.getBodyPosition())) {
 				action_code = ACTION_ATTACK;
 			}
@@ -189,18 +228,24 @@ int Boss::getAction(Map *map, Player player) {
 				}
 			}
 		}
-		else if (phase == 1) { // Fase 1: Finito di correre -> Rimane fermo + inizio timer down_time
+		else if (phase == 2) {				// Fase 2: Finito di correre -> Rimane fermo + inizio timer down_time
 			action_code = ACTION_DO_NOTHING;
 			down_time.reset();
 			nextPhase();
+			this->body = STUNNED_BOSS_BODY_TEXTURE;
+			this->head_left = STUNNED_BOSS_HEAD_LEFT_TEXTURE;
+			this->head_right = STUNNED_BOSS_HEAD_RIGHT_TEXTURE;
 		}
-		else if (phase == 2) { // Fase 2: Stordito
+		else if (phase == 3) {				// Fase 3: Stordito
 			down_time.incTimer();
 			if (down_time.limit()) {
 				nextPhase();
+				this->body = BOSS_BODY_TEXTURE;
+				this->head_left = BOSS_HEAD_LEFT_TEXTURE;
+				this->head_right = BOSS_HEAD_RIGHT_TEXTURE;
 			}
 		}
-		else if (phase == 3) { // Fase 3: Fine stordimento -> Si gira
+		else if (phase == 4) {				// Fase 4: Fine stordimento -> Si gira
 			setAbilityNum(getAbilityNum()+1);
 			if (direction == DIRECTION_LEFT) {
 				goRight();
@@ -208,6 +253,10 @@ int Boss::getAction(Map *map, Player player) {
 			else {
 				goLeft();
 			}
+			pause_time.reset();
+			nextPhase();
+		}
+		else if (phase == 5) {				// Fase 5: Skip
 			nextPhase();
 		}
 	}

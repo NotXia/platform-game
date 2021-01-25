@@ -16,8 +16,8 @@ int Player::getMoney() {
 }
 
 /*
-	Prende un input un intero
-	Incrementa health di quel valore (non può superare il limite)
+	Prende un input un intero.
+	Incrementa health di quel valore (non può superare il limite).
 */
 void Player::heal(int hp) {
 	this->health += hp;
@@ -27,16 +27,16 @@ void Player::heal(int hp) {
 }
 
 /*
-	Prende un input un intero
-	Incrementa points di quel valore
+	Prende un input un intero.
+	Incrementa points di quel valore.
 */
 void Player::incPoints(int points) {
 	this->points += points;
 }
 
 /*
-	Prende un input un intero
-	Incrementa money di quel valore
+	Prende un input un intero.
+	Incrementa money di quel valore.
 */
 void Player::incMoney(int money) {
 	this->money += money;
@@ -44,8 +44,8 @@ void Player::incMoney(int money) {
 }
 
 /*
-	Prende un input un intero
-	Decrementa money di quel valore
+	Prende un input un intero.
+	Decrementa money di quel valore.
 */
 void Player::decMoney(int money) {
 	this->money -= money;

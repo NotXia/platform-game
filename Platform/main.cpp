@@ -668,6 +668,10 @@ int main() {
                         screen.write_entity(map, player);
                     }
                 }
+                else {
+                    screen.remove_boss(map, *boss);
+                    screen.write_boss(map, *boss);
+                }
 
                 if (!old_boss.getBodyPosition().equals(boss->getBodyPosition())) {
                     screen.remove_boss(map, old_boss);

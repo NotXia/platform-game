@@ -17,6 +17,10 @@ const Pixel HOUSE_WALL_TEXTURE = Pixel(' ', 0, BG_LIGHTGREY, false);
 const Pixel HOUSE_BORDER_TEXTURE = Pixel(' ', 0, BG_BLACK, false);
 const Pixel HOUSE_DOOR_TEXTURE = Pixel(' ', 0, BG_DARKYELLOW, false);
 
+const Pixel BOSS_PLATFORM_TEXTURE = Pixel(char(219), PLATFORM_COLOR_FG, BG_LIGHTGREY, true);
+const Pixel BOSS_TERRAIN_TEXTURE = TERRAIN_ROCK_TEXTURE;
+const Pixel BOSS_SKY_TEXTURE = Pixel(' ', 0, BG_LIGHTGREY, false);
+
 
 Map::Map(Map *prev, int level_number) {
 	next = NULL;
@@ -541,39 +545,33 @@ bool Map::isLava(Position position) {
 	Imposta la matrice terrain per le boss fight
 */
 void Map::generateMapBossType1() {
-	const Pixel PLATFORM_TEXTURE = Pixel(char(219), PLATFORM_COLOR_FG, BG_LIGHTGREY, true);
-	const Pixel TERRAIN_TEXTURE = Pixel(' ', 0, BG_GREY, true);
-	const Pixel SKY_TEXTURE = Pixel(' ', 0, BG_LIGHTGREY, false);
+	const Pixel BOSS_PLATFORM_TEXTURE = Pixel(SKY_SYMBOL, 0, BG_LIGHTGREY, true);
 
 	// Generazione "pavimento"
 	for (int i=0; i<TERRAIN_HEIGHT; i++) {
 		for (int j=0; j<GAME_WIDTH; j++) {
-			terrain[j][GAME_HEIGHT-1-i] = TERRAIN_TEXTURE;
+			terrain[j][GAME_HEIGHT-1-i] = BOSS_TERRAIN_TEXTURE;
 		}
 	}
 
 	// Generazione cielo
 	for (int i=TERRAIN_HEIGHT; i<GAME_HEIGHT; i++) {
 		for (int j=0; j<GAME_WIDTH; j++) {
-			terrain[j][GAME_HEIGHT-1-i] = SKY_TEXTURE;
+			terrain[j][GAME_HEIGHT-1-i] = BOSS_SKY_TEXTURE;
 		}
 	}
 
 	// Generazione piattaforme
 	for (int i=0; i<GAME_WIDTH; i++) {
-		terrain[i][4] = PLATFORM_TEXTURE;
+		terrain[i][4] = BOSS_PLATFORM_TEXTURE;
 	}
 }
 
 void Map::generateMapBossType2() {
-	const Pixel PLATFORM_TEXTURE = Pixel(char(219), PLATFORM_COLOR_FG, BG_LIGHTGREY, true);
-	const Pixel TERRAIN_TEXTURE = Pixel(' ', 0, BG_GREY, true);
-	const Pixel SKY_TEXTURE = Pixel(' ', 0, BG_LIGHTGREY, false);
-
 	// Generazione cielo
 	for (int i=0; i<GAME_HEIGHT; i++) {
 		for (int j=0; j<GAME_WIDTH; j++) {
-			terrain[j][i] = SKY_TEXTURE;
+			terrain[j][i] = BOSS_SKY_TEXTURE;
 		}
 	}
 
@@ -586,32 +584,28 @@ void Map::generateMapBossType2() {
 	}
 
 	// Generazione piattaforme
-	terrain[1][3] = PLATFORM_TEXTURE;
-	terrain[GAME_WIDTH-2][3] = PLATFORM_TEXTURE;
+	terrain[1][3] = BOSS_PLATFORM_TEXTURE;
+	terrain[GAME_WIDTH-2][3] = BOSS_PLATFORM_TEXTURE;
 
 	for (int i=0; i<3; i++) {
 		for (int j=EMPTYZONE_LENGTH; j<GAME_WIDTH-EMPTYZONE_LENGTH; j++) {
-			terrain[j][(GAME_HEIGHT-TERRAIN_HEIGHT)-TERRAIN_HEIGHT*i] = PLATFORM_TEXTURE;
+			terrain[j][(GAME_HEIGHT-TERRAIN_HEIGHT)-TERRAIN_HEIGHT*i] = BOSS_PLATFORM_TEXTURE;
 		}
 	}
 }
 
 void Map::generateMapBossType3() {
-	const Pixel PLATFORM_TEXTURE = Pixel(char(219), PLATFORM_COLOR_FG, BG_LIGHTGREY, true);
-	const Pixel TERRAIN_TEXTURE = Pixel(' ', 0, BG_GREY, true);
-	const Pixel SKY_TEXTURE = Pixel(' ', 0, BG_LIGHTGREY, false);
-
 	// Generazione cielo
 	for (int i=0; i<GAME_HEIGHT; i++) {
 		for (int j=0; j<GAME_WIDTH; j++) {
-			terrain[j][i] = SKY_TEXTURE;
+			terrain[j][i] = BOSS_SKY_TEXTURE;
 		}
 	}
 
 	// Generazione "pavimento"
 	for (int i=0; i<TERRAIN_HEIGHT; i++) {
 		for (int j=0; j<GAME_WIDTH; j++) {
-			terrain[j][GAME_HEIGHT-1-i] = TERRAIN_TEXTURE;
+			terrain[j][GAME_HEIGHT-1-i] = BOSS_TERRAIN_TEXTURE;
 		}
 	}
 }

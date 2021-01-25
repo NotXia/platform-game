@@ -15,26 +15,26 @@ class Player : public ArmedEntity {
 		int getMoney();
 
 		/*
-			Prende un input un intero
-			Incrementa health di quel valore (non può superare il limite)
+			Prende un input un intero.
+			Incrementa health di quel valore (non può superare il limite).
 		*/
 		void heal(int hp);
 
 		/*
-			Prende un input un intero
-			Incrementa points di quel valore
+			Prende un input un intero.
+			Incrementa points di quel valore.
 		*/
 		void incPoints(int points);
 
 		/*
-			Prende un input un intero
-			Incrementa money di quel valore
+			Prende un input un intero.
+			Incrementa money di quel valore.
 		*/
 		void incMoney(int money);
 
 		/*
-			Prende un input un intero
-			Decrementa money di quel valore
+			Prende un input un intero.
+			Decrementa money di quel valore.
 		*/
 		void decMoney(int money);
 

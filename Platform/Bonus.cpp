@@ -35,7 +35,7 @@ void Bonus::setWeapon(Weapon weapon) {
 }
 
 /*
-	Restituisce il tipo del bonus in base ai campi impostati
+	Restituisce il tipo del bonus in base ai campi impostati.
 */
 int Bonus::getType() {
 	if (money != 0) {
@@ -76,7 +76,7 @@ bool Bonus::isOnTerrain() {
 }
 
 /*
-	Inizializza i parametri per la caduta
+	Inizializza i parametri per la caduta.
 */
 void Bonus::startFall() {
 	on_terrain = false;
@@ -84,21 +84,21 @@ void Bonus::startFall() {
 }
 
 /*
-	Muove la posizione di un blocco in basso
+	Muove la posizione di un blocco in basso.
 */
 void Bonus::fall() {
 	this->position = Position(position.getX(), position.getY()+1);
 }
 
 /*
-	Imposta i parametri per interrompere la caduta
+	Imposta i parametri per interrompere la caduta.
 */
 void Bonus::stopFall() {
 	on_terrain = true;
 }
 
 /*
-	Restituisce true se si può procedere nell'animazione della caduta. False altrimenti
+	Restituisce true se si può procedere nell'animazione della caduta. False altrimenti.
 */
 bool Bonus::canFall() {
 	return fall_animation.limit();

@@ -81,7 +81,7 @@ int NPC::getWeaponNumber() {
 
 /*
 	Prende in input un intero.
-	Imposta curr_selected a quel valore. Se supera i limiti, viene corretto il valore
+	Imposta curr_selected a quel valore. Se supera i limiti, viene corretto il valore.
 */
 void NPC::setCurrSelected(int curr_selected) {
 	this->curr_selected = curr_selected;
@@ -94,21 +94,21 @@ void NPC::setCurrSelected(int curr_selected) {
 }
 
 /*
-	Restituisce il campo weapon della locazione di shop indicata da curr_selected
+	Restituisce il campo weapon della locazione di shop indicata da curr_selected.
 */
 Weapon NPC::getCurrWeapon() {
 	return shop[curr_selected].weapon;
 }
 
 /*
-	Restituisce il campo price della locazione di shop indicata da curr_selected
+	Restituisce il campo price della locazione di shop indicata da curr_selected.
 */
 int NPC::getCurrWeaponPrice() {
 	return shop[curr_selected].price;
 }
 
 /*
-	Elimina la locazione di shop indicata da curr_selected
+	Elimina la locazione di shop indicata da curr_selected.
 */
 void NPC::deleteCurrentWeapon() {
 	for (int i=curr_selected; i<weapon_number-1; i++) {
@@ -117,6 +117,7 @@ void NPC::deleteCurrentWeapon() {
 	weapon_number--;
 	setCurrSelected(curr_selected);
 }
+
 
 /************
 	Medico
