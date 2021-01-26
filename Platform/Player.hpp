@@ -1,7 +1,5 @@
 #pragma once
 #include "ArmedEntity.hpp"
-#include "Pixel.hpp"
-#include "Weapon.hpp"
 
 class Player : public ArmedEntity {
 	protected:

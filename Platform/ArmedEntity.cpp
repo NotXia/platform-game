@@ -3,8 +3,6 @@
 
 ArmedEntity::ArmedEntity(int health, Pixel head_left, Pixel head_right, Pixel body, Position position, Weapon weapon) : Entity(health, head_left, head_right, body, position) {
 	this->weapon = weapon;
-	is_attacking = false;
-	weapon_animation = AnimationTimer(WEAPON_DISPLAY_TIME);
 	mapEventsTimer = AnimationTimer(MAP_EVENT_SPEED);
 	mapEvent = false;
 }
@@ -15,10 +13,6 @@ Weapon ArmedEntity::getWeapon() {
 
 void ArmedEntity::setWeapon(Weapon weapon) {
 	this->weapon = weapon;
-}
-
-bool ArmedEntity::isAttacking() {
-	return is_attacking;
 }
 
 
@@ -32,9 +26,6 @@ bool ArmedEntity::isAttacking() {
 Bullet ArmedEntity::attack() {
 	if (weapon.hasAmmo()) {
 		weapon.startShootDelay();
-		setCanMove(false);
-		weapon_animation.reset();
-		is_attacking = true;
 
 		Bullet out_bullet = weapon.getBullet();
 		out_bullet.setPosition(getBodyFrontPosition());
@@ -52,21 +43,7 @@ Bullet ArmedEntity::attack() {
 	Restituisce true se ci sono le condizioni per attaccare.
 */
 bool ArmedEntity::canAttack() {
-	return weapon.hasAmmo() && !weapon.isReloading() && !weapon.isShooting() && !is_attacking;
-}
-
-/*
-	Indica se terminare la visualizzazione dell'arma quando l'entità attacca.
-*/
-bool ArmedEntity::endWeaponDisplay() {
-	if (weapon_animation.limit() && is_attacking) {
-		is_attacking = false;
-		setCanMove(true);
-		return true;
-	}
-	else {
-		return false;
-	}
+	return weapon.hasAmmo() && !weapon.isReloading() && !weapon.isShooting();
 }
 
 /*
@@ -100,7 +77,7 @@ void ArmedEntity::reload() {
 	Restituisce true se ci sono le condizioni per ricaricare.
 */
 bool ArmedEntity::canReload() {
-	return !weapon.isReloading() && !weapon.isShooting() && !is_attacking;
+	return !weapon.isReloading() && !weapon.isShooting();
 }
 
 /*
@@ -159,6 +136,5 @@ void ArmedEntity::incCounters() {
 	Entity::incCounters();
 	weapon.incReloadDelay();
 	weapon.incShootDelay();
-	weapon_animation.incTimer();
 	mapEventsTimer.incTimer();
 }

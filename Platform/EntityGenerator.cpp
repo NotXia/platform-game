@@ -138,7 +138,7 @@ Boss createBoss(int difficulty) {
 			Pixel('>', FG_DARKRED, BACKGROUND_DEFAULT, true),
 			Pixel(char(219), FG_DARKRED, BACKGROUND_DEFAULT, true),
 			Position(GAME_WIDTH-2, 0),
-			Weapon("Scettro", Pixel(), Pixel(), Bullet(Pixel('o', FG_DARKRED, BACKGROUND_DEFAULT), difficulty, GAME_WIDTH), 5, 1, 12000, WEAPON_RANGED, GAME_WIDTH),
+			Weapon("Scettro", Pixel(), Pixel(), Bullet(Pixel('o', FG_DARKRED, BACKGROUND_DEFAULT), difficulty, GAME_WIDTH, RANGED_BULLET_SPEED), 5, 1, 12000, WEAPON_RANGED, GAME_WIDTH),
 			type,
 			5,
 			10
@@ -180,10 +180,10 @@ Weapon getRandomTier1Player() {
 		"Coltellino",
 		Pixel('-', FG_BLACK, BACKGROUND_DEFAULT, false),
 		Pixel('-', FG_BLACK, BACKGROUND_DEFAULT, false),
-		Bullet(Pixel(char(196), FG_BLACK, BACKGROUND_DEFAULT, false), 2, 0),
+		Bullet(Pixel(char(196), FG_BLACK, BACKGROUND_DEFAULT, false), 2, 0, MELEE_BULLET_SPEED),
 		1,
 		0,
-		3500,
+		4500,
 		WEAPON_MELEE,
 		2
 	);
@@ -193,10 +193,10 @@ Weapon getRandomTier1Player() {
 		"Fionda",
 		Pixel('Y', FG_BLACK, BACKGROUND_DEFAULT, false),
 		Pixel('Y', FG_BLACK, BACKGROUND_DEFAULT, false),
-		Bullet(Pixel('.', 0, BACKGROUND_DEFAULT, false), 1, 0),
+		Bullet(Pixel('.', 0, BACKGROUND_DEFAULT, false), 1, 0, RANGED_BULLET_SPEED),
 		1,
 		5000,
-		8000,
+		9000,
 		WEAPON_RANGED,
 		5
 	);
@@ -216,10 +216,10 @@ Weapon getRandomTier2Player() {
 		"Spada",
 		Pixel(char(196), FG_BLACK, BACKGROUND_DEFAULT, false),
 		Pixel(char(196), FG_BLACK, BACKGROUND_DEFAULT, false),
-		Bullet(Pixel(char(196), FG_BLACK, BACKGROUND_DEFAULT, false), 3, 0),
+		Bullet(Pixel(char(196), FG_BLACK, BACKGROUND_DEFAULT, false), 3, 0, MELEE_BULLET_SPEED),
 		1,
 		0,
-		5500,
+		6500,
 		WEAPON_MELEE,
 		3
 	);
@@ -229,10 +229,10 @@ Weapon getRandomTier2Player() {
 		"Ascia",
 		Pixel('q', FG_BLACK, BACKGROUND_DEFAULT, false),
 		Pixel('p', FG_BLACK, BACKGROUND_DEFAULT, false),
-		Bullet(Pixel(' ', FG_BLACK, BACKGROUND_DEFAULT, false), 4, 0),
+		Bullet(Pixel(' ', FG_BLACK, BACKGROUND_DEFAULT, false), 4, 0, MELEE_BULLET_SPEED),
 		1,
 		0,
-		8000,
+		9000,
 		WEAPON_MELEE,
 		2
 	);
@@ -242,10 +242,10 @@ Weapon getRandomTier2Player() {
 		"Pistola",
 		Pixel(char(191), FG_BLACK, BACKGROUND_DEFAULT, false),
 		Pixel(char(218), FG_BLACK, BACKGROUND_DEFAULT, false),
-		Bullet(Pixel(char(250), FG_BLACK, BACKGROUND_DEFAULT, false), 2, 0),
+		Bullet(Pixel(char(250), FG_BLACK, BACKGROUND_DEFAULT, false), 2, 0, RANGED_BULLET_SPEED),
 		10,
 		15000,
-		12000,
+		13000,
 		WEAPON_RANGED,
 		10
 	);
@@ -265,10 +265,10 @@ Weapon getRandomTier3Player() {
 		"Mitraglietta",
 		Pixel(char(191), FG_BLACK, BACKGROUND_DEFAULT, false),
 		Pixel(char(218), FG_BLACK, BACKGROUND_DEFAULT, false),
-		Bullet(Pixel('-', FG_BLACK, BACKGROUND_DEFAULT, false), 5, 0),
+		Bullet(Pixel('-', FG_BLACK, BACKGROUND_DEFAULT, false), 5, 0, RANGED_BULLET_SPEED),
 		20,
 		12000,
-		3500,
+		4500,
 		WEAPON_RANGED,
 		15
 	);
@@ -278,10 +278,10 @@ Weapon getRandomTier3Player() {
 		"Fucile d'assalto",
 		Pixel(char(191), FG_BLACK, BACKGROUND_DEFAULT, false),
 		Pixel(char(218), FG_BLACK, BACKGROUND_DEFAULT, false),
-		Bullet(Pixel('-', FG_BLACK, BACKGROUND_DEFAULT, false), 8, 0),
+		Bullet(Pixel('-', FG_BLACK, BACKGROUND_DEFAULT, false), 8, 0, RANGED_BULLET_SPEED),
 		35,
 		15000,
-		5000,
+		6000,
 		WEAPON_RANGED,
 		20
 	);
@@ -291,7 +291,7 @@ Weapon getRandomTier3Player() {
 		"Fucile di precisione",
 		Pixel(char(191), FG_BLACK, BACKGROUND_DEFAULT, false),
 		Pixel(char(218), FG_BLACK, BACKGROUND_DEFAULT, false),
-		Bullet(Pixel('-', FG_BLACK, BACKGROUND_DEFAULT, false), 10, 0),
+		Bullet(Pixel('-', FG_BLACK, BACKGROUND_DEFAULT, false), 10, 0, RANGED_BULLET_SPEED),
 		5,
 		30000,
 		70000,
@@ -304,7 +304,7 @@ Weapon getRandomTier3Player() {
 		"Fucile a pompa",
 		Pixel(char(191), FG_BLACK, BACKGROUND_DEFAULT, false),
 		Pixel(char(218), FG_BLACK, BACKGROUND_DEFAULT, false),
-		Bullet(Pixel('=', FG_BLACK, BACKGROUND_DEFAULT, false), 15, 0),
+		Bullet(Pixel('=', FG_BLACK, BACKGROUND_DEFAULT, false), 15, 0, RANGED_BULLET_SPEED),
 		4,
 		25000,
 		20000,
@@ -327,7 +327,7 @@ Weapon getRandomSpecial() {
 		"Laser",
 		Pixel(char(191), FG_BLACK, BACKGROUND_DEFAULT, false),
 		Pixel(char(218), FG_BLACK, BACKGROUND_DEFAULT, false),
-		Bullet(Pixel(char(196), FG_DARKRED, BACKGROUND_DEFAULT, false), 200, 0),
+		Bullet(Pixel(char(196), FG_DARKRED, BACKGROUND_DEFAULT, false), 200, 0, MELEE_BULLET_SPEED),
 		1,
 		50000,
 		30000,
@@ -351,10 +351,10 @@ Weapon getRandomTier1Enemy() {
 		"Coltellino",
 		Pixel('-', FG_BLACK, BACKGROUND_DEFAULT, false),
 		Pixel('-', FG_BLACK, BACKGROUND_DEFAULT, false),
-		Bullet(Pixel('-', BACKGROUND_DEFAULT, BACKGROUND_DEFAULT, false), 1, 0),
+		Bullet(Pixel('-', BACKGROUND_DEFAULT, BACKGROUND_DEFAULT, false), 1, 0, MELEE_BULLET_SPEED),
 		1,
 		0,
-		3500,
+		4500,
 		WEAPON_MELEE,
 		2
 	);
@@ -364,10 +364,10 @@ Weapon getRandomTier1Enemy() {
 		"Fionda",
 		Pixel('Y', FG_BLACK, BACKGROUND_DEFAULT, false),
 		Pixel('Y', FG_BLACK, BACKGROUND_DEFAULT, false),
-		Bullet(Pixel('.', FG_BLACK, BACKGROUND_DEFAULT, false), 1, 0),
+		Bullet(Pixel('.', FG_BLACK, BACKGROUND_DEFAULT, false), 1, 0, RANGED_BULLET_SPEED),
 		1,
 		5000,
-		8000,
+		9000,
 		WEAPON_RANGED,
 		5
 	);
@@ -387,10 +387,10 @@ Weapon getRandomTier2Enemy() {
 		"Spada",
 		Pixel(char(196), FG_BLACK, BACKGROUND_DEFAULT, false),
 		Pixel(char(196), FG_BLACK, BACKGROUND_DEFAULT, false),
-		Bullet(Pixel(char(196), BACKGROUND_DEFAULT, BACKGROUND_DEFAULT, false), 2, 0),
+		Bullet(Pixel(char(196), BACKGROUND_DEFAULT, BACKGROUND_DEFAULT, false), 2, 0, MELEE_BULLET_SPEED),
 		1,
 		0,
-		5500,
+		6500,
 		WEAPON_MELEE,
 		3
 	);
@@ -400,10 +400,10 @@ Weapon getRandomTier2Enemy() {
 		"Ascia",
 		Pixel('q', FG_BLACK, BACKGROUND_DEFAULT, false),
 		Pixel('p', FG_BLACK, BACKGROUND_DEFAULT, false),
-		Bullet(Pixel(' ', FG_BLACK, BACKGROUND_DEFAULT, false), 3, 0),
+		Bullet(Pixel(' ', FG_BLACK, BACKGROUND_DEFAULT, false), 3, 0, MELEE_BULLET_SPEED),
 		1,
 		0,
-		8000,
+		9000,
 		WEAPON_MELEE,
 		2
 	);
@@ -413,10 +413,10 @@ Weapon getRandomTier2Enemy() {
 		"Pistola",
 		Pixel(char(191), FG_BLACK, BACKGROUND_DEFAULT, false),
 		Pixel(char(218), FG_BLACK, BACKGROUND_DEFAULT, false),
-		Bullet(Pixel('o', FG_BLACK, BACKGROUND_DEFAULT, false), 2, 0),
+		Bullet(Pixel('o', FG_BLACK, BACKGROUND_DEFAULT, false), 2, 0, RANGED_BULLET_SPEED),
 		10,
 		15000,
-		12000,
+		13000,
 		WEAPON_RANGED,
 		10
 	);
@@ -436,10 +436,10 @@ Weapon getRandomTier3Enemy() {
 		"Mitraglietta",
 		Pixel(char(191), FG_BLACK, BACKGROUND_DEFAULT, false),
 		Pixel(char(218), FG_BLACK, BACKGROUND_DEFAULT, false),
-		Bullet(Pixel('-', BACKGROUND_DEFAULT, BACKGROUND_DEFAULT, false), 2, 0),
+		Bullet(Pixel('-', BACKGROUND_DEFAULT, BACKGROUND_DEFAULT, false), 2, 0, RANGED_BULLET_SPEED),
 		20,
 		12000,
-		5000,
+		6000,
 		WEAPON_RANGED,
 		15
 	);
@@ -449,10 +449,10 @@ Weapon getRandomTier3Enemy() {
 		"Fucile d'assalto",
 		Pixel(char(191), FG_BLACK, BACKGROUND_DEFAULT, false),
 		Pixel(char(218), FG_BLACK, BACKGROUND_DEFAULT, false),
-		Bullet(Pixel('-', BACKGROUND_DEFAULT, BACKGROUND_DEFAULT, false), 2, 0),
+		Bullet(Pixel('-', BACKGROUND_DEFAULT, BACKGROUND_DEFAULT, false), 2, 0, RANGED_BULLET_SPEED),
 		35,
 		15000,
-		3500,
+		4500,
 		WEAPON_RANGED,
 		20
 	);
@@ -462,7 +462,7 @@ Weapon getRandomTier3Enemy() {
 		"Fucile di precisione",
 		Pixel(char(191), FG_BLACK, BACKGROUND_DEFAULT, false),
 		Pixel(char(218), FG_BLACK, BACKGROUND_DEFAULT, false),
-		Bullet(Pixel('-', BACKGROUND_DEFAULT, BACKGROUND_DEFAULT, false), 3, 0),
+		Bullet(Pixel('-', BACKGROUND_DEFAULT, BACKGROUND_DEFAULT, false), 3, 0, RANGED_BULLET_SPEED),
 		5,
 		30000,
 		70000,
@@ -475,7 +475,7 @@ Weapon getRandomTier3Enemy() {
 		"Fucile a pompa",
 		Pixel(char(191), FG_BLACK, BACKGROUND_DEFAULT, false),
 		Pixel(char(218), FG_BLACK, BACKGROUND_DEFAULT, false),
-		Bullet(Pixel('=', FG_BLACK, BACKGROUND_DEFAULT, false), 5, 0),
+		Bullet(Pixel('=', FG_BLACK, BACKGROUND_DEFAULT, false), 5, 0, RANGED_BULLET_SPEED),
 		4,
 		25000,
 		20000,

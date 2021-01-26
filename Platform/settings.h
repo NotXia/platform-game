@@ -24,11 +24,10 @@ const int MAX_LIFE = 10;
 
 const int JUMP_HEIGHT = 4;
 const int JUMP_SPEED = 2500;
-const int FALL_SPEED = 1800;
+const int FALL_SPEED = 1500;
 
-const int WEAPON_DISPLAY_TIME = 4000;
-
-const int BULLET_SPEED = 900;
+const int RANGED_BULLET_SPEED = 900;
+const int MELEE_BULLET_SPEED = 1500;
 
 const int ENEMY_REFRESH_RATE = 8000;
 const int ENEMY_RANGE = 18;

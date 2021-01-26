@@ -1,8 +1,6 @@
 #pragma once
-
-#include "Pixel.hpp"
-#include "Position.hpp"
 #include "Block.hpp"
+#include "Position.hpp"
 #include "AnimationTimer.hpp"
 
 const bool DIRECTION_LEFT = false;
@@ -35,8 +33,6 @@ class Entity : public Block {
 		Position getHeadFrontPosition(); // Restituisce le coordinate davanti al corpo (stabilito in base alla direzione)
 		Position getBackPosition();		 // Restituisce le coordinate dietro al corpo (stabilito in base alla direzione)
 		void setPosition(Position position);
-		void setCanMove(bool can_move);
-		bool getCanMove();
 		bool isOnTerrain();
 		void setOnTerrain(bool on_terrain);
 

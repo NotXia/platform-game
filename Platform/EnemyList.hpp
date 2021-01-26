@@ -2,7 +2,6 @@
 #include "Enemy.hpp"
 #include <iostream>
 
-
 class EnemyList {
 	protected:
 		struct EnemyNode {

@@ -1,14 +1,11 @@
 #pragma once
+#include <iostream>
 #include "Entity.hpp"
 #include "Weapon.hpp"
-#include <iostream>
-#include "Bullet.hpp"
 
 class ArmedEntity : public Entity {
 	protected:
 		Weapon weapon;
-		bool is_attacking;
-		AnimationTimer weapon_animation;
 
 		bool mapEvent;
 		AnimationTimer mapEventsTimer;
@@ -18,7 +15,6 @@ class ArmedEntity : public Entity {
 
 		Weapon getWeapon();
 		void setWeapon(Weapon weapon);
-		bool isAttacking();
 
 
 		/****************************
@@ -34,11 +30,6 @@ class ArmedEntity : public Entity {
 			Restituisce true se ci sono le condizioni per attaccare.
 		*/
 		bool canAttack();
-
-		/*
-			Indica se terminare la visualizzazione dell'arma quando l'entità attacca.
-		*/
-		bool endWeaponDisplay();
 
 		/*
 			Se il delay per lo sparo è terminato, permette di sparare nuovamente.

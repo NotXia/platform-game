@@ -1,10 +1,8 @@
 #pragma once
 #include <windows.h>
-#include "settings.h"
 #include "Pixel.hpp"
 #include "Entity.hpp"
 #include "Map.hpp"
-#include "EnemyList.hpp"
 
 class Screen {
 	protected:
@@ -135,6 +133,8 @@ class Screen {
 			Rimuove il boss dall'area di gioco
 		*/
 		void remove_boss(Map *map, Boss boss);
+
+		void write_weapon(Map *map, ArmedEntity entity);
 
 
 		/* FINE GESTIONE AREA DI GIOCO  

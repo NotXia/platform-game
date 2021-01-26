@@ -1,9 +1,8 @@
 #include "Map.hpp"
-#include <windows.h>
-#include <cstdlib>
 #include <iostream>
-#include "colors.h"
+#include <cstdlib>
 #include <cmath>
+#include "settings.h"
 #include "EntityGenerator.h"
 
 const Pixel PLATFORM_TEXTURE = Pixel(PLATFORM_SYMBOL, PLATFORM_COLOR_FG, PLATFORM_COLOR_BG, true);

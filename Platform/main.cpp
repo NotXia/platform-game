@@ -74,8 +74,7 @@ int main() {
 
             // MOVIMENTO A SINISTRA
             if (ch == 'a' || ch == 'A') {
-                if (player.getCanMove() && 
-                    (!map->isSolidAt(player.getBodyFrontPosition()) && !map->isSolidAt(player.getHeadFrontPosition()) || player.getDirection() == DIRECTION_RIGHT)) {
+                if ((!map->isSolidAt(player.getBodyFrontPosition()) && !map->isSolidAt(player.getHeadFrontPosition()) || player.getDirection() == DIRECTION_RIGHT)) {
                     hasMoved = true;
                     moveLeft(map, screen, player);
 
@@ -92,8 +91,7 @@ int main() {
             }
             // MOVIMENTO A DESTRA
             else if (ch == 'd' || ch == 'D') {
-                if (player.getCanMove() && 
-                    (!map->isSolidAt(player.getBodyFrontPosition()) && !map->isSolidAt(player.getHeadFrontPosition()) || player.getDirection() == DIRECTION_LEFT)) {
+                if ((!map->isSolidAt(player.getBodyFrontPosition()) && !map->isSolidAt(player.getHeadFrontPosition()) || player.getDirection() == DIRECTION_LEFT)) {
                     hasMoved = true;
                     moveRight(map, screen, player);
 
@@ -108,15 +106,14 @@ int main() {
             }
             // SALTO
             else if (ch == 'w' || ch == 'W' ) {
-                if (player.getCanMove() && player.isOnTerrain()) {
+                if (player.isOnTerrain()) {
                     hasMoved = true;
                     player.initJump();
                 }
             }
             // CADUTA
             else if (ch == 's' || ch == 'S') {
-                if (player.getCanMove() &&
-                     map->isSolidAt(Position(player.getBodyPosition().getX(), player.getBodyPosition().getY()+1)) &&
+                if (map->isSolidAt(Position(player.getBodyPosition().getX(), player.getBodyPosition().getY()+1)) &&
                     !map->isSolidAt(Position(player.getBodyPosition().getX(), player.getBodyPosition().getY()+2)) &&
                     !map->isSolidAt(Position(player.getBodyPosition().getX(), player.getBodyPosition().getY()+3)) ) {
                     
@@ -136,7 +133,7 @@ int main() {
                             ranged_attack(map, screen, player, player, false);
                         }
 
-                        screen.write_at(map, player.getWeapon().getTexture(player.getDirection()), player.getBodyFrontPosition());
+                        screen.write_weapon(map, player);
                         screen.write_ammobox(player.getWeapon().getCurrAmmo());
                     }
                     else {
@@ -258,11 +255,6 @@ int main() {
             player.setOnTerrain(true);
         }
 
-        /*** Gestione animazione arma ***/
-        if (player.endWeaponDisplay()) {
-            screen.resetTerrain(map, player.getBodyFrontPosition());
-        }
-
         /*** Gestione tempo di ricarica ***/
         if (player.hasReloadFinished()) {
             screen.write_ammobox(player.getWeapon().getCurrAmmo());
@@ -352,8 +344,7 @@ int main() {
 
                 // MOVIMENTO A DESTRA
                 if (action == ACTION_GO_RIGHT) {
-                    if (enemy.getCanMove() && 
-                        (!map->isSolidAt(enemy.getBodyFrontPosition()) && !map->isSolidAt(enemy.getHeadFrontPosition())) &&   // Davanti non è solido
+                    if ((!map->isSolidAt(enemy.getBodyFrontPosition()) && !map->isSolidAt(enemy.getHeadFrontPosition())) &&   // Davanti non è solido
                         (!player.existsAt(enemy.getBodyFrontPosition()) && !player.existsAt(enemy.getHeadFrontPosition())) || // Davanti non c'è il giocatore
                         enemy.getDirection() == DIRECTION_LEFT) {
                         moveRight(map, screen, enemy);
@@ -361,8 +352,7 @@ int main() {
                 }
                 // MOVIMENTO A SINISTRA
                 else if (action == ACTION_GO_LEFT) {
-                    if (enemy.getCanMove() && 
-                        (!map->isSolidAt(enemy.getBodyFrontPosition()) && !map->isSolidAt(enemy.getHeadFrontPosition()) &&    // Davanti non è solido
+                    if ((!map->isSolidAt(enemy.getBodyFrontPosition()) && !map->isSolidAt(enemy.getHeadFrontPosition()) &&    // Davanti non è solido
                         (!player.existsAt(enemy.getBodyFrontPosition()) && !player.existsAt(enemy.getHeadFrontPosition())) || // Davanti non c'è il giocatore
                         (enemy.getDirection() == DIRECTION_RIGHT))) {
                         moveLeft(map, screen, enemy);
@@ -459,11 +449,6 @@ int main() {
                     bulletlist.updateCurrent(hit_bullet);
                     map->setBulletList(bulletlist);
                 }
-            }
-
-            /*** Gestione animazione arma ***/
-            if (enemy.endWeaponDisplay()) {
-                screen.resetTerrain(map, enemy.getBodyFrontPosition());
             }
 
             /*** Gestione tempo di ricarica ***/
@@ -594,8 +579,7 @@ int main() {
                 int action = boss->getAction(map, player);
 
                 if (action == ACTION_GO_RIGHT) {
-                    if (boss->getCanMove() && 
-                        (!map->isSolidAt(boss->getBodyFrontPosition()) && !map->isSolidAt(boss->getHeadFrontPosition())) &&
+                    if ((!map->isSolidAt(boss->getBodyFrontPosition()) && !map->isSolidAt(boss->getHeadFrontPosition())) &&
                         (!player.existsAt(boss->getBodyFrontPosition()) && !player.existsAt(boss->getHeadFrontPosition())) ||
                         boss->getDirection() == DIRECTION_LEFT) {
                         screen.remove_boss(map, *boss);
@@ -604,8 +588,7 @@ int main() {
                     }
                 }
                 else if (action == ACTION_GO_LEFT) {
-                    if (boss->getCanMove() && 
-                        (!map->isSolidAt(boss->getBodyFrontPosition()) && !map->isSolidAt(boss->getHeadFrontPosition())) &&
+                    if ((!map->isSolidAt(boss->getBodyFrontPosition()) && !map->isSolidAt(boss->getHeadFrontPosition())) &&
                         (!player.existsAt(boss->getBodyFrontPosition()) && !player.existsAt(boss->getHeadFrontPosition())) ||
                         boss->getDirection() == DIRECTION_RIGHT) {
                         screen.remove_boss(map, *boss);
@@ -739,12 +722,6 @@ int main() {
                     bulletlist.updateCurrent(hit_bullet);
                     map->setBulletList(bulletlist);
                 }
-            }
-
-            /*** Gestione animazione arma ***/
-            if (boss->endWeaponDisplay()) {
-                screen.resetTerrain(map, boss->getBodyFrontPosition());
-                boss->setCanMove(true);
             }
 
             /*** Gestione tempo di ricarica ***/

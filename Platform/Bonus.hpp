@@ -1,7 +1,7 @@
 #pragma once
+#include <iostream>
 #include "Block.hpp"
 #include "Weapon.hpp"
-#include <iostream>
 
 const int BONUS_TYPE_MONEY = 0;
 const int BONUS_TYPE_HP = 1;

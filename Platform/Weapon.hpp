@@ -1,5 +1,4 @@
 #pragma once
-#include "Pixel.hpp"
 #include "Bullet.hpp"
 #include "settings.h"
 

@@ -86,14 +86,6 @@ Position Entity::getBackPosition() {
 	return back;
 }
 
-void Entity::setCanMove(bool can_move) {
-	this->can_move = can_move;
-}
-
-bool Entity::getCanMove() {
-	return can_move;
-}
-
 bool Entity::isOnTerrain() {
 	return on_terrain;
 }

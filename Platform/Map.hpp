@@ -1,14 +1,14 @@
 #pragma once
+#include <iostream>
 #include "Pixel.hpp"
 #include "settings.h"
 #include "Position.hpp"
-#include <iostream>
 #include "EnemyList.hpp"
 #include "BulletList.hpp"
 #include "BonusList.hpp"
 #include "NPCList.hpp"
-#include "Boss.hpp"
 #include "LavaList.hpp"
+#include "Boss.hpp"
 
 class Map {
 	protected:

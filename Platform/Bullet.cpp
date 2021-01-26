@@ -1,11 +1,11 @@
 #include "Bullet.hpp"
 #include "settings.h"
 
-Bullet::Bullet(Pixel texture, int damage, int range, Position position, bool direction) : Block(texture, position) {
+Bullet::Bullet(Pixel texture, int damage, int range, Position position, bool direction, int speed) : Block(texture, position) {
 	this->damage = damage;
 	this->range = range;
 	this->direction = direction;
-	this->refresh = AnimationTimer(BULLET_SPEED);
+	this->refresh = AnimationTimer(speed);
 	this->hostile = false;
 }
 

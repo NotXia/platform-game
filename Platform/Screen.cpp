@@ -1,6 +1,6 @@
-﻿#include "Screen.hpp"
-#include <iostream>
-#include "colors.h"
+﻿#include <iostream>
+#include "Screen.hpp"
+#include "settings.h"
 using namespace std;
 
 Screen::Screen() {
@@ -216,9 +216,8 @@ void Screen::write_bullet(Map *map, Player player, Bullet bullet) {
 	if (map->isBossFight()) {
 		boss_exists = map->getBoss()->existsAt(bullet.getPosition());
 	}
-	bool weapon_display = player.isAttacking() && player.getBodyFrontPosition().equals(bullet.getPosition());
 
-	if (!enemylist.existsAt(bullet.getPosition()) && !player.existsAt(bullet.getPosition()) && !boss_exists && !bonuslist.pointAt(bullet.getPosition()) && !weapon_display) {
+	if (!enemylist.existsAt(bullet.getPosition()) && !player.existsAt(bullet.getPosition()) && !boss_exists && !bonuslist.pointAt(bullet.getPosition())) {
 		write_at(map, bullet.getBody(), bullet.getPosition());
 	}
 }
@@ -294,6 +293,12 @@ void Screen::remove_boss(Map *map, Boss boss) {
 	resetTerrain(map, boss.getBodyPosition());
 	resetTerrain(map, boss.getBody2Position());
 	resetTerrain(map, boss.getHeadPosition());
+}
+
+void Screen::write_weapon(Map *map, ArmedEntity entity) {
+	if (!map->isSolidAt(entity.getBodyFrontPosition()) && !entity.getBodyFrontPosition().equals(entity.getBodyPosition())) {
+		write_at(map, entity.getWeapon().getTexture(entity.getDirection()), entity.getBodyFrontPosition());
+	}
 }
 
 /* FINE GESTIONE AREA DI GIOCO

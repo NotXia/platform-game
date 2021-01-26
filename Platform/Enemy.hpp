@@ -1,7 +1,6 @@
 #pragma once
 #include "ArmedEntity.hpp"
-#include "Weapon.hpp"
-class Player;
+#include "Player.hpp"
 class Map;
 
 const int ACTION_DO_NOTHING = 0;

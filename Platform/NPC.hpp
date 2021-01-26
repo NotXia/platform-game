@@ -1,7 +1,7 @@
 #pragma once
 #include "Entity.hpp"
-#include "settings.h"
 #include "Weapon.hpp"
+#include "settings.h"
 
 const bool NPC_HOSPITAL = true;
 const bool NPC_WEAPONSHOP = false;

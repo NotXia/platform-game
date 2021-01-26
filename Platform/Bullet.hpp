@@ -1,8 +1,7 @@
 #pragma once
 #include "Block.hpp"
-#include "Pixel.hpp"
-#include "Position.hpp"
 #include "AnimationTimer.hpp"
+#include "settings.h"
 
 const bool BULLET_LEFT = false;
 const bool BULLET_RIGHT = true;
@@ -17,7 +16,7 @@ class Bullet : public Block {
 		AnimationTimer refresh;
 
 	public:
-		Bullet(Pixel texture=Pixel(), int damage=1, int range=1, Position position=Position(), bool direction=BULLET_LEFT);
+		Bullet(Pixel texture=Pixel(), int damage=1, int range=1, Position position=Position(), bool direction=BULLET_LEFT, int speed=RANGED_BULLET_SPEED);
 
 		int getDamage();
 		int getRange();
