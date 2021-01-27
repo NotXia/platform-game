@@ -57,10 +57,11 @@ const int PLAYER_BODY_COLOR_FG = FG_PINK;
 const char MONEY_SYMBOL = char(207);
 const int MONEY_COLOR = FG_DARKYELLOW;
 
-const char HP_SYMBOL = char(3);
+const char HP_SYMBOL = char(127);
 const int HP_COLOR = FG_DARKRED;
+const int HP_LOSS_COLOR = FG_GREY;
 
-const char PLATFORM_SYMBOL = char(219);
+const char PLATFORM_SYMBOL = char(223);
 const int PLATFORM_COLOR_FG = FG_DARKYELLOW;
 const int PLATFORM_COLOR_BG = BACKGROUND_DEFAULT;
 

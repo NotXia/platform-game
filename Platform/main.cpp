@@ -36,7 +36,7 @@ int main() {
         Pixel(PLAYER_HEAD_LEFT, PLAYER_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true),
         Pixel(PLAYER_HEAD_RIGHT, PLAYER_HEAD_COLOR_FG, BACKGROUND_DEFAULT, true),
         Pixel(PLAYER_BODY, PLAYER_BODY_COLOR_FG, BACKGROUND_DEFAULT, true),
-        map->getLeftPosition(), getRandomTier2Player()
+        map->getLeftPosition(), getRandomTier1Player()
     );
 
     Bonus *curr_bonus = NULL;
@@ -153,8 +153,8 @@ int main() {
             // Se hasMoved è true, il giocatore si è mosso dall'eventuale bonus/NPC su cui si trovava
             if (hasMoved) {
                 if (!map->isBossFight()) {
-                    curr_bonus = NULL;
-                    curr_npc = NULL;
+                    delete curr_bonus;
+                    delete curr_npc;
                     screen.clear_textbox();
                 }
             }
@@ -785,6 +785,7 @@ int main() {
     } // while (!player.isDead())
 
     screen.game_over(player.getPoints());
+    system("pause");
 }
 
 

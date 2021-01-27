@@ -14,9 +14,10 @@ const Pixel LAVA_TEXTURE = Pixel(LAVA_SYMBOL, LAVA_COLOR_FG, LAVA_COLOR_BG, true
 
 const Pixel HOUSE_WALL_TEXTURE = Pixel(' ', 0, BG_LIGHTGREY, false);
 const Pixel HOUSE_BORDER_TEXTURE = Pixel(' ', 0, BG_BLACK, false);
+const Pixel HOUSE_ROOF_TEXTURE = Pixel(char(220), FG_BLACK, SKY_COLOR_BG, false);
 const Pixel HOUSE_DOOR_TEXTURE = Pixel(' ', 0, BG_DARKYELLOW, false);
 
-const Pixel BOSS_PLATFORM_TEXTURE = Pixel(char(219), PLATFORM_COLOR_FG, BG_LIGHTGREY, true);
+const Pixel BOSS_PLATFORM_TEXTURE = Pixel(PLATFORM_SYMBOL, PLATFORM_COLOR_FG, BG_LIGHTGREY, true);
 const Pixel BOSS_TERRAIN_TEXTURE = TERRAIN_ROCK_TEXTURE;
 const Pixel BOSS_SKY_TEXTURE = Pixel(' ', 0, BG_LIGHTGREY, false);
 
@@ -255,73 +256,65 @@ void Map::generateTown() {
 		int height = rand() % 3 + 5;
 
 		// Muro sinistro
-		for (int j=0; j<height; j++) {
+		for (int j=0; j<height-1; j++)
 			terrain[start_x][start_y-j] = HOUSE_BORDER_TEXTURE;
-		}
+		terrain[start_x][start_y-height+1] = HOUSE_ROOF_TEXTURE;
 		start_x++;
 
 		// Prima colonna
-		for (int j=0; j<height-1; j++) {
+		for (int j=0; j<height-1; j++)
 			terrain[start_x][start_y-j] = HOUSE_WALL_TEXTURE;
-		}
-		terrain[start_x][start_y-height+1] = HOUSE_BORDER_TEXTURE;
+		terrain[start_x][start_y-height+1] = HOUSE_ROOF_TEXTURE;
 		start_x++;
 
 		// Larghezza a sinistra
 		for (int i=0; i<left_size; i++) {
-			for (int j=0; j<height-1; j++) {
+			for (int j=0; j<height-1; j++)
 				terrain[start_x][start_y-j] = HOUSE_WALL_TEXTURE;
-			}
-			terrain[start_x][start_y-height+1] = HOUSE_BORDER_TEXTURE;
+			terrain[start_x][start_y-height+1] = HOUSE_ROOF_TEXTURE;
 			start_x++;
 		}
 
 		// Colonna prima della porta
-		for (int j=0; j<height-1; j++) {
+		for (int j=0; j<height-1; j++)
 			terrain[start_x][start_y-j] = HOUSE_WALL_TEXTURE;
-		}
-		terrain[start_x][start_y-height+1] = HOUSE_BORDER_TEXTURE;
+		terrain[start_x][start_y-height+1] = HOUSE_ROOF_TEXTURE;
 		start_x++;
 
 		// Porta
 		for (int i=0; i<2; i++) {
-			for (int j=0; j<2; j++) {
+			for (int j=0; j<2; j++)
 				terrain[start_x][start_y-j] = HOUSE_DOOR_TEXTURE;
-			}
-			for (int j=0; j<height-3; j++) {
+			for (int j=0; j<height-3; j++)
 				terrain[start_x][start_y-2-j] = HOUSE_WALL_TEXTURE;
-			}
-			terrain[start_x][start_y-height+1] = HOUSE_BORDER_TEXTURE;
+			terrain[start_x][start_y-height+1] = HOUSE_ROOF_TEXTURE;
 			start_x++;
 		}
 
 		// Colonna dopo la porta
-		for (int j=0; j<height-1; j++) {
+		for (int j=0; j<height-1; j++)
 			terrain[start_x][start_y-j] = HOUSE_WALL_TEXTURE;
-		}
-		terrain[start_x][start_y-height+1] = HOUSE_BORDER_TEXTURE;
+		terrain[start_x][start_y-height+1] = HOUSE_ROOF_TEXTURE;
 		start_x++;
 
 		// Larghezza a destra
 		for (int i=0; i<right_size; i++) {
-			for (int j=0; j<height-1; j++) {
+			for (int j=0; j<height-1; j++)
 				terrain[start_x][start_y-j] = HOUSE_WALL_TEXTURE;
-			}
-			terrain[start_x][start_y-height+1] = HOUSE_BORDER_TEXTURE;
+			terrain[start_x][start_y-height+1] = HOUSE_ROOF_TEXTURE;
 			start_x++;
 		}
 
 		// Ultima colonna
-		for (int j=0; j<height-1; j++) {
+		for (int j=0; j<height-1; j++) 
 			terrain[start_x][start_y-j] = HOUSE_WALL_TEXTURE;
-		}
-		terrain[start_x][start_y-height+1] = HOUSE_BORDER_TEXTURE;
+		terrain[start_x][start_y-height+1] = HOUSE_ROOF_TEXTURE;
 		start_x++;
 
 		// Muro destro
-		for (int j=0; j<height; j++) {
+		for (int j=0; j<height-1; j++)
 			terrain[start_x][start_y-j] = HOUSE_BORDER_TEXTURE;
-		}
+		terrain[start_x][start_y-height+1] = HOUSE_ROOF_TEXTURE;
 		start_x++;
 
 		start_x += rand() % 10 + 2;

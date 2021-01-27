@@ -167,9 +167,9 @@ int Boss::getAction(Map *map, Player player) {
 				nextPhase();
 			}
 		}
-		else if (phase == 3) {				// Fase 3: Non ci sono più proiettili -> Va al centro della mappa + inizio timer down_time
+		else if (phase == 3) {				// Fase 3: Non ci sono più proiettili -> Va a terra + inizio timer down_time
 			action_code = ACTION_DO_NOTHING;
-			position = Position(GAME_WIDTH/2, 0);
+			position = Position((GAME_WIDTH/2-30)+rand()%61, 0);
 			down_time.reset();
 			nextPhase();
 			this->body = STUNNED_BOSS_BODY_TEXTURE;

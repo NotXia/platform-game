@@ -97,17 +97,10 @@ Bonus createBonus(int difficulty) {
 	Crea un boss e lo restituisce.
 */
 Boss createBoss(int difficulty) {
-	int type = rand() % 3;
+	int type = 1;
 	Boss boss;
 
 	if (type == BOSS_SUMMONER) {
-		/*
-			Fase 0: Evoca i nemici
-			Fase 1: Va avanti e indietro
-			Fase 2: Nemici sconfitti -> Inizio timer e cade
-			Fase 3: Caduto
-			Fase 4: Timer terminato -> Salta
-		*/
 		boss = Boss(
 			10 + 5*(difficulty-1),
 			BOSS_BASE_POINTS * difficulty,
@@ -123,13 +116,6 @@ Boss createBoss(int difficulty) {
 		);
 	}
 	else if (type == BOSS_MAGE) {
-		/*
-			Fase 0: Spara sfere di fuoco
-			Fase 1: Sta fermo
-			Fase 2: Finito di sparare -> Inizio timer e cade
-			Fase 3: Caduto
-			Fase 4: Timer terminato -> Si teletrasporta
-		*/
 		boss = Boss(
 			10 + 5*(difficulty-1),
 			BOSS_BASE_POINTS * difficulty,
@@ -138,19 +124,13 @@ Boss createBoss(int difficulty) {
 			Pixel('>', FG_DARKRED, BACKGROUND_DEFAULT, true),
 			Pixel(char(219), FG_DARKRED, BACKGROUND_DEFAULT, true),
 			Position(GAME_WIDTH-2, 0),
-			Weapon("Scettro", Pixel(), Pixel(), Bullet(Pixel('o', FG_DARKRED, BACKGROUND_DEFAULT), difficulty, GAME_WIDTH, RANGED_BULLET_SPEED), 5, 1, 12000, WEAPON_RANGED, GAME_WIDTH),
+			Weapon("Scettro", Pixel(), Pixel(), Bullet(Pixel('o', FG_DARKRED, BACKGROUND_DEFAULT), difficulty, GAME_WIDTH, 100), 8, 1, 12000, WEAPON_RANGED, GAME_WIDTH),
 			type,
-			5,
-			10
+			8,
+			15
 		);
 	}
 	else if (type == BOSS_MELEE) {
-		/*
-			Fase 0: Corre + se tocca player, lo lancia
-			Fase 1: Finito di correre -> Inizio timer e stordito
-			Fase 2: stordito
-			Fase 3: Timer terminato -> Si gira
-		*/
 		boss = Boss(
 			10 + 5*(difficulty-1),
 			BOSS_BASE_POINTS * difficulty,
@@ -175,30 +155,33 @@ Boss createBoss(int difficulty) {
 Weapon getRandomTier1Player() {
 	Weapon weapons[10];
 	int size = 0;
+	int ammo, reload_delay, shoot_delay, range, damage;
 
+	ammo = 1; 
+	reload_delay = 0; 
+	shoot_delay = 4500; 
+	range = 2;
+	damage = 2;
 	weapons[size] = Weapon(
 		"Coltellino",
 		Pixel('-', FG_BLACK, BACKGROUND_DEFAULT, false),
 		Pixel('-', FG_BLACK, BACKGROUND_DEFAULT, false),
-		Bullet(Pixel(char(196), FG_BLACK, BACKGROUND_DEFAULT, false), 2, 0, MELEE_BULLET_SPEED),
-		1,
-		0,
-		4500,
-		WEAPON_MELEE,
-		2
+		Bullet(Pixel(char(196), FG_BLACK, BACKGROUND_DEFAULT, false), damage, 0, MELEE_BULLET_SPEED),
+		ammo, reload_delay, shoot_delay, WEAPON_MELEE, range
 	);
 	size++;
 
+	ammo = 1;
+	reload_delay = 5000;
+	shoot_delay = 9000;
+	range = 5;
+	damage = 1;
 	weapons[size] = Weapon(
 		"Fionda",
 		Pixel('Y', FG_BLACK, BACKGROUND_DEFAULT, false),
 		Pixel('Y', FG_BLACK, BACKGROUND_DEFAULT, false),
-		Bullet(Pixel('.', 0, BACKGROUND_DEFAULT, false), 1, 0, RANGED_BULLET_SPEED),
-		1,
-		5000,
-		9000,
-		WEAPON_RANGED,
-		5
+		Bullet(Pixel('.', 0, BACKGROUND_DEFAULT, false), damage, 0, RANGED_BULLET_SPEED),
+		ammo, reload_delay, shoot_delay, WEAPON_RANGED, range
 	);
 	size++;
 
@@ -211,43 +194,47 @@ Weapon getRandomTier1Player() {
 Weapon getRandomTier2Player() {
 	Weapon weapons[10];
 	int size = 0;
+	int ammo, reload_delay, shoot_delay, range, damage;
 
+	ammo = 1;
+	reload_delay = 0;
+	shoot_delay = 6500;
+	range = 3;
+	damage = 3;
 	weapons[size] = Weapon(
 		"Spada",
 		Pixel(char(196), FG_BLACK, BACKGROUND_DEFAULT, false),
 		Pixel(char(196), FG_BLACK, BACKGROUND_DEFAULT, false),
-		Bullet(Pixel(char(196), FG_BLACK, BACKGROUND_DEFAULT, false), 3, 0, MELEE_BULLET_SPEED),
-		1,
-		0,
-		6500,
-		WEAPON_MELEE,
-		3
+		Bullet(Pixel(char(196), FG_BLACK, BACKGROUND_DEFAULT, false), damage, 0, MELEE_BULLET_SPEED),
+		ammo, reload_delay, shoot_delay, WEAPON_MELEE, range
 	);
 	size++;
 
+	ammo = 1;
+	reload_delay = 0;
+	shoot_delay = 9000;
+	range = 2;
+	damage = 4;
 	weapons[size] = Weapon(
 		"Ascia",
 		Pixel('q', FG_BLACK, BACKGROUND_DEFAULT, false),
 		Pixel('p', FG_BLACK, BACKGROUND_DEFAULT, false),
-		Bullet(Pixel(' ', FG_BLACK, BACKGROUND_DEFAULT, false), 4, 0, MELEE_BULLET_SPEED),
-		1,
-		0,
-		9000,
-		WEAPON_MELEE,
-		2
+		Bullet(Pixel(' ', FG_BLACK, BACKGROUND_DEFAULT, false), damage, 0, MELEE_BULLET_SPEED),
+		ammo, reload_delay, shoot_delay, WEAPON_MELEE, range
 	);
 	size++;
 
+	ammo = 10;
+	reload_delay = 15000;
+	shoot_delay = 13000;
+	range = 10;
+	damage = 2;
 	weapons[size] = Weapon(
 		"Pistola",
 		Pixel(char(191), FG_BLACK, BACKGROUND_DEFAULT, false),
 		Pixel(char(218), FG_BLACK, BACKGROUND_DEFAULT, false),
-		Bullet(Pixel(char(250), FG_BLACK, BACKGROUND_DEFAULT, false), 2, 0, RANGED_BULLET_SPEED),
-		10,
-		15000,
-		13000,
-		WEAPON_RANGED,
-		10
+		Bullet(Pixel(char(250), FG_BLACK, BACKGROUND_DEFAULT, false), damage, 0, RANGED_BULLET_SPEED),
+		ammo, reload_delay, shoot_delay, WEAPON_RANGED, range
 	);
 	size++;
 
@@ -260,56 +247,61 @@ Weapon getRandomTier2Player() {
 Weapon getRandomTier3Player() {
 	Weapon weapons[10];
 	int size = 0;
+	int ammo, reload_delay, shoot_delay, range, damage;
 
+	ammo = 20;
+	reload_delay = 12000;
+	shoot_delay = 4500;
+	range = 15;
+	damage = 5;
 	weapons[size] = Weapon(
 		"Mitraglietta",
 		Pixel(char(191), FG_BLACK, BACKGROUND_DEFAULT, false),
 		Pixel(char(218), FG_BLACK, BACKGROUND_DEFAULT, false),
-		Bullet(Pixel('-', FG_BLACK, BACKGROUND_DEFAULT, false), 5, 0, RANGED_BULLET_SPEED),
-		20,
-		12000,
-		4500,
-		WEAPON_RANGED,
-		15
+		Bullet(Pixel('-', FG_BLACK, BACKGROUND_DEFAULT, false), damage, 0, RANGED_BULLET_SPEED),
+		ammo, reload_delay, shoot_delay, WEAPON_RANGED, range
 	);
 	size++;
 
+	ammo = 35;
+	reload_delay = 15000;
+	shoot_delay = 6000;
+	range = 20;
+	damage = 8;
 	weapons[size] = Weapon(
 		"Fucile d'assalto",
 		Pixel(char(191), FG_BLACK, BACKGROUND_DEFAULT, false),
 		Pixel(char(218), FG_BLACK, BACKGROUND_DEFAULT, false),
-		Bullet(Pixel('-', FG_BLACK, BACKGROUND_DEFAULT, false), 8, 0, RANGED_BULLET_SPEED),
-		35,
-		15000,
-		6000,
-		WEAPON_RANGED,
-		20
+		Bullet(Pixel('-', FG_BLACK, BACKGROUND_DEFAULT, false), damage, 0, RANGED_BULLET_SPEED),
+		ammo, reload_delay, shoot_delay, WEAPON_RANGED, range
 	);
 	size++;
 
+	ammo = 5;
+	reload_delay = 30000;
+	shoot_delay = 70000;
+	range = GAME_WIDTH;
+	damage = 10;
 	weapons[size] = Weapon(
 		"Fucile di precisione",
 		Pixel(char(191), FG_BLACK, BACKGROUND_DEFAULT, false),
 		Pixel(char(218), FG_BLACK, BACKGROUND_DEFAULT, false),
-		Bullet(Pixel('-', FG_BLACK, BACKGROUND_DEFAULT, false), 10, 0, RANGED_BULLET_SPEED),
-		5,
-		30000,
-		70000,
-		WEAPON_RANGED,
-		GAME_WIDTH
+		Bullet(Pixel('-', FG_BLACK, BACKGROUND_DEFAULT, false), damage, 0, RANGED_BULLET_SPEED),
+		ammo, reload_delay, shoot_delay, WEAPON_RANGED, range
 	);
 	size++;
 
+	ammo = 4;
+	reload_delay = 25000;
+	shoot_delay = 20000;
+	range = 5;
+	damage = 15;
 	weapons[size] = Weapon(
 		"Fucile a pompa",
 		Pixel(char(191), FG_BLACK, BACKGROUND_DEFAULT, false),
 		Pixel(char(218), FG_BLACK, BACKGROUND_DEFAULT, false),
-		Bullet(Pixel('=', FG_BLACK, BACKGROUND_DEFAULT, false), 15, 0, RANGED_BULLET_SPEED),
-		4,
-		25000,
-		20000,
-		WEAPON_RANGED,
-		5
+		Bullet(Pixel('=', FG_BLACK, BACKGROUND_DEFAULT, false), damage, 0, RANGED_BULLET_SPEED),
+		ammo, reload_delay, shoot_delay, WEAPON_RANGED, range
 	);
 	size++;
 
@@ -322,17 +314,19 @@ Weapon getRandomTier3Player() {
 Weapon getRandomSpecial() {
 	Weapon weapons[10];
 	int size = 0;
+	int ammo, reload_delay, shoot_delay, range, damage;
 
+	ammo = 1;
+	reload_delay = 50000;
+	shoot_delay = 30000;
+	range = GAME_WIDTH;
+	damage = 200;
 	weapons[size] = Weapon(
 		"Laser",
 		Pixel(char(191), FG_BLACK, BACKGROUND_DEFAULT, false),
 		Pixel(char(218), FG_BLACK, BACKGROUND_DEFAULT, false),
-		Bullet(Pixel(char(196), FG_DARKRED, BACKGROUND_DEFAULT, false), 200, 0, MELEE_BULLET_SPEED),
-		1,
-		50000,
-		30000,
-		WEAPON_MELEE,
-		GAME_WIDTH
+		Bullet(Pixel(char(196), FG_DARKRED, BACKGROUND_DEFAULT, false), damage, 0, MELEE_BULLET_SPEED),
+		ammo, reload_delay, shoot_delay, WEAPON_MELEE, range
 	);
 	size++;
 
@@ -346,30 +340,33 @@ Weapon getRandomSpecial() {
 Weapon getRandomTier1Enemy() {
 	Weapon weapons[10];
 	int size = 0;
+	int ammo, reload_delay, shoot_delay, range, damage;
 
+	ammo = 1;
+	reload_delay = 0;
+	shoot_delay = 4500;
+	range = 2;
+	damage = 1;
 	weapons[size] = Weapon(
 		"Coltellino",
 		Pixel('-', FG_BLACK, BACKGROUND_DEFAULT, false),
 		Pixel('-', FG_BLACK, BACKGROUND_DEFAULT, false),
-		Bullet(Pixel('-', BACKGROUND_DEFAULT, BACKGROUND_DEFAULT, false), 1, 0, MELEE_BULLET_SPEED),
-		1,
-		0,
-		4500,
-		WEAPON_MELEE,
-		2
+		Bullet(Pixel('-', BACKGROUND_DEFAULT, BACKGROUND_DEFAULT, false), damage, 0, MELEE_BULLET_SPEED),
+		ammo, reload_delay, shoot_delay, WEAPON_MELEE, range
 	);
 	size++;
 
+	ammo = 1;
+	reload_delay = 5000;
+	shoot_delay = 9000;
+	range = 5;
+	damage = 1;
 	weapons[size] = Weapon(
 		"Fionda",
 		Pixel('Y', FG_BLACK, BACKGROUND_DEFAULT, false),
 		Pixel('Y', FG_BLACK, BACKGROUND_DEFAULT, false),
-		Bullet(Pixel('.', FG_BLACK, BACKGROUND_DEFAULT, false), 1, 0, RANGED_BULLET_SPEED),
-		1,
-		5000,
-		9000,
-		WEAPON_RANGED,
-		5
+		Bullet(Pixel('.', FG_BLACK, BACKGROUND_DEFAULT, false), damage, 0, RANGED_BULLET_SPEED),
+		ammo, reload_delay, shoot_delay, WEAPON_RANGED, range
 	);
 	size++;
 
@@ -382,43 +379,51 @@ Weapon getRandomTier1Enemy() {
 Weapon getRandomTier2Enemy() {
 	Weapon weapons[10];
 	int size = 0;
+	int ammo, reload_delay, shoot_delay, range, damage;
 
+	ammo = 1;
+	reload_delay = 0;
+	shoot_delay = 6500;
+	range = 3;
+	damage = 2;
 	weapons[size] = Weapon(
 		"Spada",
 		Pixel(char(196), FG_BLACK, BACKGROUND_DEFAULT, false),
 		Pixel(char(196), FG_BLACK, BACKGROUND_DEFAULT, false),
-		Bullet(Pixel(char(196), BACKGROUND_DEFAULT, BACKGROUND_DEFAULT, false), 2, 0, MELEE_BULLET_SPEED),
-		1,
-		0,
-		6500,
-		WEAPON_MELEE,
-		3
+		Bullet(Pixel(char(196), BACKGROUND_DEFAULT, BACKGROUND_DEFAULT, false), damage, 0, MELEE_BULLET_SPEED),
+		ammo, reload_delay, shoot_delay, WEAPON_MELEE, range
 	);
 	size++;
 
+	ammo = 1;
+	reload_delay = 0;
+	shoot_delay = 9000;
+	range = 2;
+	damage = 3;
 	weapons[size] = Weapon(
 		"Ascia",
 		Pixel('q', FG_BLACK, BACKGROUND_DEFAULT, false),
 		Pixel('p', FG_BLACK, BACKGROUND_DEFAULT, false),
-		Bullet(Pixel(' ', FG_BLACK, BACKGROUND_DEFAULT, false), 3, 0, MELEE_BULLET_SPEED),
-		1,
-		0,
-		9000,
+		Bullet(Pixel(' ', FG_BLACK, BACKGROUND_DEFAULT, false), damage, 0, MELEE_BULLET_SPEED),
+		ammo,
+		reload_delay,
+		shoot_delay,
 		WEAPON_MELEE,
-		2
+		range
 	);
 	size++;
 
+	ammo = 10;
+	reload_delay = 15000;
+	shoot_delay = 13000;
+	range = 10;
+	damage = 2;
 	weapons[size] = Weapon(
 		"Pistola",
 		Pixel(char(191), FG_BLACK, BACKGROUND_DEFAULT, false),
 		Pixel(char(218), FG_BLACK, BACKGROUND_DEFAULT, false),
-		Bullet(Pixel('o', FG_BLACK, BACKGROUND_DEFAULT, false), 2, 0, RANGED_BULLET_SPEED),
-		10,
-		15000,
-		13000,
-		WEAPON_RANGED,
-		10
+		Bullet(Pixel('o', FG_BLACK, BACKGROUND_DEFAULT, false), damage, 0, RANGED_BULLET_SPEED),
+		ammo, reload_delay, shoot_delay, WEAPON_RANGED, range
 	);
 	size++;
 
@@ -431,56 +436,61 @@ Weapon getRandomTier2Enemy() {
 Weapon getRandomTier3Enemy() {
 	Weapon weapons[10];
 	int size = 0;
+	int ammo, reload_delay, shoot_delay, range, damage;
 
+	ammo = 20;
+	reload_delay = 12000;
+	shoot_delay = 6000;
+	range = 15;
+	damage = 2;
 	weapons[size] = Weapon(
 		"Mitraglietta",
 		Pixel(char(191), FG_BLACK, BACKGROUND_DEFAULT, false),
 		Pixel(char(218), FG_BLACK, BACKGROUND_DEFAULT, false),
-		Bullet(Pixel('-', BACKGROUND_DEFAULT, BACKGROUND_DEFAULT, false), 2, 0, RANGED_BULLET_SPEED),
-		20,
-		12000,
-		6000,
-		WEAPON_RANGED,
-		15
+		Bullet(Pixel('-', BACKGROUND_DEFAULT, BACKGROUND_DEFAULT, false), damage, 0, RANGED_BULLET_SPEED),
+		ammo, reload_delay, shoot_delay, WEAPON_RANGED, range
 	);
 	size++;
 
+	ammo = 35;
+	reload_delay = 15000;
+	shoot_delay = 4500;
+	range = 20;
+	damage = 2;
 	weapons[size] = Weapon(
 		"Fucile d'assalto",
 		Pixel(char(191), FG_BLACK, BACKGROUND_DEFAULT, false),
 		Pixel(char(218), FG_BLACK, BACKGROUND_DEFAULT, false),
 		Bullet(Pixel('-', BACKGROUND_DEFAULT, BACKGROUND_DEFAULT, false), 2, 0, RANGED_BULLET_SPEED),
-		35,
-		15000,
-		4500,
-		WEAPON_RANGED,
-		20
+		ammo, reload_delay, shoot_delay, WEAPON_RANGED, range
 	);
 	size++;
 
+	ammo = 5;
+	reload_delay = 30000;
+	shoot_delay = 70000;
+	range = GAME_WIDTH;
+	damage = 3;
 	weapons[size] = Weapon(
 		"Fucile di precisione",
 		Pixel(char(191), FG_BLACK, BACKGROUND_DEFAULT, false),
 		Pixel(char(218), FG_BLACK, BACKGROUND_DEFAULT, false),
-		Bullet(Pixel('-', BACKGROUND_DEFAULT, BACKGROUND_DEFAULT, false), 3, 0, RANGED_BULLET_SPEED),
-		5,
-		30000,
-		70000,
-		WEAPON_RANGED,
-		GAME_WIDTH
+		Bullet(Pixel('-', BACKGROUND_DEFAULT, BACKGROUND_DEFAULT, false), damage, 0, RANGED_BULLET_SPEED),
+		ammo, reload_delay, shoot_delay, WEAPON_RANGED, range
 	);
 	size++;
 
+	ammo = 4;
+	reload_delay = 25000;
+	shoot_delay = 20000;
+	range = 5;
+	damage = 5;
 	weapons[size] = Weapon(
 		"Fucile a pompa",
 		Pixel(char(191), FG_BLACK, BACKGROUND_DEFAULT, false),
 		Pixel(char(218), FG_BLACK, BACKGROUND_DEFAULT, false),
-		Bullet(Pixel('=', FG_BLACK, BACKGROUND_DEFAULT, false), 5, 0, RANGED_BULLET_SPEED),
-		4,
-		25000,
-		20000,
-		WEAPON_RANGED,
-		5
+		Bullet(Pixel('=', FG_BLACK, BACKGROUND_DEFAULT, false), damage, 0, RANGED_BULLET_SPEED),
+		ammo, reload_delay, shoot_delay, WEAPON_RANGED, range
 	);
 	size++;
 

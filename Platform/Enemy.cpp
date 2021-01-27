@@ -98,7 +98,7 @@ int Enemy::getAction(Map *map, Player player) {
 				lastPlayerPosition->getX() > this->position.getX() && map->isLava(Position(getBelowPosition().getX(), getBelowPosition().getY()+3))) {
 				action_code = ACTION_GO_RIGHT;
 			}
-			else if (lastPlayerPosition->getX() < this->position.getX()-weapon_range+1 ||
+			else if (lastPlayerPosition->getX() < this->position.getX()-weapon_range-1 ||
 				lastPlayerPosition->getX() < this->position.getX() && map->isLava(Position(getBelowPosition().getX(), getBelowPosition().getY()+3))) {
 				action_code = ACTION_GO_LEFT;
 			}

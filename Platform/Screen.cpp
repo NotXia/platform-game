@@ -5,7 +5,7 @@ using namespace std;
 
 Screen::Screen() {
 	this->console = GetStdHandle(STD_OUTPUT_HANDLE);
-	hideCursor();
+	hideCursor(); 
 	this->hp_x = 1;
 	this->hp_y = (GAME_HEIGHT + 2) + GAMEBAR_OFFSET;
 	this->weapon_x = 7 + (MAX_LIFE * 2 - 1) + GAMEBAR_PADDING;
@@ -520,7 +520,7 @@ void Screen::write_hp(int hp) {
 			cout <<HP_SYMBOL <<" ";
 		}
 
-		setColor(FG_GREY | BG_BLACK);
+		setColor(HP_LOSS_COLOR | BG_BLACK);
 		for (int i=0; i<MAX_LIFE-hp; i++) {
 			cout <<HP_SYMBOL <<" ";
 		}
