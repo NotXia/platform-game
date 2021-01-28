@@ -153,8 +153,8 @@ int main() {
             // Se hasMoved è true, il giocatore si è mosso dall'eventuale bonus/NPC su cui si trovava
             if (hasMoved) {
                 if (!map->isBossFight()) {
-                    delete curr_bonus;
-                    delete curr_npc;
+                    curr_bonus = NULL;
+                    curr_npc = NULL;
                     screen.clear_textbox();
                 }
             }
