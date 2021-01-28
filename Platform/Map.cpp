@@ -14,8 +14,18 @@ const Pixel LAVA_TEXTURE = Pixel(LAVA_SYMBOL, LAVA_COLOR_FG, LAVA_COLOR_BG, true
 
 const Pixel HOUSE_WALL_TEXTURE = Pixel(' ', 0, BG_LIGHTGREY, false);
 const Pixel HOUSE_BORDER_TEXTURE = Pixel(' ', 0, BG_BLACK, false);
-const Pixel HOUSE_ROOF_TEXTURE = Pixel(char(220), FG_BLACK, SKY_COLOR_BG, false);
+const Pixel HOUSE_LOWER_ROOF_TEXTURE = Pixel(char(220), FG_BLACK, SKY_COLOR_BG, false);
+const Pixel HOUSE_UPPER_ROOF_TEXTURE = Pixel(char(223), FG_BLACK, SKY_COLOR_BG, false);
+const Pixel HOUSE_ROOF_PADDING_TEXTURE = Pixel(' ', 0, BG_DARKYELLOW, false);
+const Pixel HOUSE_LOWER_ROOF_PADDING_TEXTURE = Pixel(char(220), FG_BLACK, BG_DARKYELLOW, false);
+const Pixel HOUSE_UPPER_ROOF_PADDING_TEXTURE = Pixel(char(223), FG_BLACK, BG_DARKYELLOW, false);
 const Pixel HOUSE_DOOR_TEXTURE = Pixel(' ', 0, BG_DARKYELLOW, false);
+const Pixel HOUSE_WINDOW_TEXTURE = Pixel(char(197), FG_WHITE, BG_GREY, false);
+
+const Pixel TREE_TRUNK_TEXTURE = Pixel(' ', 0, BG_DARKYELLOW, false);
+const Pixel TREE_LEAF_TEXTURE = Pixel(' ', 0, BG_DARKGREEN, false);
+
+const Pixel FENCE_TEXTURE = Pixel(char(197), FG_DARKYELLOW, SKY_COLOR_BG, false);
 
 const Pixel BOSS_PLATFORM_TEXTURE = Pixel(PLATFORM_SYMBOL, PLATFORM_COLOR_FG, BG_LIGHTGREY, true);
 const Pixel BOSS_TERRAIN_TEXTURE = TERRAIN_ROCK_TEXTURE;
@@ -253,71 +263,151 @@ void Map::generateTown() {
 			left_size = end_x-start_x/2;
 			right_size = end_x-start_x/2;
 		}
-		int height = rand() % 3 + 5;
 
-		// Muro sinistro
-		for (int j=0; j<height-1; j++)
-			terrain[start_x][start_y-j] = HOUSE_BORDER_TEXTURE;
-		terrain[start_x][start_y-height+1] = HOUSE_ROOF_TEXTURE;
-		start_x++;
+		int structure_type = rand() % 3;
 
-		// Prima colonna
-		for (int j=0; j<height-1; j++)
-			terrain[start_x][start_y-j] = HOUSE_WALL_TEXTURE;
-		terrain[start_x][start_y-height+1] = HOUSE_ROOF_TEXTURE;
-		start_x++;
+		//Generazione casa
+		if (structure_type > 0) {
 
-		// Larghezza a sinistra
-		for (int i=0; i<left_size; i++) {
-			for (int j=0; j<height-1; j++)
-				terrain[start_x][start_y-j] = HOUSE_WALL_TEXTURE;
-			terrain[start_x][start_y-height+1] = HOUSE_ROOF_TEXTURE;
+			int height = rand() % 3 + 5;
+
+			start_x -= 2;
+			terrain[start_x][start_y - height + 2] = HOUSE_UPPER_ROOF_TEXTURE;
 			start_x++;
+			terrain[start_x][start_y - height + 1] = HOUSE_BORDER_TEXTURE;
+			start_x++;
+
+			// Muro sinistro
+			for (int j = 0; j < height - 1; j++)
+				terrain[start_x][start_y - j] = HOUSE_BORDER_TEXTURE;
+			terrain[start_x][start_y - height + 1] = HOUSE_LOWER_ROOF_PADDING_TEXTURE;
+			terrain[start_x][start_y - height] = HOUSE_LOWER_ROOF_TEXTURE;
+			start_x++;
+
+			// Prima colonna
+			for (int j = 0; j < height - 1; j++)
+				terrain[start_x][start_y - j] = HOUSE_WALL_TEXTURE;
+			terrain[start_x][start_y - height + 1] = HOUSE_LOWER_ROOF_PADDING_TEXTURE;
+			terrain[start_x][start_y - height] = HOUSE_UPPER_ROOF_PADDING_TEXTURE;
+			start_x++;
+
+			// Larghezza a sinistra
+			for (int i = 0; i < left_size; i++) {
+				for (int j = 0; j < height - 1; j++)
+					terrain[start_x][start_y - j] = HOUSE_WALL_TEXTURE;
+				terrain[start_x][start_y - height + 3] = HOUSE_WINDOW_TEXTURE;
+				terrain[start_x][start_y - height + 1] = HOUSE_LOWER_ROOF_PADDING_TEXTURE;
+				terrain[start_x][start_y - height] = HOUSE_ROOF_PADDING_TEXTURE;
+				terrain[start_x][start_y - height - 1] = HOUSE_LOWER_ROOF_TEXTURE;
+				start_x++;
+			}
+
+			// Colonna prima della porta
+			for (int j = 0; j < height - 1; j++)
+				terrain[start_x][start_y - j] = HOUSE_WALL_TEXTURE;
+			terrain[start_x][start_y - height + 1] = HOUSE_LOWER_ROOF_PADDING_TEXTURE;
+			terrain[start_x][start_y - height] = HOUSE_ROOF_PADDING_TEXTURE;
+			terrain[start_x][start_y - height - 1] = HOUSE_LOWER_ROOF_TEXTURE;
+			start_x++;
+
+			// Porta
+			for (int i = 0; i < 2; i++) {
+				for (int j = 0; j < 2; j++)
+					terrain[start_x][start_y - j] = HOUSE_DOOR_TEXTURE;
+				for (int j = 0; j < height - 3; j++)
+					terrain[start_x][start_y - 2 - j] = HOUSE_WALL_TEXTURE;
+				terrain[start_x][start_y - height + 1] = HOUSE_LOWER_ROOF_PADDING_TEXTURE;
+				terrain[start_x][start_y - height] = HOUSE_ROOF_PADDING_TEXTURE;
+				terrain[start_x][start_y - height - 1] = HOUSE_LOWER_ROOF_TEXTURE;
+				start_x++;
+			}
+
+			// Colonna dopo la porta
+			for (int j = 0; j < height - 1; j++)
+				terrain[start_x][start_y - j] = HOUSE_WALL_TEXTURE;
+			terrain[start_x][start_y - height + 1] = HOUSE_LOWER_ROOF_PADDING_TEXTURE;
+			terrain[start_x][start_y - height] = HOUSE_DOOR_TEXTURE;
+			terrain[start_x][start_y - height - 1] = HOUSE_LOWER_ROOF_TEXTURE;
+			start_x++;
+
+			// Larghezza a destra
+			for (int i = 0; i < right_size; i++) {
+				for (int j = 0; j < height - 1; j++)
+					terrain[start_x][start_y - j] = HOUSE_WALL_TEXTURE;
+				terrain[start_x][start_y - height + 3] = HOUSE_WINDOW_TEXTURE;
+				terrain[start_x][start_y - height + 1] = HOUSE_LOWER_ROOF_PADDING_TEXTURE;
+				terrain[start_x][start_y - height] = HOUSE_ROOF_PADDING_TEXTURE;
+				terrain[start_x][start_y - height - 1] = HOUSE_LOWER_ROOF_TEXTURE;
+				start_x++;
+			}
+
+			// Ultima colonna
+			for (int j = 0; j < height - 1; j++)
+				terrain[start_x][start_y - j] = HOUSE_WALL_TEXTURE;
+			terrain[start_x][start_y - height + 1] = HOUSE_LOWER_ROOF_PADDING_TEXTURE;
+			terrain[start_x][start_y - height] = HOUSE_UPPER_ROOF_PADDING_TEXTURE;
+			start_x++;
+
+			// Muro destro
+			for (int j = 0; j < height - 1; j++)
+				terrain[start_x][start_y - j] = HOUSE_BORDER_TEXTURE;
+			terrain[start_x][start_y - height + 1] = HOUSE_LOWER_ROOF_PADDING_TEXTURE;
+			terrain[start_x][start_y - height] = HOUSE_LOWER_ROOF_TEXTURE;
+			start_x++;
+
+			terrain[start_x][start_y - height + 1] = HOUSE_BORDER_TEXTURE;
+			start_x++;
+
+			terrain[start_x][start_y - height + 2] = HOUSE_UPPER_ROOF_TEXTURE;
+
 		}
 
-		// Colonna prima della porta
-		for (int j=0; j<height-1; j++)
-			terrain[start_x][start_y-j] = HOUSE_WALL_TEXTURE;
-		terrain[start_x][start_y-height+1] = HOUSE_ROOF_TEXTURE;
-		start_x++;
+		//Generazione albero
+		else {
 
-		// Porta
-		for (int i=0; i<2; i++) {
-			for (int j=0; j<2; j++)
-				terrain[start_x][start_y-j] = HOUSE_DOOR_TEXTURE;
-			for (int j=0; j<height-3; j++)
-				terrain[start_x][start_y-2-j] = HOUSE_WALL_TEXTURE;
-			terrain[start_x][start_y-height+1] = HOUSE_ROOF_TEXTURE;
+			int height = rand() % 3 + 5;
+
+			//Prime foglie dell'albero senza tronco
+			terrain[start_x][start_y - height + 2] = TREE_LEAF_TEXTURE;
+			terrain[start_x][start_y - height + 3] = TREE_LEAF_TEXTURE;
 			start_x++;
+
+			for(int j=1;j<=4;j++) 
+				terrain[start_x][start_y - height + j] = TREE_LEAF_TEXTURE;
+			start_x++;
+
+			// Albero con tronco
+			for (int i = 0; i < left_size; i++) {
+				for (int j = 0; j < height - 1; j++)
+					terrain[start_x][start_y - j] = TREE_TRUNK_TEXTURE;
+				terrain[start_x][start_y - height] = TREE_LEAF_TEXTURE;
+				for (int j = 1; j <= 4; j++)
+					terrain[start_x][start_y - height + j] = TREE_LEAF_TEXTURE;
+				start_x++;
+			}
+
+			//Ultime foglie dell'albero senza tronco
+			for (int j = 1; j <= 4; j++)
+				terrain[start_x][start_y - height + j] = TREE_LEAF_TEXTURE;
+			start_x++;
+
+			terrain[start_x][start_y - height + 2] = TREE_LEAF_TEXTURE;
+			terrain[start_x][start_y - height + 3] = TREE_LEAF_TEXTURE;
+			start_x++;
+
 		}
 
-		// Colonna dopo la porta
-		for (int j=0; j<height-1; j++)
-			terrain[start_x][start_y-j] = HOUSE_WALL_TEXTURE;
-		terrain[start_x][start_y-height+1] = HOUSE_ROOF_TEXTURE;
-		start_x++;
-
-		// Larghezza a destra
-		for (int i=0; i<right_size; i++) {
-			for (int j=0; j<height-1; j++)
-				terrain[start_x][start_y-j] = HOUSE_WALL_TEXTURE;
-			terrain[start_x][start_y-height+1] = HOUSE_ROOF_TEXTURE;
+		
+		//Generazione fence tra edifici
+		int fence_lenght = rand() % 10 + 2;
+		for (int j = 0; j < fence_lenght; j++) {
+			terrain[start_x][start_y] = FENCE_TEXTURE;
 			start_x++;
-		}
+		} 
+		
 
-		// Ultima colonna
-		for (int j=0; j<height-1; j++) 
-			terrain[start_x][start_y-j] = HOUSE_WALL_TEXTURE;
-		terrain[start_x][start_y-height+1] = HOUSE_ROOF_TEXTURE;
-		start_x++;
+		//start_x += rand() % 10 + 2;
 
-		// Muro destro
-		for (int j=0; j<height-1; j++)
-			terrain[start_x][start_y-j] = HOUSE_BORDER_TEXTURE;
-		terrain[start_x][start_y-height+1] = HOUSE_ROOF_TEXTURE;
-		start_x++;
-
-		start_x += rand() % 10 + 2;
 	}
 
 	npcList.insert(NPC(1, Pixel('<', NPC_HEAD_COLOR_FG, BACKGROUND_DEFAULT, false), Pixel('<', NPC_HEAD_COLOR_FG, BACKGROUND_DEFAULT, false),
