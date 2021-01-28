@@ -256,22 +256,22 @@ void Map::generateTown() {
 	int end_x = GAME_WIDTH-EMPTYZONE_LENGTH;
 	int start_y = GAME_HEIGHT-TERRAIN_HEIGHT-1;
 
-	while (end_x-start_x > 10) {
+	while (end_x-start_x > 15) {
 		int left_size = rand() % 4 + 1;
 		int right_size = rand() % 4 + 1;
+
 		if (left_size+right_size > end_x-start_x) {
-			left_size = end_x-start_x/2;
-			right_size = end_x-start_x/2;
+			left_size = (end_x-start_x)/2;
+			right_size = (end_x-start_x)/2;
 		}
 
 		int structure_type = rand() % 3;
 
-		//Generazione casa
+		// Generazione casa
 		if (structure_type > 0) {
 
 			int height = rand() % 3 + 5;
 
-			start_x -= 2;
 			terrain[start_x][start_y - height + 2] = HOUSE_UPPER_ROOF_TEXTURE;
 			start_x++;
 			terrain[start_x][start_y - height + 1] = HOUSE_BORDER_TEXTURE;
@@ -361,13 +361,11 @@ void Map::generateTown() {
 			terrain[start_x][start_y - height + 2] = HOUSE_UPPER_ROOF_TEXTURE;
 
 		}
-
-		//Generazione albero
-		else {
+		else { // Generazione albero
 
 			int height = rand() % 3 + 5;
 
-			//Prime foglie dell'albero senza tronco
+			// Prime foglie dell'albero senza tronco
 			terrain[start_x][start_y - height + 2] = TREE_LEAF_TEXTURE;
 			terrain[start_x][start_y - height + 3] = TREE_LEAF_TEXTURE;
 			start_x++;
@@ -386,7 +384,7 @@ void Map::generateTown() {
 				start_x++;
 			}
 
-			//Ultime foglie dell'albero senza tronco
+			// Ultime foglie dell'albero senza tronco
 			for (int j = 1; j <= 4; j++)
 				terrain[start_x][start_y - height + j] = TREE_LEAF_TEXTURE;
 			start_x++;
@@ -398,16 +396,14 @@ void Map::generateTown() {
 		}
 
 		
-		//Generazione fence tra edifici
-		int fence_lenght = rand() % 10 + 2;
-		for (int j = 0; j < fence_lenght; j++) {
-			terrain[start_x][start_y] = FENCE_TEXTURE;
-			start_x++;
-		} 
-		
-
-		//start_x += rand() % 10 + 2;
-
+		// Generazione staccionate tra edifici
+		int fence_length = rand() % 5 + 2;
+		if (fence_length < end_x-start_x) {
+			for (int j = 0; j < fence_length; j++) {
+				terrain[start_x][start_y] = FENCE_TEXTURE;
+				start_x++;
+			} 
+		}
 	}
 
 	npcList.insert(NPC(1, Pixel('<', NPC_HEAD_COLOR_FG, BACKGROUND_DEFAULT, false), Pixel('<', NPC_HEAD_COLOR_FG, BACKGROUND_DEFAULT, false),
