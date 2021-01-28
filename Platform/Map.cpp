@@ -359,10 +359,8 @@ void Map::generateTown() {
 			start_x++;
 
 			terrain[start_x][start_y - height + 2] = HOUSE_UPPER_ROOF_TEXTURE;
-
 		}
 		else { // Generazione albero
-
 			int height = rand() % 3 + 5;
 
 			// Prime foglie dell'albero senza tronco
@@ -392,9 +390,7 @@ void Map::generateTown() {
 			terrain[start_x][start_y - height + 2] = TREE_LEAF_TEXTURE;
 			terrain[start_x][start_y - height + 3] = TREE_LEAF_TEXTURE;
 			start_x++;
-
 		}
-
 		
 		// Generazione staccionate tra edifici
 		int fence_length = rand() % 5 + 2;

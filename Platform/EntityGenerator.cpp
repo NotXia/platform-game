@@ -54,7 +54,7 @@ Weapon createEnemyWeapon(int difficulty) {
 	Crea un nemico e lo restituisce.
 */
 Enemy createEnemy(int difficulty) {
-	int hp = rand() % (difficulty*2 - difficulty + 1) + difficulty;
+	int hp = rand() % (difficulty*2) + difficulty;
 	int points = ENEMY_BASE_POINTS * difficulty;
 	int money = rand() % difficulty + 1;
 
@@ -97,7 +97,7 @@ Bonus createBonus(int difficulty) {
 	Crea un boss e lo restituisce.
 */
 Boss createBoss(int difficulty) {
-	int type = 1;
+	int type = rand() % 3;
 	Boss boss;
 
 	if (type == BOSS_SUMMONER) {
@@ -344,7 +344,7 @@ Weapon getRandomTier1Enemy() {
 
 	ammo = 1;
 	reload_delay = 0;
-	shoot_delay = 4500;
+	shoot_delay = 8000;
 	range = 2;
 	damage = 1;
 	weapons[size] = Weapon(
@@ -358,7 +358,7 @@ Weapon getRandomTier1Enemy() {
 
 	ammo = 1;
 	reload_delay = 5000;
-	shoot_delay = 9000;
+	shoot_delay = 12000;
 	range = 5;
 	damage = 1;
 	weapons[size] = Weapon(
@@ -385,7 +385,7 @@ Weapon getRandomTier2Enemy() {
 	reload_delay = 0;
 	shoot_delay = 6500;
 	range = 3;
-	damage = 2;
+	damage = 1;
 	weapons[size] = Weapon(
 		"Spada",
 		Pixel(char(196), FG_BLACK, BACKGROUND_DEFAULT, false),
@@ -399,7 +399,7 @@ Weapon getRandomTier2Enemy() {
 	reload_delay = 0;
 	shoot_delay = 9000;
 	range = 2;
-	damage = 3;
+	damage = 2;
 	weapons[size] = Weapon(
 		"Ascia",
 		Pixel('q', FG_BLACK, BACKGROUND_DEFAULT, false),
@@ -417,7 +417,7 @@ Weapon getRandomTier2Enemy() {
 	reload_delay = 15000;
 	shoot_delay = 13000;
 	range = 10;
-	damage = 2;
+	damage = 1;
 	weapons[size] = Weapon(
 		"Pistola",
 		Pixel(char(191), FG_BLACK, BACKGROUND_DEFAULT, false),
@@ -440,9 +440,9 @@ Weapon getRandomTier3Enemy() {
 
 	ammo = 20;
 	reload_delay = 12000;
-	shoot_delay = 6000;
+	shoot_delay = 10000;
 	range = 15;
-	damage = 2;
+	damage = 1;
 	weapons[size] = Weapon(
 		"Mitraglietta",
 		Pixel(char(191), FG_BLACK, BACKGROUND_DEFAULT, false),
@@ -454,14 +454,14 @@ Weapon getRandomTier3Enemy() {
 
 	ammo = 35;
 	reload_delay = 15000;
-	shoot_delay = 4500;
+	shoot_delay = 7000;
 	range = 20;
-	damage = 2;
+	damage = 1;
 	weapons[size] = Weapon(
 		"Fucile d'assalto",
 		Pixel(char(191), FG_BLACK, BACKGROUND_DEFAULT, false),
 		Pixel(char(218), FG_BLACK, BACKGROUND_DEFAULT, false),
-		Bullet(Pixel('-', BACKGROUND_DEFAULT, BACKGROUND_DEFAULT, false), 2, 0, RANGED_BULLET_SPEED),
+		Bullet(Pixel('-', BACKGROUND_DEFAULT, BACKGROUND_DEFAULT, false), damage, 0, RANGED_BULLET_SPEED),
 		ammo, reload_delay, shoot_delay, WEAPON_RANGED, range
 	);
 	size++;
@@ -484,7 +484,7 @@ Weapon getRandomTier3Enemy() {
 	reload_delay = 25000;
 	shoot_delay = 20000;
 	range = 5;
-	damage = 5;
+	damage = 2;
 	weapons[size] = Weapon(
 		"Fucile a pompa",
 		Pixel(char(191), FG_BLACK, BACKGROUND_DEFAULT, false),

@@ -81,73 +81,45 @@ int Enemy::getAction(Map *map, Player player) {
 	int weapon_range = weapon.getRange();
 
 	if (lastPlayerPosition != NULL) { // Il nemico ha visto il giocatore almeno una volta
-		if (lastPlayerPosition->getY() > this->position.getY() && !map->isLava(Position(getBelowPosition().getX(), getBelowPosition().getY()+3))) {
-			/*
-				Se il giocatore si trova più in basso del nemico e non c'è lava sotto:
-				- Scende dalla piattaforma su cui è attualmente
-			*/
-			action_code = ACTION_FALL;
+		/*
+			Priorità azioni:
+			Attacco (se l'ultima posizione nota è effettivamente il giocatore) -> Salto -> Caduta -> Movimento -> Salto (azione di default)
+		*/
+		if (player.getBodyPosition().equals(*lastPlayerPosition) &&             // L'ultima posizione nota è quella effettiva del player
+			lastPlayerPosition->getX() > this->position.getX() &&				// Player a destra
+			lastPlayerPosition->getX() <= this->position.getX()+weapon_range && // Player nel raggio dell'arma
+			lastPlayerPosition->getY() == this->position.getY() &&				// Player alla stessa altezza
+			direction == DIRECTION_RIGHT) {										// Rivolto verso il giocatore
+			action_code = ACTION_ATTACK;
 		}
-		if (player.getBodyPosition().equals(*lastPlayerPosition)) {
-			/*
-				Se l'ultima posizione nota è effettivamente quella del giocatore:
-				- Si avvicina entro il raggio d'azione dell'arma
-				- Attacca
-			*/
-			if (lastPlayerPosition->getX() > this->position.getX()+weapon_range-1 ||
-				lastPlayerPosition->getX() > this->position.getX() && map->isLava(Position(getBelowPosition().getX(), getBelowPosition().getY()+3))) {
-				action_code = ACTION_GO_RIGHT;
-			}
-			else if (lastPlayerPosition->getX() < this->position.getX()-weapon_range-1 ||
-				lastPlayerPosition->getX() < this->position.getX() && map->isLava(Position(getBelowPosition().getX(), getBelowPosition().getY()+3))) {
-				action_code = ACTION_GO_LEFT;
-			}
-
-			if (lastPlayerPosition->getY() == this->position.getY()) {
-				if (lastPlayerPosition->getX() > this->position.getX() && lastPlayerPosition->getX() < this->position.getX()+weapon_range+1 && direction == DIRECTION_RIGHT) {
-					action_code = ACTION_ATTACK;
-				}
-				else if (lastPlayerPosition->getX() < this->position.getX() && lastPlayerPosition->getX() > this->position.getX()-weapon_range-1 && direction == DIRECTION_LEFT) {
-					action_code = ACTION_ATTACK;
-				}
-			}
+		else if (player.getBodyPosition().equals(*lastPlayerPosition) &&				// L'ultima posizione nota è quella effettiva del player
+					lastPlayerPosition->getX() < this->position.getX() &&				// Player a sinistra
+					lastPlayerPosition->getX() >= this->position.getX()-weapon_range && // Player nel raggio dell'arma
+					lastPlayerPosition->getY() == this->position.getY() &&				// Player alla stessa altezza
+					direction == DIRECTION_LEFT) {										// Rivolto verso il giocatore
+			action_code = ACTION_ATTACK;
 		}
-		else {
-			/*
-				Se l'ultima posizione nota non è quella attuale del giocatore:
-				- Si avvicina
-			*/
-			if (lastPlayerPosition->getX() > this->position.getX()) {
-				action_code = ACTION_GO_RIGHT;
-			}
-			else {
-				action_code = ACTION_GO_LEFT;
-			}
-		}
-
-		if (lastPlayerPosition->getY() < this->position.getY()) {
-			/*
-				Se il giocatore si trova più in alto del nemico:
-				- Annulla l'azione precedentemente calcolata
-				- Salta se sopra c'è una piattaforma
-				- Si avvicina al giocatore rispetto all'asse X se non può saltare
-			*/
-			if (map->isSolidAt(Position(this->position.getX(), this->position.getY()-2))) {
-				action_code = ACTION_JUMP;
-			}
-			else if (lastPlayerPosition->getX() > this->position.getX()) {
-				action_code = ACTION_GO_RIGHT;
-			}
-			else {
-				action_code = ACTION_GO_LEFT;
-			}
-		}
-
-		/* Se il movimento dovesse portare il nemico sulla lava, salta */
-		if (action_code == ACTION_GO_RIGHT && map->isLava(Position(getBelowPosition().getX()+1, getBelowPosition().getY()))) {
+		else if (lastPlayerPosition->getY() < this->position.getY() &&						 // Player sopra
+				 map->isSolidAt(Position(this->position.getX(), this->position.getY()-2))) { // Blocco solido sopra
 			action_code = ACTION_JUMP;
 		}
-		else if (action_code == ACTION_GO_LEFT && map->isLava(Position(getBelowPosition().getX()-1, getBelowPosition().getY()))) {
+		else if (lastPlayerPosition->getY() > this->position.getY() &&								// Player sotto
+				!map->isLava(Position(getBelowPosition().getX(), getBelowPosition().getY()+3)) &&   // Non c'è lava sotto
+				!map->isLava(Position(getBelowPosition().getX()+1, getBelowPosition().getY()+3)) && // Non c'è lava sotto a dx
+				!map->isLava(Position(getBelowPosition().getX()-1, getBelowPosition().getY()+3))) { // Non c'è lava sotto a sx
+			action_code = ACTION_FALL;
+		}
+		else if ((lastPlayerPosition->getX() > this->position.getX() ||										  // Player a destra
+				(lastPlayerPosition->getX() > this->position.getX() && this->direction == DIRECTION_LEFT)) && // Player a destra e nemico rivolto a sinistra
+				!map->isLava(Position(getBelowPosition().getX()+1, getBelowPosition().getY())) ) {            // Non c'è lava a destra
+			action_code = ACTION_GO_RIGHT;
+		}
+		else if ((lastPlayerPosition->getX() <= this->position.getX() ||										// Player a sinistra
+				(lastPlayerPosition->getX() <= this->position.getX() && this->direction == DIRECTION_RIGHT)) && // Player a sinistra e nemico rivolto a destra
+				!map->isLava(Position(getBelowPosition().getX()-1, getBelowPosition().getY())) ) {				// Non c'è lava a sinistra
+			action_code = ACTION_GO_LEFT;
+		}
+		else {
 			action_code = ACTION_JUMP;
 		}
 	}
