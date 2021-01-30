@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "colors.h"
 
 const int STRING_LEN = 1000;
@@ -48,16 +48,16 @@ const int LAVA_DAMAGE = 1;
 *************/
 const int BACKGROUND_DEFAULT = BG_DARKCYAN;
 
-const char PLAYER_HEAD_LEFT = char(17);
-const char PLAYER_HEAD_RIGHT = char(16);
+const char PLAYER_HEAD_LEFT = '<';
+const char PLAYER_HEAD_RIGHT = '>';
 const char PLAYER_BODY = char(219);
 const int PLAYER_HEAD_COLOR_FG = FG_PINK;
 const int PLAYER_BODY_COLOR_FG = FG_PINK;
 
-const char MONEY_SYMBOL = char(207);
+const char MONEY_SYMBOL = char(189);
 const int MONEY_COLOR = FG_DARKYELLOW;
 
-const char HP_SYMBOL = char(127);
+const char HP_SYMBOL = char(207);
 const int HP_COLOR = FG_DARKRED;
 const int HP_LOSS_COLOR = FG_GREY;
 

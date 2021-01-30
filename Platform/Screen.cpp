@@ -421,7 +421,7 @@ void Screen::write_textbox_npc_weapon(NPC npc, Weapon player_weapon) {
 		moveCursor(start_x, start_y+1);
 		cout <<"villaggio, ti serve qualcosa?";
 		moveCursor(start_x, start_y+2);
-		cout <<char(17) <<" " <<weapon_name <<" (" <<npc.getCurrSelected()+1 <<"/" <<npc.getWeaponNumber() <<") " <<char(16);
+		cout <<"< " <<weapon_name <<" (" <<npc.getCurrSelected()+1 <<"/" <<npc.getWeaponNumber() <<") >";
 		moveCursor(start_x, start_y+3);
 		cout <<"(" <<weapon.higherDamage(player_weapon) <<") danni | "
 			<<"(" <<weapon.higherAmmo(player_weapon) <<") munizioni | "
