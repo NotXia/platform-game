@@ -133,7 +133,9 @@ int main() {
                             ranged_attack(map, screen, player, player, false);
                         }
 
-                        screen.write_weapon(map, player);
+                        if (!map->isSolidAt(player.getBodyFrontPosition())) {
+                            screen.write_weapon(map, player);
+                        }
                         screen.write_ammobox(player.getWeapon().getCurrAmmo());
                     }
                     else {
@@ -153,6 +155,8 @@ int main() {
             // Se hasMoved è true, il giocatore si è mosso dall'eventuale bonus/NPC su cui si trovava
             if (hasMoved) {
                 if (!map->isBossFight()) {
+                    delete curr_bonus;
+                    delete curr_npc;
                     curr_bonus = NULL;
                     curr_npc = NULL;
                     screen.clear_textbox();
@@ -296,7 +300,6 @@ int main() {
                 }
                 else if (bonus.getType() == BONUS_TYPE_WEAPON) {
                     screen.write_textbox_weaponbonus(bonus.getWeapon(), player.getWeapon());
-                    delete curr_bonus;
                     curr_bonus = new Bonus();
                     *curr_bonus = bonus;
                 }
@@ -387,7 +390,9 @@ int main() {
                                 ranged_attack(map, screen, player, enemy, true);
                             }
 
-                            screen.write_at(map, enemy.getWeapon().getTexture(enemy.getDirection()), enemy.getBodyFrontPosition());
+                            if (!map->isSolidAt(player.getBodyFrontPosition()) && !player.getBodyPosition().equals(enemy.getBodyFrontPosition())) {
+                                screen.write_weapon(map, enemy);
+                            }
                         }
                         else {
                             if (enemy.canReload() && !enemy.getWeapon().hasAmmo()) {
@@ -519,7 +524,6 @@ int main() {
                     screen.write_textbox_npc_weapon(npc, player.getWeapon());
                 }
 
-                delete curr_npc;
                 curr_npc = new NPC();
                 *curr_npc = npc;
             }

@@ -1,0 +1,151 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="ArmedEntity" Collapsed="true">
+    <Position X="4" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAICAAAAAAAABAQAACgCgACQAKAACABAAAIAACAAA=</HashCode>
+      <FileName>ArmedEntity.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Block" Collapsed="true">
+    <Position X="5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAARAAAAAAAAIAAAAUAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Block.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Entity" Collapsed="true">
+    <Position X="5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>mCCiBkgCABApIAAAAAQgAASCChAIEAIALCAAAACAEEg=</HashCode>
+      <FileName>Entity.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Boss" Collapsed="true">
+    <Position X="3.75" Y="6.75" Width="1.5" />
+    <InheritanceLine Type="Enemy" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="5" Y="5.062" />
+        <Point X="4.5" Y="5.062" />
+        <Point X="4.5" Y="6.75" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>CAACIAAAAAAAAACAQAAAAAAAAQIBAAAABCAEAAAwAEE=</HashCode>
+      <FileName>Boss.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Enemy" Collapsed="true">
+    <Position X="5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAkCAAEAAAAAAUAAAgAEAEAAAAQCABAAACAAAECA=</HashCode>
+      <FileName>Enemy.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bonus" Collapsed="true">
+    <Position X="0.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAADAAAAgAACAAAAAAAACCwAIAAIABABAIAACECA=</HashCode>
+      <FileName>Bonus.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NPC" Collapsed="true">
+    <Position X="7.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAMQEFAAAAwAIUIAgAwAA=</HashCode>
+      <FileName>NPC.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Player" Collapsed="true">
+    <Position X="2.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACIAIAAAAAABAAAAAAAAAAAAwCAAAAAAQAAECA=</HashCode>
+      <FileName>Player.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bullet" Collapsed="true">
+    <Position X="9.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAKEAKAECAogAACAAACAACIIAAAIAAAACAAAAYAAA=</HashCode>
+      <FileName>Bullet.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Weapon" Collapsed="true">
+    <Position X="9.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAADgggIgACAAggAIMAoAgABIUAFAAgQAhAsiBgoAAA=</HashCode>
+      <FileName>Weapon.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AnimationTimer" Collapsed="true">
+    <Position X="12.25" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAkAAIBAAAgAAAAAAAAAAEAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>AnimationTimer.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Map" Collapsed="true">
+    <Position X="12.25" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAKAABQAHNUAAQADCgAoCkAABCAgQgIgAIVAgLpgAQA=</HashCode>
+      <FileName>Map.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Pixel" Collapsed="true">
+    <Position X="12.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAGAEAAABAAAiAAgAACAAAAAAgIAAAAA=</HashCode>
+      <FileName>Pixel.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Position" Collapsed="true">
+    <Position X="12.25" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACAAAAgAAAGAAAAAAAAAAAAAABgAGAAAAA=</HashCode>
+      <FileName>Position.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Screen" Collapsed="true">
+    <Position X="12.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAEkagAAgABGUAAAHACBACJAQAIBkEIA6IwAEoBIK4M=</HashCode>
+      <FileName>Screen.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BonusList" Collapsed="true">
+    <Position X="0.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAoAgAAAAhAIAAAAiAAAAAAAAAAAgAAAABACAAAgAA=</HashCode>
+      <FileName>BonusList.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BulletList" Collapsed="true">
+    <Position X="9.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAhAIAAAACAAAAAAAAAAAgAAAABACAAIgIA=</HashCode>
+      <FileName>BulletList.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EnemyList" Collapsed="true">
+    <Position X="5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAgAAAAgAIAAAAqAAAAAAAAAAAgAAAABACAACgAA=</HashCode>
+      <FileName>EnemyList.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NPCList" Collapsed="true">
+    <Position X="7.25" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAgAAAAhAIAAAAiACAAgAAAAAAAAAAABACAAAgAA=</HashCode>
+      <FileName>NPCList.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LavaList" Collapsed="true">
+    <Position X="12.25" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>iAAAAgAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>LavaList.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

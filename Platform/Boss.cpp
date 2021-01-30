@@ -17,7 +17,7 @@ Boss::Boss(int health, int points, int money, Pixel head_left, Pixel head_right,
 	this->max_phase = 5;
 	this->ability_num = ability_num;
 	this->ability_max = ability_max;
-	this->down_time = AnimationTimer(45);
+	this->down_time = AnimationTimer(65);
 	this->pause_time = AnimationTimer(20);
 	this->refresh = AnimationTimer(1500);
 
