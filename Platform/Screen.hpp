@@ -189,6 +189,12 @@ class Screen {
 		********************************/
 
 		/*
+			Prende in input un oggetto Map.
+			Stampa il numero del livello.
+		*/
+		void write_level_number(Map *map);
+
+		/*
 			Prende in input un intero.
 			Aggiorna la quantità di soldi visualizzata.
 		*/

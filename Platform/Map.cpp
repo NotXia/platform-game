@@ -517,6 +517,10 @@ Map* Map::gotoNext(Position exit_position) {
 	return this->next;
 }
 
+int Map::getLevelNumber() {
+	return this->level_number;
+}
+
 /*
 	Prende in input una posizione.
 	Restituisce true se quella posizione è solida, false altrimenti.

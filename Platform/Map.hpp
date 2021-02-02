@@ -86,6 +86,7 @@ class Map {
 		void setNPCList(NPCList npclist);
 		Boss* getBoss();
 		void setBoss(Boss *boss);
+		int getLevelNumber();
 
 
 		/*

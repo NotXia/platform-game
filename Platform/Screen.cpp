@@ -153,6 +153,7 @@ void Screen::write_game_area(Map *map) {
 	write_terrain(map);
 	write_enemies(map);
 	write_bonuses(map);
+	write_level_number(map);
 }
 
 /*
@@ -475,11 +476,26 @@ void Screen::write_boss_hp(Boss boss) {
 ********************************/
 
 /*
+	Prende in input un oggetto Map.
+	Stampa il numero del livello.
+*/
+void Screen::write_level_number(Map *map) {
+	moveCursor(textBox_x+2, textBox_y);
+	resetColor();
+
+	cout <<char(180) <<" Livello " <<map->getDifficulty() <<"-" <<(map->getLevelNumber() % DIFFICULTY_INCREASE_RATE)+1 <<" " <<char(195);
+
+	resetColor();
+}
+
+
+/*
 	Prende in input un intero.
 	Aggiorna la quantità di soldi visualizzata.
 */
 void Screen::write_money(int money) {
 	moveCursor(hp_x, hp_y + 1);
+	resetColor();
 	cout <<"Soldi " <<"      ";
 
 	moveCursor(hp_x, hp_y + 1);
