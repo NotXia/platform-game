@@ -466,15 +466,6 @@ void Screen::write_boss_hp(Boss boss) {
 	}
 }
 
-
-/* FINE GESTIONE TEXT BOX
-**************************/
-
-
-/********************************
-   INIZIO GESTIONE DATI PLAYER
-********************************/
-
 /*
 	Prende in input un oggetto Map.
 	Stampa il numero del livello.
@@ -487,6 +478,15 @@ void Screen::write_level_number(Map *map) {
 
 	resetColor();
 }
+
+
+/* FINE GESTIONE TEXT BOX
+**************************/
+
+
+/********************************
+   INIZIO GESTIONE DATI PLAYER
+********************************/
 
 
 /*

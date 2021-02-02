@@ -180,6 +180,12 @@ class Screen {
 		*/
 		void write_boss_hp(Boss boss);
 
+		/*
+			Prende in input un oggetto Map.
+			Stampa il numero del livello.
+		*/
+		void write_level_number(Map *map);
+
 		/* FINE GESTIONE TEXT BOX  
 		**************************/
 
@@ -187,12 +193,6 @@ class Screen {
 		/********************************
 		   INIZIO GESTIONE DATI PLAYER
 		********************************/
-
-		/*
-			Prende in input un oggetto Map.
-			Stampa il numero del livello.
-		*/
-		void write_level_number(Map *map);
 
 		/*
 			Prende in input un intero.
