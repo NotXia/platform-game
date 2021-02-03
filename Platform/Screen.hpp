@@ -134,7 +134,16 @@ class Screen {
 		*/
 		void remove_boss(Map *map, Boss boss);
 
+		/*
+			Prende in input un oggetto Map ed ArmedEntity.
+			Stampa nell'area di gioco, nella posizione frontale dell'entità, la sua arma.
+		*/
 		void write_weapon(Map *map, ArmedEntity entity);
+
+		/*
+			Stampa nell'area di gioco il tutorial.
+		*/
+		void write_tutorial();
 
 
 		/* FINE GESTIONE AREA DI GIOCO  

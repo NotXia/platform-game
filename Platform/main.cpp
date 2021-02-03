@@ -56,6 +56,7 @@ int main() {
     screen.write_weaponInfo(player.getWeapon());
     screen.write_money(player.getMoney());
     screen.write_hp(player.getHealth());
+    screen.write_tutorial();
 
     while (!player.isDead()) {
 

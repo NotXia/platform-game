@@ -46,7 +46,12 @@ Map::Map(Map *prev, int level_number) {
 	boss = NULL;
 	this->level_number = level_number;
 
-	if (level_number == getDifficulty()*DIFFICULTY_INCREASE_RATE-1) {
+	if (level_number == 0) { // Primo livello
+		generateTerrainGrass();
+		generateEnemies(ceil(1 + log2(getDifficulty())));
+		generateBonuses(rand() % 4 + 1);
+	}
+	else if (level_number == getDifficulty()*DIFFICULTY_INCREASE_RATE-1) {
 		// Boss
 		delete boss;
 		boss = new Boss();

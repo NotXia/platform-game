@@ -296,10 +296,33 @@ void Screen::remove_boss(Map *map, Boss boss) {
 	resetTerrain(map, boss.getHeadPosition());
 }
 
+/*
+	Prende in input un oggetto Map ed ArmedEntity.
+	Stampa nell'area di gioco, nella posizione frontale dell'entità, la sua arma.
+*/
 void Screen::write_weapon(Map *map, ArmedEntity entity) {
 	if (!map->isSolidAt(entity.getBodyFrontPosition()) && !entity.getBodyFrontPosition().equals(entity.getBodyPosition())) {
 		write_at(map, entity.getWeapon().getTexture(entity.getDirection()), entity.getBodyFrontPosition());
 	}
+}
+
+/*
+	Stampa nell'area di gioco il tutorial.
+*/
+void Screen::write_tutorial() {
+	clear_textbox();
+	int start_x = 1;
+	int start_y = 1;
+	resetColor();
+	setColor(FG_WHITE | SKY_COLOR_BG);
+
+	moveCursor(start_x, start_y);
+	cout <<"[W] salto   [A] sinistra   [S] scendi   [D] destra";
+	moveCursor(start_x, start_y+2);
+	cout <<"[Spazio] attacco   [R] Ricarica";
+	moveCursor(start_x, start_y+4);
+	cout <<"[E] interagisci   [Q] Interagisci 2   [O][P] Navigazione mercante armi";
+	resetColor();
 }
 
 /* FINE GESTIONE AREA DI GIOCO
@@ -435,7 +458,7 @@ void Screen::write_textbox_npc_weapon(NPC npc, Weapon player_weapon) {
 		setColor(MONEY_COLOR | BG_BLACK);
 		cout <<MONEY_SYMBOL;
 		resetColor();
-		cout <<")  [o] Indietro  [p] Avanti";
+		cout <<")  [O] Indietro  [P] Avanti";
 	}
 	else {
 		moveCursor(start_x, start_y);
@@ -479,7 +502,6 @@ void Screen::write_level_number(Map *map) {
 	resetColor();
 }
 
-
 /* FINE GESTIONE TEXT BOX
 **************************/
 
@@ -487,7 +509,6 @@ void Screen::write_level_number(Map *map) {
 /********************************
    INIZIO GESTIONE DATI PLAYER
 ********************************/
-
 
 /*
 	Prende in input un intero.
