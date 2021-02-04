@@ -317,11 +317,11 @@ void Screen::write_tutorial() {
 	setColor(FG_WHITE | SKY_COLOR_BG);
 
 	moveCursor(start_x, start_y);
-	cout <<"[W] salto   [A] sinistra   [S] scendi   [D] destra";
+	cout <<"[W] Salto   [A] Sinistra   [S] Scendi   [D] Destra";
 	moveCursor(start_x, start_y+2);
-	cout <<"[Spazio] attacco   [R] Ricarica";
+	cout <<"[Spazio] Attacco   [R] Ricarica";
 	moveCursor(start_x, start_y+4);
-	cout <<"[E] interagisci   [Q] Interagisci 2   [O][P] Navigazione mercante armi";
+	cout <<"[E] Interagisci   [Q] Interagisci 2   [O][P] Navigazione mercante armi";
 	resetColor();
 }
 

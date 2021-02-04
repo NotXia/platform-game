@@ -49,7 +49,7 @@ Map::Map(Map *prev, int level_number) {
 	if (level_number == 0) { // Primo livello
 		generateTerrainGrass();
 		generateEnemies(ceil(1 + log2(getDifficulty())));
-		generateBonuses(rand() % 4 + 1);
+		generateBonuses(rand() % 2);
 	}
 	else if (level_number == getDifficulty()*DIFFICULTY_INCREASE_RATE-1) {
 		// Boss
@@ -221,7 +221,7 @@ void Map::generateBonuses(int max_bonus) {
 		int j;
 
 		// La generazione inizia dall'angolo in alto a destra, scorrendo orizzontalmente l'area di gioco fino a raggiungere l'angolo in basso a sinistra
-		while (i<GAME_HEIGHT-TERRAIN_HEIGHT && max_bonus > 0) {
+		while (i<GAME_HEIGHT-TERRAIN_HEIGHT+1 && max_bonus > 0) {
 			base_chance -= 100 * max_bonus;
 			if (base_chance <= 0) { base_chance = 1000; }
 
