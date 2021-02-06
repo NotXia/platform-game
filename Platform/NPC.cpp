@@ -26,7 +26,7 @@ NPC::NPC(int health, Pixel head_left, Pixel head_right, Pixel body, Position pos
 			found = false;
 			tier3_chance = (difficulty) * 45;
 			tierS_chance = difficulty;
-			tier2_chance = 1/(difficulty/100.0) + tierS_chance*2;
+			tier2_chance = 1/(difficulty/100.0) + tierS_chance*2.0;
 
 			int generate = rand() % (tier2_chance+tier3_chance+tierS_chance);
 			if (generate < tier2_chance) {
