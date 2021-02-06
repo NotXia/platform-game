@@ -24,18 +24,18 @@ NPC::NPC(int health, Pixel head_left, Pixel head_right, Pixel body, Position pos
 		bool found;
 		for (int i=0; i<3; i++) {
 			found = false;
-			tier2_chance = 10 + (difficulty+1) * 40;
-			tier3_chance = (difficulty+1) * 45;
+			tier3_chance = (difficulty) * 45;
 			tierS_chance = difficulty;
+			tier2_chance = 1/(difficulty/100.0) + tierS_chance*2;
 
 			int generate = rand() % (tier2_chance+tier3_chance+tierS_chance);
 			if (generate < tier2_chance) {
 				weapon = getRandomTier2Player();
-				price = 10 * difficulty;
+				price = 8 * difficulty;
 			}
 			else if (generate < tier2_chance+tier3_chance) {
 				weapon = getRandomTier3Player();
-				price = 20 * difficulty;
+				price = 15 * difficulty;
 			}
 			else {
 				weapon = getRandomSpecial();

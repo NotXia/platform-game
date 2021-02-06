@@ -182,7 +182,6 @@ void Screen::write_at(Map *map, Pixel pixel, Position position) {
 	setColor(pixel.getColor());
 	cout <<pixel.getValue();
 	resetColor();
-
 }
 
 /*
@@ -390,6 +389,7 @@ void Screen::write_textbox_weaponbonus(Weapon bonus_weapon, Weapon player_weapon
 		 <<"(" <<bonus_weapon.fasterShootRate(player_weapon) <<") cad. di fuoco";
 	moveCursor(start_x, start_y+5);
 	cout <<"[E] Prendi";
+	resetColor();
 }
 
 /*
@@ -421,6 +421,7 @@ void Screen::write_textbox_npc_hp(NPC npc, int missing_hp) {
 	cout <<MONEY_SYMBOL;
 	resetColor();
 	cout <<")";
+	resetColor();
 }
 
 /*
@@ -466,6 +467,7 @@ void Screen::write_textbox_npc_weapon(NPC npc, Weapon player_weapon) {
 		moveCursor(start_x, start_y+1);
 		cout <<"finito la merce :-(";
 	}
+	resetColor();
 }
 
 /*
@@ -487,6 +489,7 @@ void Screen::write_boss_hp(Boss boss) {
 			cout <<" ";
 		}
 	}
+	resetColor();
 }
 
 /*
@@ -534,6 +537,7 @@ void Screen::write_points(int points) {
 	moveCursor(hp_x, hp_y+2);
 	resetColor();
 	cout <<"Punti " <<points;
+	resetColor();
 }
 
 

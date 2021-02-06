@@ -7,9 +7,10 @@
 Weapon createPlayerWeapon(int difficulty) {
 	Weapon weapon;
 
-	int tier1_chance = 100;
-	int tier2_chance = (difficulty-1) * 25;
-	int tier3_chance = (difficulty-1) * 11;
+	int tier1_chance = 100 + (difficulty-1) * (-10);
+	if (tier1_chance < 0) { tier1_chance = 0;  }
+	int tier2_chance = 40 + (difficulty-1) * 2;
+	int tier3_chance = (difficulty-1) * 8;
 
 	int generate = rand() % (tier1_chance+tier2_chance+tier3_chance);
 	if (generate < tier1_chance) {
