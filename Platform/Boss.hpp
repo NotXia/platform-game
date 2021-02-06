@@ -1,6 +1,7 @@
 #pragma once
 #include "Enemy.hpp"
 #include "Player.hpp"
+#include "LavaList.hpp"
 
 const int BOSS_SUMMONER = 0;
 const int BOSS_MAGE = 1;
@@ -17,6 +18,12 @@ class Boss : public Enemy {
 
 		AnimationTimer pause_time;
 
+		/*
+			Imposta la matrice terrain per le boss fight
+		*/
+		void generateMapBossType1(Pixel terrain[][GAME_HEIGHT], LavaList &lavaList);
+		void generateMapBossType2(Pixel terrain[][GAME_HEIGHT], LavaList &lavaList);
+		void generateMapBossType3(Pixel terrain[][GAME_HEIGHT], LavaList &lavaList);
 
 	public:
 		Boss(int health=0, int points=0, int money=0, Pixel head_left=Pixel(), Pixel head_right=Pixel(), Pixel body=Pixel(), Position position=Position(), Weapon weapon=Weapon(), int type=0, int ability_num=0, int ability_max=0);
@@ -45,6 +52,12 @@ class Boss : public Enemy {
 			Restituisce il codice dell'azione da eseguire
 		*/
 		int getAction(Map *map, Player player);
+
+		/*
+			Prende in input una matrice di Pixel e un oggetto LavaList.
+			Genera il terreno associato al boss. Restituisce la coordinata X di entrata.
+		*/
+		int generateTerrain(Pixel terrain[][GAME_HEIGHT], LavaList &lavaList);
 
 		void incCounters();
 };

@@ -27,10 +27,6 @@ const Pixel TREE_LEAF_TEXTURE = Pixel(' ', 0, BG_DARKGREEN, false);
 
 const Pixel FENCE_TEXTURE = Pixel(char(197), FG_DARKYELLOW, SKY_COLOR_BG, false);
 
-const Pixel BOSS_PLATFORM_TEXTURE = Pixel(PLATFORM_SYMBOL, PLATFORM_COLOR_FG, BG_LIGHTGREY, true);
-const Pixel BOSS_TERRAIN_TEXTURE = TERRAIN_ROCK_TEXTURE;
-const Pixel BOSS_SKY_TEXTURE = Pixel(' ', 0, BG_LIGHTGREY, false);
-
 
 Map::Map(Map *prev, int level_number) {
 	next = NULL;
@@ -56,18 +52,7 @@ Map::Map(Map *prev, int level_number) {
 		delete boss;
 		boss = new Boss();
 		*boss = createBoss(getDifficulty());
-		if (boss->getType() == BOSS_SUMMONER) {
-			generateMapBossType1();
-			left_position.setX(left_position.getX() + 1);
-		}
-		else if (boss->getType() == BOSS_MAGE) {
-			generateMapBossType2();
-			left_position.setX(left_position.getX()+EMPTYZONE_LENGTH);
-		}
-		else if (boss->getType() == BOSS_MELEE) {
-			generateMapBossType3();
-			left_position.setX(left_position.getX() + 1);
-		}
+		left_position.setX(boss->generateTerrain(terrain, lavaList));
 		place_wall();
 	}
 	else if (level_number == getDifficulty()*DIFFICULTY_INCREASE_RATE-2) {
@@ -169,7 +154,7 @@ void Map::generatePlatforms() {
 */
 void Map::generateEnemies(int max_enemies) {
 	if (max_enemies != 0) {
-		int base_chance = 2000 + 500*max_enemies;
+		int base_chance = 10;
 		int chance = base_chance;
 		int generate;
 
@@ -178,29 +163,26 @@ void Map::generateEnemies(int max_enemies) {
 
 		// La generazione inizia dall'angolo in basso a destra, scorrendo orizzontalmente l'area di gioco fino a raggiungere l'angolo in alto a sinistra
 		while(i >= 0 && max_enemies > 0) {
-			base_chance -= 200 * max_enemies;
-			if (base_chance <= 0) { base_chance = 1000; }
-
 			j = GAME_WIDTH - (EMPTYZONE_LENGTH * 2);
 			while (j > (EMPTYZONE_LENGTH*2) && max_enemies > 0) {
-				if (terrain[j][i].isSolid() && !lavaList.existsAt(Position(j, i)) && !terrain[j][i-1].isSolid() && !terrain[j][i-2].isSolid()) {
-					generate = rand() % chance;
+				if (chance > 1000) { chance = 1000; }
 
-					if (generate == 0 && max_enemies > 0) {
+				if (terrain[j][i].isSolid() && !lavaList.existsAt(Position(j, i)) && !terrain[j][i-1].isSolid() && !terrain[j][i-2].isSolid()) {
+					generate = rand() % 1000 + 1;
+
+					if (generate < chance && max_enemies > 0) {
 						Enemy new_enemy = createEnemy(getDifficulty());
 						new_enemy.setPosition(Position(j, i-1));
 						enemyList.add(new_enemy);
+
 						max_enemies--;
 						chance = base_chance;
 					}
-					else {
-						chance -= rand() % ((100*max_enemies) + 1);
-						if (chance <= 0) {
-							chance = 1;
-						}
-					}
 				}
 				j--;
+				if (max_enemies > 0) {
+					chance += rand() % (max_enemies*2-1) + 1;
+				}
 			}
 			i--;
 		}
@@ -213,7 +195,7 @@ void Map::generateEnemies(int max_enemies) {
 */
 void Map::generateBonuses(int max_bonus) {
 	if (max_bonus != 0) {
-		int base_chance = 1000 + 500*max_bonus;
+		int base_chance = 10;
 		int chance = base_chance;
 		int generate;
 
@@ -222,15 +204,15 @@ void Map::generateBonuses(int max_bonus) {
 
 		// La generazione inizia dall'angolo in alto a destra, scorrendo orizzontalmente l'area di gioco fino a raggiungere l'angolo in basso a sinistra
 		while (i<GAME_HEIGHT-TERRAIN_HEIGHT+1 && max_bonus > 0) {
-			base_chance -= 100 * max_bonus;
-			if (base_chance <= 0) { base_chance = 1000; }
-
 			j = GAME_WIDTH-(EMPTYZONE_LENGTH*2);
-			while  (j>(EMPTYZONE_LENGTH*2) && max_bonus > 0) {
-				if (terrain[j][i].isSolid() && !lavaList.existsAt(Position(j, i)) && !terrain[j][i-1].isSolid() && !terrain[j][i-2].isSolid()) {
-					generate = rand() % chance;
 
-					if (generate == 0 && max_bonus > 0) {
+			while  (j>(EMPTYZONE_LENGTH*2) && max_bonus > 0) {
+				if (chance > 1000) { chance = 1000; }
+				
+				if (terrain[j][i].isSolid() && !lavaList.existsAt(Position(j, i)) && !terrain[j][i-1].isSolid() && !terrain[j][i-2].isSolid()) {
+					generate = rand() % 1000 + 1;
+
+					if (generate < chance && max_bonus > 0) {
 						Bonus bonus = createBonus(getDifficulty());
 						bonus.setPosition(Position(j, i-1));
 
@@ -247,6 +229,9 @@ void Map::generateBonuses(int max_bonus) {
 					}
 				}
 				j--;
+				if (max_bonus > 0) {
+					chance += rand() % (max_bonus*2-1) + 1;
+				}
 			}
 			i++;
 		}
@@ -407,16 +392,22 @@ void Map::generateTown() {
 		}
 	}
 
+	int first_x = rand() % (GAME_WIDTH-EMPTYZONE_LENGTH-EMPTYZONE_LENGTH) + EMPTYZONE_LENGTH;
+	int second_x = rand() % (GAME_WIDTH-EMPTYZONE_LENGTH-EMPTYZONE_LENGTH) + EMPTYZONE_LENGTH;
+
 	npcList.insert(NPC(1, Pixel('<', NPC_HEAD_COLOR_FG, BACKGROUND_DEFAULT, false), Pixel('<', NPC_HEAD_COLOR_FG, BACKGROUND_DEFAULT, false),
 				  Pixel(char(219), NPC_HEAD_COLOR_FG, BACKGROUND_DEFAULT, false),
-				  Position(rand() % (GAME_WIDTH-EMPTYZONE_LENGTH-EMPTYZONE_LENGTH) + EMPTYZONE_LENGTH , GAME_HEIGHT-TERRAIN_HEIGHT-1),
+				  Position(first_x, GAME_HEIGHT-TERRAIN_HEIGHT-1),
 				  NPC_HOSPITAL, getDifficulty()
 	));
-	npcList.insert(NPC(1, Pixel('<', NPC_HEAD_COLOR_FG, BACKGROUND_DEFAULT, false), Pixel('<', NPC_HEAD_COLOR_FG, BACKGROUND_DEFAULT, false),
-				  Pixel(char(219), NPC_HEAD_COLOR_FG, BACKGROUND_DEFAULT, false),
-				  Position(rand() % (GAME_WIDTH-EMPTYZONE_LENGTH-EMPTYZONE_LENGTH) + EMPTYZONE_LENGTH, GAME_HEIGHT-TERRAIN_HEIGHT-1),
-				  NPC_WEAPONSHOP, getDifficulty()
-	));
+
+	if (first_x != second_x) {
+		npcList.insert(NPC(1, Pixel('<', NPC_HEAD_COLOR_FG, BACKGROUND_DEFAULT, false), Pixel('<', NPC_HEAD_COLOR_FG, BACKGROUND_DEFAULT, false),
+					  Pixel(char(219), NPC_HEAD_COLOR_FG, BACKGROUND_DEFAULT, false),
+					  Position(second_x, GAME_HEIGHT-TERRAIN_HEIGHT-1),
+					  NPC_WEAPONSHOP, getDifficulty()
+		));
+	}
 }
 
 /*
@@ -622,73 +613,4 @@ void Map::endBossFight() {
 */
 bool Map::isLava(Position position) {
 	return lavaList.existsAt(position);
-}
-
-/*
-	Imposta la matrice terrain per le boss fight
-*/
-void Map::generateMapBossType1() {
-	const Pixel BOSS_PLATFORM_TEXTURE = Pixel(SKY_SYMBOL, 0, BG_LIGHTGREY, true);
-
-	// Generazione "pavimento"
-	for (int i=0; i<TERRAIN_HEIGHT; i++) {
-		for (int j=0; j<GAME_WIDTH; j++) {
-			terrain[j][GAME_HEIGHT-1-i] = BOSS_TERRAIN_TEXTURE;
-		}
-	}
-
-	// Generazione cielo
-	for (int i=TERRAIN_HEIGHT; i<GAME_HEIGHT; i++) {
-		for (int j=0; j<GAME_WIDTH; j++) {
-			terrain[j][GAME_HEIGHT-1-i] = BOSS_SKY_TEXTURE;
-		}
-	}
-
-	// Generazione piattaforme
-	for (int i=0; i<GAME_WIDTH; i++) {
-		terrain[i][4] = BOSS_PLATFORM_TEXTURE;
-	}
-}
-
-void Map::generateMapBossType2() {
-	// Generazione cielo
-	for (int i=0; i<GAME_HEIGHT; i++) {
-		for (int j=0; j<GAME_WIDTH; j++) {
-			terrain[j][i] = BOSS_SKY_TEXTURE;
-		}
-	}
-
-	// Generazione "pavimento"
-	for (int i=0; i<1; i++) {
-		for (int j=0; j<GAME_WIDTH; j++) {
-			terrain[j][GAME_HEIGHT-1-i] = LAVA_TEXTURE;
-			lavaList.insert(Position(j, GAME_HEIGHT-i-1));
-		}
-	}
-
-	// Generazione piattaforme
-	terrain[1][3] = BOSS_PLATFORM_TEXTURE;
-	terrain[GAME_WIDTH-2][3] = BOSS_PLATFORM_TEXTURE;
-
-	for (int i=0; i<3; i++) {
-		for (int j=EMPTYZONE_LENGTH; j<GAME_WIDTH-EMPTYZONE_LENGTH; j++) {
-			terrain[j][(GAME_HEIGHT-TERRAIN_HEIGHT)-TERRAIN_HEIGHT*i] = BOSS_PLATFORM_TEXTURE;
-		}
-	}
-}
-
-void Map::generateMapBossType3() {
-	// Generazione cielo
-	for (int i=0; i<GAME_HEIGHT; i++) {
-		for (int j=0; j<GAME_WIDTH; j++) {
-			terrain[j][i] = BOSS_SKY_TEXTURE;
-		}
-	}
-
-	// Generazione "pavimento"
-	for (int i=0; i<TERRAIN_HEIGHT; i++) {
-		for (int j=0; j<GAME_WIDTH; j++) {
-			terrain[j][GAME_HEIGHT-1-i] = BOSS_TERRAIN_TEXTURE;
-		}
-	}
 }
