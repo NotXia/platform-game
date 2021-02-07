@@ -201,7 +201,7 @@ char Weapon::higherAmmo(Weapon weapon) {
 
 // Contronto distanza di sparo.
 char Weapon::higherRange(Weapon weapon) {
-	return getCheckSymbol(this->bullet.getRange() - weapon.bullet.getRange());
+	return getCheckSymbol(this->getRange() - weapon.getRange());
 }
 
 // Confronto velocità ricarica.
