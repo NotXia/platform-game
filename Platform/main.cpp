@@ -27,6 +27,8 @@ void increase_points(Screen screen, Player &player, int points);
 void ranged_attack(Map *map, Screen screen, Player player, ArmedEntity &entity, bool hostile);
 void melee_attack(Map *map, Screen screen, Player player, ArmedEntity &entity, bool hostile);
 
+void show_npc(Map *map, Screen screen);
+
 int main() {
     srand(time(0));
 
@@ -43,8 +45,6 @@ int main() {
     Bonus *curr_bonus = NULL;
     NPC *curr_npc = NULL;
     bool hasMoved = false;
-    bool showNPCs = true;
-    bool print_boss_hp = true;
 
     EnemyList enemylist;
     BulletList bulletlist;
@@ -100,15 +100,11 @@ int main() {
                             screen.write_game_area(map);
                             player.setPosition(map->getRightPosition());
                             screen.write_entity(map, player);
-                            showNPCs = true;
+                            show_npc(map, screen);
 
-
-                            /***
-                            
-                                INSERIRE QUA NPC + HP BOSS -> Togliere flag
-                                
-                            ***/
-
+                            if (map->isBossFight()) {
+                                screen.write_boss_hp(*map->getBoss());
+                            }
                         }
                     }
                 }
@@ -125,15 +121,11 @@ int main() {
                         screen.write_game_area(map);
                         player.setPosition(map->getLeftPosition());
                         screen.write_entity(map, player);
-                        showNPCs = true;
+                        show_npc(map, screen);
 
-
-
-                        /***
-
-                            INSERIRE QUA NPC + HP BOSS -> Togliere flag
-
-                        ***/
+                        if (map->isBossFight()) {
+                            screen.write_boss_hp(*map->getBoss());
+                        }
                     }
                 }
             }
@@ -514,17 +506,6 @@ int main() {
         ---------------------- */
         npclist = map->getNPCList();
 
-        // Visualizza gli NPC sulla mappa
-        if (showNPCs) {
-            npclist.initIter();
-            while(!npclist.isNull()) {
-                screen.write_entity(map, npclist.getCurrent());
-                npclist.goNext();
-            }
-
-            showNPCs = false;
-        }
-
         // Gestisce l'interazione con gli NPC
         if (curr_npc == NULL) {
             if (npclist.inPlayerRange(player.getBodyPosition())) {
@@ -586,11 +567,6 @@ int main() {
         if (map->isBossFight()) {
             Boss *boss = map->getBoss();
 
-            if (print_boss_hp) {
-                screen.write_boss_hp(*boss);
-                print_boss_hp = false;
-            }
-
             /*** Gestione collisione con proiettili ***/
             bulletlist = map->getBulletList();
             if (bulletlist.pointAt(boss->getHeadPosition(), boss->getBodyPosition(), boss->getBody2Position())) {
@@ -615,7 +591,6 @@ int main() {
                         screen.write_entity(map, player);
                         screen.write_bonuses(map);
                         screen.clear_textbox();
-                        print_boss_hp = true;
                     }
 
                     bulletlist.updateCurrent(hit_bullet);
@@ -887,4 +862,15 @@ void melee_attack(Map *map, Screen screen, Player player, ArmedEntity &entity, b
     }
 
     entity.reload();
+}
+
+void show_npc(Map *map, Screen screen) {
+    NPCList npclist = map->getNPCList();
+
+    // Visualizza gli NPC sulla mappa
+    npclist.initIter();
+    while (!npclist.isNull()) {
+        screen.write_entity(map, npclist.getCurrent());
+        npclist.goNext();
+    }
 }
