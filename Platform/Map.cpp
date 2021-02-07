@@ -47,21 +47,18 @@ Map::Map(Map *prev, int level_number) {
 		generateEnemies(ceil(1 + log2(getDifficulty())));
 		generateBonuses(rand() % 2);
 	}
-	else if (level_number == getDifficulty()*DIFFICULTY_INCREASE_RATE-1) {
-		// Boss
+	else if (level_number == getDifficulty()*DIFFICULTY_INCREASE_RATE-1) { // Boss
 		delete boss;
 		boss = new Boss();
 		*boss = createBoss(getDifficulty());
 		left_position.setX(boss->generateTerrain(terrain, lavaList));
 		place_wall();
 	}
-	else if (level_number == getDifficulty()*DIFFICULTY_INCREASE_RATE-2) {
-		// Villaggio
+	else if (level_number == getDifficulty()*DIFFICULTY_INCREASE_RATE-2) { // Villaggio
 		generateTerrainGrass();
 		generateTown();
 	}
-	else {
-		// Livello
+	else { // Livello
 		if (rand()%5 == 0) {
 			generateTerrainRock();
 			generatePlatforms();
@@ -119,7 +116,7 @@ void Map::generateTerrainRock() {
 */
 void Map::generatePlatforms() {
 	/* 
-		Generazione area di gioco:
+		Generazione piattaforme:
 		- L'area iniziale e finale del livello rimangono libere da piattaforme
 		- L'area centrale prevede la generazione di piattaforme
 	*/
@@ -259,7 +256,6 @@ void Map::generateTown() {
 
 		// Generazione casa
 		if (structure_type > 0) {
-
 			int height = rand() % 3 + 5;
 
 			terrain[start_x][start_y - height + 2] = HOUSE_UPPER_ROOF_TEXTURE;
@@ -395,18 +391,28 @@ void Map::generateTown() {
 	int first_x = rand() % (GAME_WIDTH-EMPTYZONE_LENGTH-EMPTYZONE_LENGTH) + EMPTYZONE_LENGTH;
 	int second_x = rand() % (GAME_WIDTH-EMPTYZONE_LENGTH-EMPTYZONE_LENGTH) + EMPTYZONE_LENGTH;
 
-	npcList.insert(NPC(1, Pixel('<', NPC_HEAD_COLOR_FG, BACKGROUND_DEFAULT, false), Pixel('<', NPC_HEAD_COLOR_FG, BACKGROUND_DEFAULT, false),
-				  Pixel(char(219), NPC_HEAD_COLOR_FG, BACKGROUND_DEFAULT, false),
-				  Position(first_x, GAME_HEIGHT-TERRAIN_HEIGHT-1),
-				  NPC_HOSPITAL, getDifficulty()
-	));
+	npcList.insert(
+		NPC (
+			1, 
+			Pixel('<', NPC_HEAD_COLOR_FG, BACKGROUND_DEFAULT, false), 
+			Pixel('<', NPC_HEAD_COLOR_FG, BACKGROUND_DEFAULT, false),
+			Pixel(char(219), NPC_HEAD_COLOR_FG, BACKGROUND_DEFAULT, false),
+			Position(first_x, GAME_HEIGHT-TERRAIN_HEIGHT-1),
+			NPC_HOSPITAL, getDifficulty()
+		)
+	);
 
-	if (first_x != second_x) {
-		npcList.insert(NPC(1, Pixel('<', NPC_HEAD_COLOR_FG, BACKGROUND_DEFAULT, false), Pixel('<', NPC_HEAD_COLOR_FG, BACKGROUND_DEFAULT, false),
-					  Pixel(char(219), NPC_HEAD_COLOR_FG, BACKGROUND_DEFAULT, false),
-					  Position(second_x, GAME_HEIGHT-TERRAIN_HEIGHT-1),
-					  NPC_WEAPONSHOP, getDifficulty()
-		));
+	if (first_x != second_x) { // Il secondo mercante viene creato se si trova in una posizione diversa dal primo
+		npcList.insert(
+			NPC(
+				1, 
+				Pixel('<', NPC_HEAD_COLOR_FG, BACKGROUND_DEFAULT, false), 
+				Pixel('<', NPC_HEAD_COLOR_FG, BACKGROUND_DEFAULT, false),
+				Pixel(char(219), NPC_HEAD_COLOR_FG, BACKGROUND_DEFAULT, false),
+				Position(second_x, GAME_HEIGHT-TERRAIN_HEIGHT-1),
+				NPC_WEAPONSHOP, getDifficulty()
+			)
+		);
 	}
 }
 
@@ -417,7 +423,7 @@ void Map::generateTown() {
 void Map::generateLava() {
 	int h = GAME_HEIGHT - TERRAIN_HEIGHT - 3;
 
-	// La lava viene generata sotto le piattaforme all'altezza del giocatore, lasciando lo spazio per evitarle attraversando sulla piattaforma.
+	// La lava viene generata sotto le piattaforme all'altezza del giocatore, lasciando lo spazio per evitarle attraversando la piattaforma.
 	for (int i=2; i<GAME_WIDTH-2; i++) {
 		if (terrain[i][h].isSolid() && 
 			terrain[i-1][h].isSolid() && terrain[i-2][h].isSolid() && 

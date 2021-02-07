@@ -301,9 +301,11 @@ void Boss::incCounters() {
 	Enemy::incCounters();
 }
 
+
 /*
 	Imposta la matrice terrain per le boss fight
 */
+
 void Boss::generateMapBossType1(Pixel terrain[][GAME_HEIGHT], LavaList &lavaList) {
 	const Pixel BOSS_PLATFORM_TEXTURE = Pixel(SKY_SYMBOL, 0, BG_LIGHTGREY, true);
 

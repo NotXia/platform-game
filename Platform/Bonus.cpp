@@ -47,6 +47,9 @@ int Bonus::getType() {
 	else if (weapon != NULL) {
 		return BONUS_TYPE_WEAPON;
 	}
+	else {
+		return BONUS_TYPE_MONEY; // Valore di default (il bonus non contiene nulla)
+	}
 }
 
 /*
